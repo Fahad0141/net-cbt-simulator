@@ -1,0 +1,23 @@
+name: Wrong or unclear question
+description: Report an incorrect answer key, a typo, or an ambiguous question
+labels: [question-bank]
+body:
+  - type: input
+    id: paper
+    attributes:
+      label: Paper code and question number
+      description: Shown in the review screen, e.g. ENG-K7Q2-9XM4, Q37
+    validations:
+      required: true
+  - type: input
+    id: template
+    attributes:
+      label: Template id (if shown)
+      placeholder: physics/work-energy/kinetic-energy
+  - type: textarea
+    id: problem
+    attributes:
+      label: What is wrong?
+      description: Include the correct answer and your working or a reference.
+    validations:
+      required: true

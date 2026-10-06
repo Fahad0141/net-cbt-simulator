@@ -1,0 +1,35 @@
+# dependencies
+node_modules/
+
+# build output
+dist/
+dist-ssr/
+*.local
+*.tsbuildinfo
+
+# test output
+coverage/
+playwright-report/
+test-results/
+blob-report/
+
+# logs
+*.log
+npm-debug.log*
+
+# editor / OS
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+tsconfig.check-*.json
+
+# Android APKs copied out of the Gradle build
+dist-android/
+
+# Windows desktop app: the web build copied in, electron-builder output and the final installer
+desktop/web/
+desktop/release/
+dist-desktop/

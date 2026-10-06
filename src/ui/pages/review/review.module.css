@@ -1,0 +1,618 @@
+/* Review page components: toolbar, question card and navigator.
+ * Colours come only from the theme tokens in global.css (light and dark). */
+
+/* ---------- toolbar ---------- */
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px 24px;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.chip {
+  position: relative;
+  display: inline-flex;
+  min-width: 0;
+}
+
+/* The native radio covers the chip: real radio semantics, arrow keys and hit area. */
+.chip input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.chipBody {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+  padding: 4px 5px 4px 12px;
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text-2);
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  transition:
+    background 0.15s,
+    border-color 0.15s,
+    color 0.15s;
+}
+
+.chip:hover .chipBody {
+  background: var(--surface-3);
+}
+
+.chip input:checked + .chipBody {
+  border-color: var(--primary);
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+
+.chip input:focus-visible + .chipBody {
+  box-shadow: var(--focus);
+}
+
+.count {
+  min-width: 28px;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: var(--surface-3);
+  color: var(--text);
+  font-size: 12.5px;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.chip input:checked + .chipBody .count {
+  background: var(--primary);
+  color: var(--on-primary);
+}
+
+.dot {
+  flex: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.dotAll {
+  background: conic-gradient(var(--success) 0 55%, var(--danger) 55% 82%, var(--muted) 82% 100%);
+}
+
+.dotCorrect {
+  background: var(--success);
+}
+
+.dotWrong {
+  background: var(--danger);
+}
+
+.dotBlank {
+  border: 2px solid var(--muted);
+}
+
+.dotReview {
+  background: var(--purple);
+}
+
+.toolbarControls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 22px;
+  min-width: 0;
+}
+
+.subjectField {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.subjectLabel {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-2);
+}
+
+.subjectSelect {
+  width: auto;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 36px;
+  color: var(--text-2);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+}
+
+.switch input {
+  appearance: none;
+  position: relative;
+  flex: none;
+  width: 40px;
+  height: 22px;
+  margin: 0;
+  border-radius: 999px;
+  background: var(--muted);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.switch input::before {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  transition: transform 0.15s;
+}
+
+.switch input:checked {
+  background: var(--primary);
+}
+
+.switch input:checked::before {
+  transform: translateX(18px);
+}
+
+.switch input:focus-visible {
+  border-radius: 999px;
+  box-shadow: var(--focus);
+}
+
+/* ---------- question card ---------- */
+
+/* Badges never wrap; long chapter names must, or they overflow a 360px screen. */
+.badgeText {
+  min-width: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.questionCard {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  /* clears the sticky site header when scrolled into view */
+  scroll-margin-top: 76px;
+}
+
+.qHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 12px;
+}
+
+.qTitle {
+  margin: 0;
+  font-size: 19px;
+  font-weight: 700;
+}
+
+.qOf {
+  color: var(--muted);
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.scope {
+  margin: 0;
+  color: var(--text-2);
+  font-size: 13.5px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 12px;
+  padding: 10px 14px;
+  border: 1px solid var(--border-strong);
+  border-left-width: 4px;
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  color: var(--text);
+  font-size: 14.5px;
+}
+
+.bannerCorrect {
+  border-color: var(--success);
+  background: var(--success-soft);
+}
+
+.bannerWrong {
+  border-color: var(--danger);
+  background: var(--danger-soft);
+}
+
+.bannerBlank {
+  border-left-color: var(--muted);
+}
+
+.bannerTitle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 15.5px;
+  font-weight: 700;
+}
+
+.bannerIcon {
+  flex: none;
+  color: var(--muted);
+}
+
+.bannerCorrect .bannerIcon {
+  color: var(--success);
+}
+
+.bannerWrong .bannerIcon {
+  color: var(--danger);
+}
+
+.bannerDetail {
+  color: var(--text-2);
+}
+
+.bannerDetail strong {
+  color: var(--text);
+}
+
+.reviewTag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-left: auto;
+  padding: 2px 9px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--purple) 13%, var(--surface));
+  color: color-mix(in srgb, var(--purple) 82%, var(--text));
+  font-size: 12.5px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 24px;
+  margin: 0;
+  font-size: 13.5px;
+}
+
+.facts > div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.facts dt {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--muted);
+}
+
+.facts dd {
+  margin: 0;
+  color: var(--text);
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+}
+
+.overPace {
+  color: color-mix(in srgb, var(--warning) 85%, var(--text));
+  font-weight: 600;
+}
+
+.reportRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--border);
+}
+
+.reference {
+  min-width: 0;
+  margin: 0;
+  color: var(--muted);
+  font-size: 12.5px;
+  overflow-wrap: anywhere;
+}
+
+.reference code {
+  padding: 1px 5px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--surface-2);
+  color: var(--text-2);
+  font-family: var(--mono);
+  font-size: 12px;
+}
+
+.referenceLabel {
+  font-size: 11.5px;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.templateId {
+  word-break: break-all;
+}
+
+.reportLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  font-size: 13.5px;
+  font-weight: 600;
+}
+
+.navBar {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 0 -18px -18px;
+  padding: 12px 18px;
+  border-top: 1px solid var(--border);
+  border-radius: 0 0 var(--radius) var(--radius);
+  background: var(--surface);
+}
+
+.navButton {
+  min-width: 118px;
+}
+
+.navPosition {
+  color: var(--muted);
+  font-size: 13.5px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- navigator ---------- */
+
+.navScroll {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.navGroup {
+  min-width: 0;
+}
+
+.navGroupHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.navGroupTitle {
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.navGroupRange {
+  color: var(--muted);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.navGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(38px, 1fr));
+  gap: 5px;
+}
+
+.cell {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  height: 36px;
+  padding: 0;
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+}
+
+.cell:hover {
+  border-color: var(--primary);
+}
+
+.cell:focus-visible {
+  border-radius: 6px;
+  box-shadow: var(--focus);
+}
+
+.cellCorrect {
+  border-color: var(--success);
+  background: var(--success-soft);
+}
+
+.cellWrong {
+  border-color: var(--danger);
+  background: var(--danger-soft);
+}
+
+.cellBlank {
+  border-style: dashed;
+  background: var(--surface-2);
+  color: var(--text-2);
+}
+
+/* Outcome glyphs, so the grid does not rely on colour alone. */
+.cellCorrect::after,
+.cellWrong::after {
+  position: absolute;
+  right: 2px;
+  bottom: 1px;
+  font-size: 9px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.cellCorrect::after {
+  content: '\2713';
+  color: var(--success);
+}
+
+.cellWrong::after {
+  content: '\2715';
+  color: var(--danger);
+}
+
+.cellCurrent {
+  z-index: 1;
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.reviewDot {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--purple);
+  box-shadow: 0 0 0 1.5px var(--surface);
+}
+
+.navEmpty {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  margin: 0;
+  padding: 0;
+  color: var(--text-2);
+  font-size: 12.5px;
+  list-style: none;
+}
+
+.legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.swatch {
+  position: relative;
+  display: inline-block;
+  flex: none;
+  width: 20px;
+  height: 16px;
+  border: 1px solid var(--border-strong);
+  border-radius: 4px;
+  background: var(--surface);
+}
+
+.swatch.cellCorrect::after,
+.swatch.cellWrong::after {
+  right: 1px;
+  bottom: 0;
+  font-size: 8px;
+}
+
+.swatchReview .reviewDot {
+  top: 2px;
+  right: 2px;
+}
+
+@media (min-width: 961px) {
+  /* Desktop sidebar: the grid scrolls inside the sticky panel. */
+  .navScroll {
+    max-height: calc(100vh - 300px);
+    min-height: 160px;
+    margin: -4px;
+    padding: 4px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+  }
+}
+
+@media (max-width: 640px) {
+  .navBar {
+    margin: 0 -14px -14px;
+    padding: 10px 14px;
+  }
+
+  .navButton {
+    min-width: 0;
+  }
+
+  .subjectField {
+    flex: 1 1 100%;
+  }
+
+  .subjectSelect {
+    flex: 1 1 auto;
+  }
+
+  .reviewTag {
+    margin-left: 0;
+  }
+}

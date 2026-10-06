@@ -1,0 +1,351 @@
+/**
+ * Curated commonly misspelt words for the spelling generators (chapter `english/spelling`).
+ *
+ * Rules for entries:
+ * - `w` is the only accepted spelling in BOTH British and American English. Words with
+ *   accepted variants (colour/color, organise/organize, travelled/traveled,
+ *   judgement/judgment, focused/focussed, supersede/supercede ...) are deliberately left out.
+ * - `x` holds at least three hand-picked misspellings that copy real error patterns
+ *   (doubled or undoubled letters, ie/ei, -ance/-ence, -able/-ible, dropped silent letters,
+ *   swapped or extra vowels). A misspelling must NOT be a real English word or an accepted
+ *   variant (so no "lightening" for lightning, "forth" for fourth or "peace" for piece).
+ * - `n` is a short memory note stating the key point of the correct spelling; explanations
+ *   quote it in brackets.
+ * - `r` is the main trap of the word, used by the "same pattern" template.
+ * - `f` (family) marks related words (necessary/unnecessary) that must not share a question.
+ * - `d` is the level: 1 = everyday words, 2 = typical test words, 3 = advanced words.
+ * - All content is original.
+ */
+import type { Difficulty } from '@/engine/types';
+
+export type SpellingRule = 'double' | 'ie' | 'suffix' | 'silent' | 'cede' | 'other';
+
+export interface SpellingEntry {
+  /** Correct spelling (lower case). */
+  w: string;
+  d: Difficulty;
+  r: SpellingRule;
+  /** Memory note for the correct spelling. */
+  n: string;
+  /** Plausible misspellings (3 or more), none of which is a real word. */
+  x: readonly string[];
+  /** Family key: words of one family never appear in the same question. */
+  f?: string;
+}
+
+/** Short statement of each trap, used by the "same pattern" template. */
+export const RULE_TIPS: Record<Exclude<SpellingRule, 'other'>, string> = {
+  double: 'All four words test doubled and single letters, which have to be learnt word by word.',
+  ie: 'All four words test the order of i and e ("i before e except after c", with exceptions such as seize, weird and leisure).',
+  suffix: 'All four words test endings such as -ance/-ence, -ant/-ent, -able/-ible and -ary/-ery, which have to be learnt word by word.',
+  silent: 'All four words contain a letter that is silent or barely heard, and so is easily dropped or misplaced.',
+  cede: 'Only exceed, proceed and succeed end in -ceed (and only supersede ends in -sede); the other verbs of this family, such as precede, concede, recede and intercede, end in -cede.',
+};
+
+function e(w: string, d: Difficulty, r: SpellingRule, n: string, x: string, f?: string): SpellingEntry {
+  return { w, d, r, n, x: x.split(' '), ...(f ? { f } : {}) };
+}
+
+export const SPELLING: readonly SpellingEntry[] = [
+  // ---------------------------------------------------------------- level 1: everyday words
+  e('believe', 1, 'ie', 'i before e: bel-ie-ve', 'beleive beleve beleeve'),
+  e('receive', 1, 'ie', 'e before i after c: rec-ei-ve', 'recieve receve receeve', 'ceive'),
+  e('achieve', 1, 'ie', 'i before e: ach-ie-ve', 'acheive achive acheeve'),
+  e('friend', 1, 'ie', 'i before e: fr-ie-nd', 'freind frend freend'),
+  e('niece', 1, 'ie', 'i before e: n-ie-ce', 'neice neece niese'),
+  e('piece', 1, 'ie', 'i before e: p-ie-ce', 'peice piese peece'),
+  e('ceiling', 1, 'ie', 'e before i after c, with one l: c-ei-ling', 'cieling ceilling seiling'),
+  e('foreign', 1, 'ie', 'e before i, then a silent g: for-eig-n', 'foriegn forein forreign'),
+  e('height', 1, 'ie', 'e before i, ending in -ght: h-ei-ght', 'hieght heigth heigt'),
+  e('weird', 1, 'ie', 'an exception to the rule: w-ei-rd', 'wierd weerd wiered'),
+  e('receipt', 1, 'silent', 'e before i after c, plus a silent p: rec-ei-pt', 'reciept receit reciet', 'ceive'),
+  e('necessary', 1, 'double', 'one c and a double s: ne-c-e-ss-ary', 'neccessary necesary neccesary', 'necessary'),
+  e('separate', 1, 'other', 'an a after the p: sep-a-rate', 'seperate separete seprate'),
+  e('definitely', 1, 'other', 'built on finite: def-in-ite-ly', 'definately definitly defenitely'),
+  e('beginning', 1, 'double', 'one g and a double n before -ing: begi-nn-ing', 'begining beggining beginnig'),
+  e('tomorrow', 1, 'double', 'one m and a double r: to-m-o-rr-ow', 'tommorow tomorow tommorrow'),
+  e('government', 1, 'silent', 'the n of govern is kept: gover-n-ment', 'goverment govermment governmant'),
+  e('library', 1, 'other', 'two r sounds: lib-r-ar-y', 'libary liberary librery'),
+  e('address', 1, 'double', 'a double d and a double s: a-dd-re-ss', 'adress addres adresss'),
+  e('argument', 1, 'other', 'the e of argue is dropped: argu-ment', 'arguement argumant arguemant'),
+  e('business', 1, 'other', 'u before i, with a single s in the middle: bu-si-ness', 'buisness bussiness busness'),
+  e('calendar', 1, 'suffix', 'it ends in -ar: calend-ar', 'calandar calander calendor'),
+  e('different', 1, 'double', 'a double f and the ending -ent: di-ff-er-ent', 'diffrent diferent differant'),
+  e('disappear', 1, 'double', 'dis + appear: one s and a double p', 'dissapear disapear dissappear'),
+  e('disappoint', 1, 'double', 'dis + appoint: one s and a double p', 'dissapoint disapoint dissappoint'),
+  e('environment', 1, 'silent', 'the n of environ is kept: environ-ment', 'enviroment enviornment envirnment'),
+  e('especially', 1, 'other', 'es- at the start and a double l: es-pecia-ll-y', 'expecially especialy espesially'),
+  e('excellent', 1, 'suffix', 'ex + cell, with the ending -ent: ex-cell-ent', 'excellant exellent excelent'),
+  e('forty', 1, 'other', 'no u, unlike four: f-o-rty', 'fourty fortey fortty'),
+  e('grammar', 1, 'suffix', 'a double m and the ending -ar: gra-mm-ar', 'grammer gramar gramer'),
+  e('grateful', 1, 'other', 'grate (not great) + -ful with one l', 'greatful gratefull graitful'),
+  e('guarantee', 1, 'silent', 'a silent u after g, then -antee: gu-arantee', 'garantee guarentee guarante'),
+  e('immediately', 1, 'double', 'a double m, and the e of immediate is kept: i-mm-ediate-ly', 'immediatly imediately immediatelly'),
+  e('interrupt', 1, 'double', 'inter + rupt: a double r', 'interupt intterupt enterrupt'),
+  e('knowledge', 1, 'silent', 'a silent k, and -dge at the end: k-now-le-dge', 'knowlege knoweledge nowledge'),
+  e('occasion', 1, 'double', 'a double c and a single s: o-cc-a-s-ion', 'occassion ocasion occation', 'occasion'),
+  e('opportunity', 1, 'double', 'a double p, then -or-: o-pp-or-tunity', 'oppurtunity oportunity opportunaty'),
+  e('parallel', 1, 'double', 'a single r, a double l in the middle and a single l at the end: pa-r-a-ll-e-l', 'paralel parralel parallell'),
+  e('possession', 1, 'double', 'two pairs of s: po-ss-e-ss-ion', 'posession possesion posesion'),
+  e('probably', 1, 'other', 'probable + -ly: prob-ab-ly', 'probaly probabley probebly'),
+  e('recommend', 1, 'double', 're + commend: one c and a double m', 'reccomend recomend reccommend'),
+  e('restaurant', 1, 'other', 'restau- followed by -rant: restau-rant', 'restaraunt resturant restaurent'),
+  e('schedule', 1, 'silent', 'sch- with an h, ending in -dule: sch-edule', 'shedule schedual scedule'),
+  e('sincerely', 1, 'other', 'the e of sincere is kept before -ly: sincere-ly', 'sincerly sincerelly sinserely'),
+  e('successful', 1, 'double', 'a double c, a double s and -ful with one l: su-cc-e-ss-ful', 'succesful sucessful successfull'),
+  e('truly', 1, 'other', 'the e of true is dropped: tru-ly', 'truely truley trully'),
+  e('until', 1, 'double', 'only one l at the end: unti-l', 'untill unttil unntil'),
+  e('vegetable', 1, 'other', 'an e after veg: veg-e-table', 'vegtable vegatable vegetible'),
+  e('vehicle', 1, 'suffix', 'a silent h, ending in -cle: ve-h-i-cle', 'vehical vehicel vechicle'),
+  e('tongue', 1, 'silent', 'it ends in -gue: ton-gue', 'tounge tonge tongu'),
+  e('thorough', 1, 'other', 'thor- followed by -ough: thor-ough', 'thurough thorogh thourough'),
+  e('temperature', 1, 'other', 'temper + -ature: temper-ature', 'temprature tempreture temperture'),
+  e('similar', 1, 'other', 'one m and the ending -ar: si-m-il-ar', 'similiar simmilar similer'),
+  e('sentence', 1, 'suffix', 'it ends in -ence: sent-ence', 'sentance sentense sentince'),
+  e('professor', 1, 'double', 'one f, a double s and the ending -or: pro-f-e-ss-or', 'proffesor proffessor profesor'),
+  e('island', 1, 'silent', 'a silent s: i-s-land', 'iland ilsand islend'),
+  e('doubt', 1, 'silent', 'a silent b: dou-b-t', 'daubt doupt doubht'),
+  e('answer', 1, 'silent', 'a silent w: ans-w-er', 'anser answere ansewer'),
+  e('beautiful', 1, 'other', 'beau- (e, a, u) + -ful with one l', 'beatiful beutiful beautifull'),
+  e('because', 1, 'other', 'be + cause: be-cause', 'becuase becouse beacause'),
+  e('column', 1, 'silent', 'one l and a silent n at the end: co-l-um-n', 'colum collumn coloumn'),
+  e('finally', 1, 'double', 'final + -ly gives a double l: fina-ll-y', 'finaly finnally finalley'),
+  e('jealous', 1, 'other', 'jeal- followed by -ous: jeal-ous', 'jelous jealouse jellous'),
+  e('listen', 1, 'silent', 'a silent t: lis-t-en', 'lisen lissen listten'),
+  e('medicine', 1, 'other', 'an i after med: med-i-cine', 'medecine medicin medicene'),
+  e('people', 1, 'other', 'e, o, then -ple: pe-o-ple', 'poeple peopel peaple'),
+  e('village', 1, 'double', 'a double l and the ending -age: vi-ll-age', 'vilage villege villiage'),
+  e('exercise', 1, 'other', 'no c after the x: ex-er-cise', 'excercise exersise exercice'),
+  e('experience', 1, 'suffix', 'it ends in -ience: exper-ience', 'experiance expirience experence'),
+  e('dictionary', 1, 'suffix', 'one n and the ending -ary: diction-ary', 'dictionery dictionnary dicionary'),
+  e('useful', 1, 'other', 'use + -ful with one l: use-ful', 'usefull usful usefel'),
+  e('language', 1, 'other', 'u before a: lang-ua-ge', 'langauge languge languege'),
+  e('naturally', 1, 'double', 'natural + -ly gives a double l: natura-ll-y', 'naturaly natrually naturelly'),
+  e('writing', 1, 'double', 'the e of write is dropped and the t stays single: wri-t-ing', 'writting writeing wrighting'),
+  e('coming', 1, 'double', 'the e of come is dropped and the m stays single: co-m-ing', 'comming comeing comeng'),
+  e('chocolate', 1, 'other', 'the vowels o, o and a before the final -te: ch-o-c-o-l-a-te', 'choclate chocolete chocalate'),
+  e('decision', 1, 'double', 'one s, with c in the middle: de-c-i-s-ion', 'decission desicion decisian'),
+  e('mathematics', 1, 'other', 'math-e-matics, with -ics at the end', 'mathmatics mathemetics mathematices'),
+  e('category', 1, 'other', 'cat-e-gory: an e after cat', 'catagory categorey cattegory'),
+  e('gorgeous', 1, 'other', 'an e after the second g keeps it soft: gorg-e-ous', 'gorgous gorjeous georgeous'),
+  e('marriage', 1, 'other', 'marry changes y to i: marr-i-age', 'marraige mariage marrige'),
+  e('strength', 1, 'other', 'strong becomes streng + th: streng-th', 'strenght strenth stength'),
+  e('temporary', 1, 'suffix', 'tempor- with the ending -ary: tempor-ary', 'temporery tempory temperary'),
+  e('responsible', 1, 'suffix', 'it ends in -ible: respons-ible', 'responsable responsibel resposible'),
+  e('visible', 1, 'suffix', 'it ends in -ible: vis-ible', 'visable visibel vissible'),
+  e('guard', 1, 'silent', 'a silent u after g: g-u-ard', 'gaurd gard guerd'),
+  e('guidance', 1, 'suffix', 'guide drops its e, with the ending -ance: guid-ance', 'guidence gaidance guidanse'),
+
+  // ---------------------------------------------------------------- level 2: typical test words
+  e('accommodate', 2, 'double', 'a double c and a double m: a-cc-o-mm-odate', 'accomodate acommodate accommadate'),
+  e('embarrass', 2, 'double', 'a double r and a double s: emba-rr-a-ss', 'embarass embaras emberrass'),
+  e('conscientious', 2, 'silent', 'built on science: con-sci-en-tious', 'consciencious conscientous concientious', 'consc'),
+  e('occurrence', 2, 'double', 'a double c, a double r and the ending -ence: o-cc-u-rr-ence', 'occurence ocurrence occurrance', 'occur'),
+  e('millennium', 2, 'double', 'a double l and a double n: mi-ll-e-nn-ium', 'millenium milennium millenniam'),
+  e('committee', 2, 'double', 'a double m, a double t and a double e: co-mm-i-tt-ee', 'commitee comittee committe', 'commit'),
+  e('commitment', 2, 'double', 'a double m but a single t: commit + -ment', 'committment comitment commitmant', 'commit'),
+  e('conscience', 2, 'silent', 'con + science: con-sci-ence', 'concience consience conscence', 'consc'),
+  e('conscious', 2, 'silent', 'sc then i: con-sci-ous', 'concious consious conscous', 'consc'),
+  e('consensus', 2, 'other', 'related to consent, with s throughout: con-sen-sus', 'concensus consensous consencus'),
+  e('convenience', 2, 'suffix', 'it ends in -ience: conven-ience', 'conveniance convienience convinience'),
+  e('criticism', 2, 'other', 'critic + -ism: critic-ism', 'critisism criticisim critiscism'),
+  e('deceive', 2, 'ie', 'e before i after c: dec-ei-ve', 'decieve deceeve deceve', 'ceive'),
+  e('perceive', 2, 'ie', 'e before i after c: perc-ei-ve', 'percieve perceeve persieve', 'ceive'),
+  e('desperate', 2, 'other', 'des-per-ate: e after the p', 'desparate desprate desperete'),
+  e('dilemma', 2, 'double', 'a double m and no n: dile-mm-a', 'dilemna dilema dillemma'),
+  e('discipline', 2, 'silent', 'sc in the middle: dis-ci-pline', 'dicipline disipline discipeline'),
+  e('ecstasy', 2, 'other', 'ec- (not ex-) at the start and the ending -asy: ec-st-asy', 'ecstacy ecstassy ecstesy'),
+  e('exaggerate', 2, 'double', 'a double g and a single r: exa-gg-e-r-ate', 'exagerate exxagerate exaggarate'),
+  e('exhilarate', 2, 'silent', 'a silent h, then -ilarate: ex-h-ilarate', 'exhilerate exilarate exhillarate'),
+  e('existence', 2, 'suffix', 'it ends in -ence: exist-ence', 'existance existense existince'),
+  e('fascinate', 2, 'silent', 'a silent c after the s: fas-c-inate', 'facinate fassinate fascinnate'),
+  e('fluorescent', 2, 'other', 'u before o, then -escent: flu-or-escent', 'flourescent fluorecent fluorescant'),
+  e('harass', 2, 'double', 'a single r and a double s: ha-r-a-ss', 'harrass harrase herass'),
+  e('hierarchy', 2, 'ie', 'hi-er-archy: i before e', 'heirarchy hierachy hierarchey'),
+  e('humorous', 2, 'other', 'humour drops its second u before -ous: hum-or-ous', 'humourous humerous humorus'),
+  e('hygiene', 2, 'ie', 'i before e after the g: hyg-ie-ne', 'hygeine hygene hygine'),
+  e('hypocrisy', 2, 'other', 'hypo- with the ending -crisy: hypo-crisy', 'hypocricy hipocrisy hypocrasy'),
+  e('independent', 2, 'suffix', 'it ends in -ent: independ-ent', 'independant indepedent independint'),
+  e('indispensable', 2, 'suffix', 'it ends in -able: indispens-able', 'indispensible indespensable indispensabel'),
+  e('inoculate', 2, 'double', 'a single n and a single c: i-n-o-c-ulate', 'innocculate inocculate inoculete'),
+  e('irrelevant', 2, 'suffix', 'a double r and the ending -ant: i-rr-elev-ant', 'irrelevent irrevelant irelevant', 'relevant'),
+  e('irresistible', 2, 'suffix', 'a double r and the ending -ible: i-rr-esist-ible', 'irresistable irrisistible iresistible', 'resist'),
+  e('leisure', 2, 'ie', 'an exception to the rule: l-ei-sure', 'liesure leasure leisur'),
+  e('mischievous', 2, 'other', 'three syllables, with no i before -ous: mis-chie-vous', 'mischievious mischevous mischeivous'),
+  e('misspell', 2, 'double', 'mis + spell: a double s and a double l', 'mispell misspel missspell'),
+  e('noticeable', 2, 'suffix', 'the e of notice is kept before -able: notice-able', 'noticable noticeble notticeable'),
+  e('nuisance', 2, 'suffix', 'nui- with the ending -ance: nuis-ance', 'nusiance nuisanse nuisence'),
+  e('occasionally', 2, 'double', 'a double c, a single s and a double l: o-cc-a-s-iona-ll-y', 'occasionaly ocasionally occassionally', 'occasion'),
+  e('occurred', 2, 'double', 'a double c and a double r: o-cc-u-rr-ed', 'occured ocurred occurrred', 'occur'),
+  e('omission', 2, 'double', 'a single m and a double s: o-m-i-ss-ion', 'ommission omision ommision'),
+  e('perseverance', 2, 'suffix', 'no r between perse- and -verance, and the ending -ance: perse-ver-ance', 'perseverence perserverance persevarance'),
+  e('persistent', 2, 'suffix', 'it ends in -ent: persist-ent', 'persistant persistint persestent'),
+  e('personnel', 2, 'double', 'a double n and a single l: perso-nn-e-l', 'personel personnell persunnel'),
+  e('playwright', 2, 'other', 'a wright is a maker: play-wright', 'playwrite playwrigt plaiwright'),
+  e('privilege', 2, 'other', 'no d, and the ending -lege: privi-lege', 'priviledge privelege privilage'),
+  e('pronunciation', 2, 'other', 'no o after the first n: pro-nun-ciation', 'pronounciation pronunsiation pronunciaton'),
+  e('publicly', 2, 'other', 'public + -ly: public-ly', 'publicely publicaly publickly'),
+  e('questionnaire', 2, 'double', 'a double n, a single r and a final e: questio-nn-ai-r-e', 'questionaire questionnair questionairre'),
+  e('referred', 2, 'double', 'a single f and a double r: re-f-e-rr-ed', 'refered reffered referrred', 'refer'),
+  e('relevant', 2, 'suffix', 'l before v, with the ending -ant: rel-ev-ant', 'relevent revelant relavant', 'relevant'),
+  e('religious', 2, 'other', 'relig- with the ending -ious: relig-ious', 'religous relligious religeous'),
+  e('repetition', 2, 'other', 'from repeat: rep-e-t-ition', 'repitition repetetion reppetition'),
+  e('ridiculous', 2, 'other', 'from ridicule: rid-icul-ous', 'rediculous ridiculus ridicalous'),
+  e('scissors', 2, 'silent', 'a silent c and a double s: s-c-i-ss-ors', 'sissors scisors scissers'),
+  e('secretary', 2, 'suffix', 'secret + -ary: secret-ary', 'secretery secratary secertary'),
+  e('seize', 2, 'ie', 'an exception to the rule: s-ei-ze', 'sieze seeze siese'),
+  e('siege', 2, 'ie', 'i before e: s-ie-ge', 'seige siedge seege'),
+  e('sergeant', 2, 'other', 'ser- with the ending -geant: ser-geant', 'sargeant sergent seargent'),
+  e('souvenir', 2, 'other', 'sou- with the ending -venir: sou-venir', 'souvenier suvenir sovenir'),
+  e('tendency', 2, 'suffix', 'it ends in -ency: tend-ency', 'tendancy tendencey tendensy'),
+  e('threshold', 2, 'double', 'only one h in the middle: thres-h-old', 'threshhold thresold threshould'),
+  e('tyranny', 2, 'double', 'a single r and a double n: ty-r-a-nn-y', 'tyrany tyrrany tyrannie'),
+  e('unnecessary', 2, 'double', 'un + necessary: a double n, one c and a double s', 'unneccessary unecessary unnecesary', 'necessary'),
+  e('vacuum', 2, 'double', 'a single c and a double u: va-c-uu-m', 'vaccuum vacum vaccum'),
+  e('vicious', 2, 'other', 'vic- with the ending -ious: vic-ious', 'viscious vicous vicius'),
+  e('withhold', 2, 'double', 'with + hold: a double h', 'withold witthhold withholde'),
+  e('acquaintance', 2, 'silent', 'acq- with a silent c, and the ending -ance: a-c-quaint-ance', 'aquaintance acquaintence acquantance'),
+  e('acquire', 2, 'silent', 'acq- with a silent c: a-c-quire', 'aquire accquire acquier'),
+  e('aggressive', 2, 'double', 'a double g and a double s: a-gg-re-ss-ive', 'agressive aggresive agresive'),
+  e('amateur', 2, 'other', 'it ends in -eur: amat-eur', 'amature amatuer ammateur'),
+  e('apparent', 2, 'suffix', 'a double p, a single r and the ending -ent: a-pp-a-r-ent', 'apparant aparent apparrent'),
+  e('appearance', 2, 'suffix', 'appear + -ance: appear-ance', 'appearence apearance appearanse'),
+  e('assassination', 2, 'double', 'two pairs of s: a-ss-a-ss-ination', 'assasination asassination assassinnation'),
+  e('cemetery', 2, 'suffix', 'three e vowels, ending in -ery: c-e-m-e-t-e-ry', 'cemetary cematery semetery'),
+  e('changeable', 2, 'suffix', 'the e of change is kept before -able: change-able', 'changable chanegable changeible'),
+  e('colleague', 2, 'other', 'col- with the ending -league: col-league', 'collegue colleage colleaugue'),
+  e('curiosity', 2, 'other', 'the u of curious is dropped: curi-osity', 'curiousity curiosety curriosity'),
+  e('efficient', 2, 'ie', 'a double f, then i before e: e-ff-ic-ie-nt', 'efficeint eficient efficiant'),
+  e('eligible', 2, 'suffix', 'one l at the start and the ending -ible: el-ig-ible', 'eligable elligible eligibel'),
+  e('equipment', 2, 'other', 'equip + -ment, with a single p: equip-ment', 'equippment equiptment equipmant'),
+  e('explanation', 2, 'other', 'explain drops its i: expl-a-nation', 'explaination explenation explanasion'),
+  e('familiar', 2, 'other', 'one m, one l and the ending -iar: famil-iar', 'familier famillar familar'),
+  e('hindrance', 2, 'other', 'the e of hinder is dropped: hind-rance', 'hindrence hindranse hinderence'),
+  e('illiterate', 2, 'double', 'a double l and a single t: i-ll-i-t-erate', 'iliterate illitterate illiterrate'),
+  e('incidentally', 2, 'other', 'incidental + -ly: incidenta-lly', 'incidently incidentaly incedentally'),
+  e('intelligence', 2, 'double', 'a double l and the ending -ence: inte-ll-igence', 'inteligence intelligance intellegence'),
+  e('laboratory', 2, 'other', 'an o after the b: lab-o-ratory', 'labratory laboratary labaratory'),
+  e('maintenance', 2, 'suffix', 'main-ten-ance: maintain changes to mainten-', 'maintainance maintenence maintanance'),
+  e('miniature', 2, 'other', 'mini- with the ending -ature: mini-ature', 'miniture minature miniatur'),
+  e('parliament', 2, 'other', 'an a after the i: parl-ia-ment', 'parliment parliamant parlaiment'),
+  e('pastime', 2, 'double', 'pass + time with only one s and one t: pa-s-time', 'pasttime pastimme pasteme'),
+  e('prejudice', 2, 'other', 'no d: pre-judice', 'predjudice prejudise prejedice'),
+  e('pursue', 2, 'other', 'pur- at the start: pur-sue', 'persue pursew purrsue'),
+  e('reference', 2, 'suffix', 'a single f and the ending -ence: re-f-er-ence', 'referance refference refrence', 'refer'),
+  e('remembrance', 2, 'other', 'the e of remember is dropped: rememb-rance', 'rememberance remembrence rememberence'),
+  e('resistance', 2, 'suffix', 'it ends in -ance: resist-ance', 'risistance resistanse ressistance', 'resist'),
+  e('rhythm', 2, 'silent', 'rh at the start and no vowel between th and m: rh-y-thm', 'rythm rhythem rythym'),
+  e('tariff', 2, 'double', 'a single r and a double f: ta-r-i-ff', 'tarriff tarif tariffe'),
+  e('twelfth', 2, 'silent', 'the f is kept although it is barely heard: twel-f-th', 'twelth twelveth twelfthe'),
+  e('wholly', 2, 'double', 'whole + -ly gives a double l: who-ll-y', 'wholy wholley whooly'),
+  e('yacht', 2, 'silent', 'a silent ch: ya-ch-t', 'yaht yaght yhacht'),
+  e('handkerchief', 2, 'silent', 'a silent d, and the ending -chief: han-d-ker-chief', 'hankerchief handkercheif handkerchif'),
+  e('millionaire', 2, 'double', 'a double l and a single n: mi-ll-io-n-aire', 'millionnaire milionaire millionare'),
+  e('pavilion', 2, 'double', 'only one l: pavi-l-ion', 'pavillion pavilian pavillon'),
+  e('porcelain', 2, 'other', 'it ends in -lain: porce-lain', 'porcelin porcelein porceline'),
+  e('grievous', 2, 'ie', 'i before e, with no i before -ous: gr-ie-vous', 'grievious greivous grievos'),
+  e('accelerate', 2, 'double', 'a double c and a single l: a-cc-e-l-erate', 'accelarate acellerate acelerate'),
+  e('anonymous', 2, 'other', 'one n after the a, and a y: a-non-y-mous', 'anonymus annonymous anonimous'),
+  e('correspondence', 2, 'suffix', 'a double r and the ending -ence: co-rr-espond-ence', 'correspondance corespondence corresspondence'),
+  e('deterrent', 2, 'double', 'a double r and the ending -ent: dete-rr-ent', 'deterent deterrant detterrent'),
+  e('disastrous', 2, 'other', 'the e of disaster is dropped: disast-rous', 'disasterous disastrus dissastrous'),
+  e('mortgage', 2, 'silent', 'a silent t: mor-t-gage', 'morgage mortage mortgauge'),
+  e('permissible', 2, 'suffix', 'a double s and the ending -ible: permi-ss-ible', 'permissable permisible permmissible'),
+  e('preferred', 2, 'double', 'a single f and a double r: pre-f-e-rr-ed', 'prefered prefferred preferrred', 'refer'),
+  e('symmetry', 2, 'double', 'sy- with a double m: sy-mm-etry', 'symetry symmetery simmetry'),
+  e('transferred', 2, 'double', 'a single f and a double r: trans-f-e-rr-ed', 'transfered tranferred transfferred', 'refer'),
+  e('accessible', 2, 'suffix', 'a double c, a double s and the ending -ible: a-cc-e-ss-ible', 'accessable acessible accesible'),
+  e('manageable', 2, 'suffix', 'the e of manage is kept before -able: manage-able', 'managable manageble mannageable'),
+  e('courageous', 2, 'other', 'the e of courage is kept before -ous: courage-ous', 'couragous courageus couragious'),
+  e('sovereign', 2, 'ie', 'it ends in -eign: sover-eign', 'soverign sovreign sovereing'),
+  e('counterfeit', 2, 'ie', 'it ends in -feit: counter-feit', 'counterfiet conterfeit counterfit', 'feit'),
+  e('forfeit', 2, 'ie', 'it ends in -feit: for-feit', 'forfiet forefeit forfit', 'feit'),
+  e('psychiatrist', 2, 'silent', 'a silent p, then ch: p-sy-ch-iatrist', 'psyciatrist phychiatrist psychiatrest'),
+  e('predecessor', 2, 'double', 'one c and a double s: prede-c-e-ss-or', 'predecesor predeccessor predesessor'),
+  e('recede', 2, 'cede', 'it ends in -cede: re-cede', 'receed resede receede'),
+  e('concede', 2, 'cede', 'it ends in -cede: con-cede', 'conceed consede conceede'),
+  e('precede', 2, 'cede', 'it ends in -cede: pre-cede', 'preceed presede preceede'),
+  e('proceed', 2, 'cede', 'one of the three -ceed verbs: pro-ceed', 'procede proceede prosseed'),
+  e('succeed', 2, 'cede', 'one of the three -ceed verbs, with a double c: su-cc-eed', 'succede suceed sucseed'),
+  e('exceed', 2, 'cede', 'one of the three -ceed verbs: ex-ceed', 'excede exseed exceede'),
+  e('reservoir', 2, 'other', 'reserv- with the ending -oir: reserv-oir', 'resevoir reservior resorvoir'),
+  e('queue', 2, 'other', 'q followed by ueue: q-ueue', 'queu qeue queeue'),
+
+  // ---------------------------------------------------------------- level 3: advanced words
+  e('onomatopoeia', 3, 'other', 'it ends in -poeia: onomato-poeia', 'onomatopeia onomatopoea onommatopoeia'),
+  e('idiosyncrasy', 3, 'other', 'idio- with the ending -crasy: idio-syn-crasy', 'idiosyncrisy idiosincrasy ideosyncrasy'),
+  e('sacrilegious', 3, 'other', 'from sacrilege, not religious: sacri-legious', 'sacreligious sacrilegeous sacriligious'),
+  e('silhouette', 3, 'silent', 'a silent h, and the ending -ouette: sil-h-ouette', 'silhoutte silouette silhouete'),
+  e('surveillance', 3, 'double', 'a double l and the ending -ance: survei-ll-ance', 'surveilance survelliance survaillance'),
+  e('entrepreneur', 3, 'other', 'entre- + pre- + -neur: entre-pre-neur', 'entrepeneur enterpreneur entreprenuer'),
+  e('connoisseur', 3, 'double', 'a double n and a double s: co-nn-oi-ss-eur', 'conoisseur connoiseur connosieur'),
+  e('liaison', 3, 'other', 'two i letters: l-i-a-i-son', 'liason liasion liaisson'),
+  e('lieutenant', 3, 'other', 'lieu- with the ending -tenant: lieu-tenant', 'leiutenant lieutenent lutenant'),
+  e('bureaucracy', 3, 'other', 'bureau- + -cracy: bureau-cracy', 'beaurocracy bureacracy bureaucrasy'),
+  e('camouflage', 3, 'other', 'camou- with the ending -flage: camou-flage', 'camoflage camouflague camaflage'),
+  e('pharaoh', 3, 'other', 'a before o at the end: phar-a-oh', 'pharoah pharaoe pharoh'),
+  e('pseudonym', 3, 'silent', 'a silent p, then eu: p-seu-donym', 'psuedonym pseudonim sudonym'),
+  e('renaissance', 3, 'double', 'a single n, then ai and a double s: re-n-ai-ss-ance', 'renaisance rennaissance renaissence'),
+  e('reminiscence', 3, 'silent', 'sc in the middle and the ending -ence: remini-sc-ence', 'reminiscense reminisence remminiscence'),
+  e('rendezvous', 3, 'silent', 'a silent z and a silent s: rende-z-vou-s', 'rendevous rendesvous randezvous'),
+  e('acquiesce', 3, 'silent', 'acq- at the start and -esce at the end: acqui-esce', 'aquiesce acquiese acquiesse'),
+  e('annihilate', 3, 'double', 'a double n and a silent h: a-nn-i-h-ilate', 'anihilate annihalate annhilate'),
+  e('asphyxiate', 3, 'other', 'ph then yx: as-ph-yx-iate', 'asphixiate asphyxsiate aphyxiate'),
+  e('bourgeois', 3, 'other', 'bour- with the ending -geois: bour-geois', 'bourgois bourgeios bourgeouis'),
+  e('caricature', 3, 'other', 'cari- + -cature: cari-cature', 'charicature caricture caracature'),
+  e('catastrophe', 3, 'other', 'it ends in -phe: catastro-phe', 'catastrophy catastrofe catastrophie'),
+  e('chauffeur', 3, 'double', 'a double f and the ending -eur: chau-ff-eur', 'chaufeur chauffuer shauffeur'),
+  e('convalesce', 3, 'silent', 'a single l and the ending -esce: conva-l-esce', 'convalese convalesse convallesce'),
+  e('desiccate', 3, 'double', 'a single s and a double c: de-s-i-cc-ate', 'dessicate desicate dessiccate'),
+  e('diphtheria', 3, 'silent', 'ph then th: di-ph-th-eria', 'diptheria diphteria dipthteria'),
+  e('inadvertent', 3, 'suffix', 'it ends in -ent: inadvert-ent', 'inadvertant innadvertent inadvertint'),
+  e('innocuous', 3, 'double', 'a double n and a single c: i-nn-o-c-uous', 'inocuous innocous innocuos'),
+  e('iridescent', 3, 'double', 'a single r and sc: i-r-ide-sc-ent', 'irridescent iridesent irridescant'),
+  e('jeopardy', 3, 'silent', 'a silent o after the e: je-o-pardy', 'jepardy jeapardy jeopordy'),
+  e('kaleidoscope', 3, 'ie', 'e before i: kal-ei-doscope', 'kaliedoscope kaleidascope kalidoscope'),
+  e('labyrinth', 3, 'other', 'y between b and r, then i: lab-y-r-i-nth', 'labrynth labirynth labyrynth'),
+  e('mayonnaise', 3, 'double', 'a double n: mayo-nn-aise', 'mayonaise mayonnase maionnaise'),
+  e('obsequious', 3, 'other', 'obse- with the ending -quious: obse-quious', 'obsequeous obsequius obsiquious'),
+  e('ophthalmology', 3, 'silent', 'ph then th: o-ph-th-almology', 'opthalmology ophthamology ophtalmology'),
+  e('paraphernalia', 3, 'other', 'an r after the ph: para-pher-nalia', 'paraphenalia parapharnalia paraphernailia'),
+  e('picturesque', 3, 'other', 'picture + -esque, sharing the e: pictur-esque', 'picturesk pictureque picteresque'),
+  e('plagiarism', 3, 'other', 'an i after the g: plag-i-arism', 'plagarism plagiarisim plagerism'),
+  e('pneumonia', 3, 'silent', 'a silent p, then eu: p-neu-monia', 'neumonia pnuemonia pneumonnia'),
+  e('precocious', 3, 'other', 'pre- + -cocious: pre-cocious', 'precocius precotious presocious'),
+  e('reconnaissance', 3, 'double', 'a double n and a double s: reco-nn-ai-ss-ance', 'reconnaisance reconaissance reconnaissence'),
+  e('sapphire', 3, 'double', 'a double p before h: sa-pph-ire', 'saphire sapphyre sapphier'),
+  e('surreptitious', 3, 'double', 'a double r and a single p: su-rr-e-p-titious', 'surreptitous sureptitious surruptitious'),
+  e('synonymous', 3, 'other', 'syn- + -onymous with a y: syn-on-y-mous', 'synonimous synonymus synonomous'),
+  e('vacillate', 3, 'double', 'a single c and a double l: va-c-i-ll-ate', 'vaccillate vacilate vasillate'),
+  e('fuchsia', 3, 'other', 'named after Fuchs: fuch-sia', 'fuschia fushia fucshia'),
+  e('guillotine', 3, 'double', 'a silent u and a double l: gu-i-ll-otine', 'guilotine guillatine gillotine'),
+  e('intercede', 3, 'cede', 'it ends in -cede: inter-cede', 'interceed intersede interceede'),
+  e('mnemonic', 3, 'silent', 'a silent m at the start: m-ne-monic', 'mneumonic nemonic mnemmonic'),
+  e('phlegm', 3, 'silent', 'ph at the start and a silent g: ph-le-g-m', 'phlem flegm phelgm'),
+  e('rheumatism', 3, 'silent', 'rh at the start, then eu: rh-eu-matism', 'rhuematism reumatism rheumatisim'),
+  e('miscellaneous', 3, 'double', 'sc and a double l: mi-sc-e-ll-aneous', 'miscellanous miscelaneous misellaneous'),
+  e('abscess', 3, 'silent', 'sc in the middle and a double s: ab-sc-e-ss', 'absess abcess abscees'),
+  e('bouquet', 3, 'other', 'bou- with the ending -quet: bou-quet', 'boquet bouqet bouquete'),
+  e('advantageous', 3, 'other', 'the e of advantage is kept before -ous: advantage-ous', 'advantagous advantagious advantageus'),
+];
+
+/** Load-time integrity checks so a careless edit fails the quality gate loudly. */
+(function check(): void {
+  const words = new Set<string>();
+  const wrong = new Set<string>();
+  for (const s of SPELLING) {
+    if (words.has(s.w)) throw new Error(`_spelling: duplicate word "${s.w}"`);
+    words.add(s.w);
+  }
+  for (const s of SPELLING) {
+    if (!/^[a-z]+$/.test(s.w)) throw new Error(`_spelling: bad word "${s.w}"`);
+    if (s.x.length < 3) throw new Error(`_spelling: "${s.w}" needs 3+ misspellings`);
+    if (new Set(s.x).size !== s.x.length) throw new Error(`_spelling: repeated misspelling in "${s.w}"`);
+    for (const m of s.x) {
+      if (!/^[a-z]+$/.test(m)) throw new Error(`_spelling: bad misspelling "${m}" of "${s.w}"`);
+      if (words.has(m)) throw new Error(`_spelling: misspelling "${m}" is a listed word`);
+      if (wrong.has(m)) throw new Error(`_spelling: misspelling "${m}" is used twice`);
+      wrong.add(m);
+    }
+  }
+})();

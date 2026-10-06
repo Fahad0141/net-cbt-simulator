@@ -1,0 +1,145 @@
+.question {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.passage {
+  border-left: 3px solid var(--border-strong);
+  padding: 4px 0 4px 12px;
+  color: var(--text-2);
+}
+
+.passageNote {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+
+.stemRow {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+}
+
+.number {
+  font-weight: 700;
+  flex: 0 0 auto;
+}
+
+.stem {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow-x: auto;
+}
+
+.figureRow {
+  padding-left: 24px;
+}
+
+.options {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0 24px;
+  display: grid;
+  gap: 6px;
+}
+
+.compact {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.option {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  min-width: 0;
+  flex-wrap: wrap;
+}
+
+.label {
+  font-weight: 700;
+  color: var(--muted);
+  flex: 0 0 auto;
+}
+
+.optionText {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.selected {
+  border-color: var(--border-strong);
+}
+
+.correct {
+  border-color: var(--success);
+  background: var(--success-soft);
+}
+
+.wrong {
+  border-color: var(--danger);
+  background: var(--danger-soft);
+}
+
+.tag {
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: var(--success);
+  color: #fff;
+}
+
+.tagWrong {
+  background: var(--danger);
+}
+
+.explanation {
+  margin-left: 24px;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  border: 1px dashed var(--border-strong);
+  font-size: 14.5px;
+}
+
+@media (max-width: 640px) {
+  .options,
+  .figureRow {
+    padding-left: 0;
+  }
+
+  .compact {
+    grid-template-columns: 1fr;
+  }
+
+  .explanation {
+    margin-left: 0;
+  }
+}
+
+@media print {
+  .option {
+    border: 0;
+    padding: 1px 4px;
+    background: none !important;
+  }
+
+  .tag {
+    display: none;
+  }
+}

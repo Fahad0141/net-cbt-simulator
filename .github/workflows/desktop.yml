@@ -1,0 +1,55 @@
+name: Windows desktop app
+
+# Builds the Windows installer (desktop/, see docs/DESKTOP.md). Separate from the website's CI and
+# GitHub Pages deploy: it runs only for version tags and on demand.
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: desktop-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  installer:
+    runs-on: windows-latest
+    permissions:
+      contents: write # attach the installer to the GitHub release of a version tag
+    env:
+      # No code-signing certificate: build an unsigned installer (see docs/DESKTOP.md).
+      CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            desktop/package-lock.json
+      - run: npm ci
+      - run: npm ci
+        working-directory: desktop
+      - run: npm test
+        working-directory: desktop
+      - run: npm run build
+        env:
+          VITE_REPO_URL: https://github.com/${{ github.repository }}
+      - run: npm run dist
+        working-directory: desktop
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows-installer
+          path: dist-desktop/*.exe
+          if-no-files-found: error
+      - name: Smoke test the unpacked app
+        run: npm run desktop:smoke
+      - name: Attach the installer to the release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist-desktop/*.exe

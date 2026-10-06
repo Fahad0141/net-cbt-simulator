@@ -1,0 +1,83 @@
+.intro {
+  margin: 0 0 14px;
+  color: var(--text-2);
+  font-size: 14px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.input {
+  flex: 1 1 180px;
+  font-family: var(--mono);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.input::placeholder {
+  font-family: var(--mono);
+  color: var(--muted);
+  opacity: 0.8;
+}
+
+.input[aria-invalid='true'] {
+  border-color: var(--danger);
+}
+
+.submit {
+  flex: 0 0 auto;
+}
+
+.error {
+  margin: 2px 0 0;
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  background: var(--danger-soft);
+  color: var(--danger);
+  font-size: 13.5px;
+  font-weight: 600;
+}
+
+.hint {
+  margin: 2px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.valid {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 6px;
+  color: var(--text-2);
+  font-weight: 600;
+}
+
+.valid svg {
+  flex: 0 0 auto;
+  margin-top: 1px;
+  color: var(--success);
+}
+
+.code {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: var(--surface-3);
+  color: var(--text);
+}
+
+@media (max-width: 400px) {
+  .submit {
+    flex: 1 1 100%;
+  }
+}

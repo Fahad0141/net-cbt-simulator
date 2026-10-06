@@ -1,0 +1,48 @@
+# electron-builder configuration of the Windows desktop app (see docs/DESKTOP.md).
+appId: com.netcbt.simulator.desktop
+productName: NET CBT Simulator
+copyright: MIT licence. Unofficial, not affiliated with NUST.
+
+directories:
+  output: release
+  buildResources: build
+
+# Only the shell and the copied web build go into app.asar (the app has no runtime dependencies).
+files:
+  - main.cjs
+  - preload.cjs
+  - lib/**/*.cjs
+  - web/**/*
+  - package.json
+  - '!**/*.map'
+
+asar: true
+npmRebuild: false
+electronLanguages: [en-US]
+
+win:
+  target:
+    - target: nsis
+      arch: [x64]
+  icon: build/icon.ico
+  executableName: NET CBT Simulator
+  # Unsigned: no code-signing certificate (Windows SmartScreen shows "Unknown publisher").
+  signAndEditExecutable: true
+  forceCodeSigning: false
+
+nsis:
+  oneClick: false
+  perMachine: false
+  allowElevation: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: always
+  createStartMenuShortcut: true
+  shortcutName: NET CBT Simulator
+  uninstallDisplayName: NET CBT Simulator
+  installerIcon: build/icon.ico
+  uninstallerIcon: build/icon.ico
+  include: build/installer.nsh
+  artifactName: NET-CBT-Simulator-Setup-${version}.${ext}
+  # Keep %APPDATA%\NET CBT Simulator (history, settings) when uninstalling or updating.
+  deleteAppDataOnUninstall: false
+  runAfterFinish: true

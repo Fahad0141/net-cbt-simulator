@@ -1,0 +1,25 @@
+{
+  "name": "net-cbt-simulator-desktop",
+  "productName": "NET CBT Simulator",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Unofficial NUST Entry Test (NET) computer-based test simulator for Windows.",
+  "author": "NET CBT Simulator contributors",
+  "license": "MIT",
+  "main": "main.cjs",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "web": "node scripts/prepare.mjs",
+    "start": "node scripts/prepare.mjs && electron .",
+    "pack": "node scripts/prepare.mjs && electron-builder --win dir --x64 --publish never",
+    "dist": "node scripts/prepare.mjs && electron-builder --win nsis --x64 --publish never && node scripts/collect.mjs",
+    "test": "node --test test/policy.test.cjs test/windowState.test.cjs",
+    "icon": "node scripts/make-icon.mjs"
+  },
+  "devDependencies": {
+    "electron": "41.7.1",
+    "electron-builder": "26.17.0"
+  }
+}
