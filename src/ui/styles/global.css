@@ -1,0 +1,177 @@
+/* Design tokens for the dashboard / review / analytics pages.
+ * (The CBT terminal has its own faithful, light-only styling in cbt.module.css.)
+ * Text tokens keep WCAG AA (>= 4.5:1) in both themes: --muted on --bg, --surface,
+ * --surface-2, --surface-3 and the soft tints; --primary/--success/--danger/--warning
+ * on their own -soft tint (the Badge tones) and on --bg / --surface. */
+:root {
+  --bg: #f3f6fb;
+  --surface: #ffffff;
+  --surface-2: #f6f8fc;
+  --surface-3: #eaf0f8;
+  --text: #13213a;
+  --text-2: #3a4a63;
+  --muted: #5d6c81;
+  --border: #d7dfeb;
+  --border-strong: #b8c5d8;
+  --primary: #0a5d91;
+  --primary-hover: #084d78;
+  --primary-soft: #e3f0fa;
+  --on-primary: #ffffff;
+  --accent: #f4c430;
+  --success: #1b7b35;
+  --success-soft: #e3f5e8;
+  --danger: #c0392b;
+  --danger-soft: #fdeaea;
+  --warning: #9d5c00;
+  --warning-soft: #fff3df;
+  --purple: #6d3fd6;
+  --radius: 10px;
+  --radius-sm: 6px;
+  --shadow: 0 1px 2px rgba(16, 24, 40, 0.06), 0 1px 3px rgba(16, 24, 40, 0.1);
+  --shadow-lg: 0 10px 30px rgba(16, 24, 40, 0.14);
+  --focus: 0 0 0 3px rgba(10, 93, 145, 0.35);
+  --font: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --mono: ui-monospace, 'Cascadia Code', Consolas, 'Courier New', monospace;
+  --rt-code-bg: rgba(10, 93, 145, 0.08);
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: #0e1522;
+    --surface: #151f30;
+    --surface-2: #1a2639;
+    --surface-3: #22314a;
+    --text: #e6edf7;
+    --text-2: #c3cfe0;
+    --muted: #8a9ab3;
+    --border: #2a3a55;
+    --border-strong: #3a4e70;
+    --primary: #4aa3e0;
+    --primary-hover: #6bb5e8;
+    --primary-soft: #16314b;
+    --on-primary: #06131f;
+    --success: #4cc46f;
+    --success-soft: #133524;
+    --danger: #f06b5d;
+    --danger-soft: #3b1a1a;
+    --warning: #f0a845;
+    --warning-soft: #3a2a12;
+    --purple: #a283f5;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.5);
+    --focus: 0 0 0 3px rgba(74, 163, 224, 0.45);
+    --rt-code-bg: rgba(255, 255, 255, 0.08);
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme='dark'] {
+  --bg: #0e1522;
+  --surface: #151f30;
+  --surface-2: #1a2639;
+  --surface-3: #22314a;
+  --text: #e6edf7;
+  --text-2: #c3cfe0;
+  --muted: #8a9ab3;
+  --border: #2a3a55;
+  --border-strong: #3a4e70;
+  --primary: #4aa3e0;
+  --primary-hover: #6bb5e8;
+  --primary-soft: #16314b;
+  --on-primary: #06131f;
+  --success: #4cc46f;
+  --success-soft: #133524;
+  --danger: #f06b5d;
+  --danger-soft: #3b1a1a;
+  --warning: #f0a845;
+  --warning-soft: #3a2a12;
+  --purple: #a283f5;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.5);
+  --focus: 0 0 0 3px rgba(74, 163, 224, 0.45);
+  --rt-code-bg: rgba(255, 255, 255, 0.08);
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+a {
+  color: var(--primary);
+}
+
+a:hover {
+  color: var(--primary-hover);
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: none;
+  box-shadow: var(--focus);
+  border-radius: 4px;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  line-height: 1.25;
+  margin: 0 0 0.5em;
+}
+
+img,
+svg {
+  max-width: 100%;
+}
+
+.katex-display {
+  margin: 0.4em 0;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

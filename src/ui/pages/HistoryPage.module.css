@@ -1,0 +1,361 @@
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.filter {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  flex: 0 1 300px;
+}
+
+.filterLabel {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-2);
+}
+
+.toolbarActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-left: auto;
+}
+
+/* status message: the live region is always mounted; idle it takes no space */
+.statusIdle .statusText {
+  margin: 0;
+}
+
+.statusInfo,
+.statusError {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 12px;
+  padding: 6px 6px 6px 14px;
+  border-radius: var(--radius-sm);
+  border-left: 4px solid var(--success);
+  background: var(--success-soft);
+  color: var(--text);
+  font-size: 14px;
+}
+
+.statusError {
+  border-left-color: var(--danger);
+  background: var(--danger-soft);
+}
+
+.statusText {
+  margin: 4px 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.statusText:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+  box-shadow: none;
+}
+
+.dismiss {
+  flex: none;
+  border: 0;
+  background: transparent;
+  color: var(--text-2);
+  font-size: 20px;
+  line-height: 1;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.dismiss:hover {
+  background: var(--surface-3);
+}
+
+.errorTitle {
+  margin: 0;
+  font-size: 17px;
+}
+
+.emptyActions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.overview {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(140px, 100%), 1fr));
+  gap: 16px;
+}
+
+/* attempts table: a real table on wide screens, stacked cards on phones */
+.tableCard {
+  /* positioned so the visually hidden caption cannot escape the horizontal scroller */
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.table th,
+.table td {
+  padding: 11px 12px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: middle;
+}
+
+.table th {
+  background: var(--surface-2);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  font-weight: 650;
+  white-space: nowrap;
+}
+
+.table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.row:hover td {
+  background: var(--surface-2);
+}
+
+.date {
+  white-space: nowrap;
+  color: var(--text-2);
+}
+
+.paper {
+  min-width: 200px;
+}
+
+/* padded so the link is a comfortable tap target without changing the layout */
+.paperTitle {
+  display: block;
+  padding: 8px 0;
+  margin: -8px 0;
+  font-weight: 650;
+  color: var(--text);
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+.paperTitle:hover {
+  color: var(--primary);
+  text-decoration: underline;
+}
+
+.paperMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  margin-top: 2px;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+.code {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text-2);
+  overflow-wrap: anywhere;
+}
+
+.badges {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.table .scoreHead,
+.table .score {
+  text-align: right;
+}
+
+.score {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.score strong {
+  font-size: 15px;
+}
+
+.percent {
+  min-width: 120px;
+}
+
+.percentValue {
+  display: block;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+  margin-bottom: 4px;
+}
+
+.percentBar {
+  display: block;
+}
+
+.time {
+  font-variant-numeric: tabular-nums;
+}
+
+/* a duration never breaks inside itself ("2h 54m"); "of 3h 00m" may drop to its own line */
+.nowrap {
+  white-space: nowrap;
+}
+
+.table .actions {
+  text-align: right;
+}
+
+.actionButtons,
+.confirm {
+  display: inline-flex;
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 6px;
+}
+
+.confirmText {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--danger);
+  white-space: nowrap;
+}
+
+/* row actions keep a 36px tap target (the shared small button is 30px) */
+.action {
+  min-height: 36px;
+}
+
+.deleteButton {
+  color: var(--danger);
+}
+
+.deleteButton:hover {
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+
+/* below this width the seven columns cannot all breathe: switch to stacked cards */
+@media (max-width: 1080px) {
+  .tableCard {
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    overflow: visible;
+  }
+
+  .table,
+  .table tbody {
+    display: block;
+  }
+
+  .table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+  }
+
+  .table tbody {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 14px;
+    padding: 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+  }
+
+  .row:hover td {
+    background: transparent;
+  }
+
+  .table td {
+    display: block;
+    padding: 0;
+    border: 0;
+    min-width: 0;
+  }
+
+  .table td[data-label]::before {
+    content: attr(data-label);
+    display: block;
+    font-size: 11.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+    font-weight: 650;
+    margin-bottom: 2px;
+  }
+
+  .paper {
+    grid-column: 1 / -1;
+    order: -2;
+  }
+
+  .paperTitle {
+    font-size: 15.5px;
+  }
+
+  .date {
+    order: -1;
+    grid-column: 1 / -1;
+    white-space: normal;
+  }
+
+  .table .score {
+    text-align: left;
+  }
+
+  .percent {
+    grid-column: 1 / -1;
+    min-width: 0;
+  }
+
+  .table .actions {
+    grid-column: 1 / -1;
+    text-align: left;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+  }
+
+  .actionButtons,
+  .confirm {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+}

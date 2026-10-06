@@ -1,0 +1,953 @@
+/*
+ * The printable paper.
+ *
+ * Sheets are always black on white: on screen they preview the printout in every
+ * colour theme, and in print they are the printout. Each sheet therefore defines a
+ * fixed "paper" palette and re-maps the shared design tokens that QuestionView and
+ * RichText use inside it. Nothing essential relies on background colours, which
+ * browsers drop when printing (filled bubbles are drawn with borders).
+ */
+
+.document {
+  --paper-size: 10.5pt;
+  --paper-serif: Cambria, Georgia, 'Times New Roman', Times, serif;
+  --paper-sans: Arial, 'Helvetica Neue', Helvetica, 'Liberation Sans', sans-serif;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  min-width: 0;
+}
+
+.sheet {
+  --paper-bg: #fff;
+  --paper-ink: #111;
+  --paper-ink-2: #2b2b2b;
+  --paper-muted: #575757;
+  --paper-rule: #b9b9b9;
+  --paper-rule-strong: #1a1a1a;
+  --paper-tint: #f1f1f1;
+  --surface: var(--paper-bg);
+  --surface-2: var(--paper-tint);
+  --surface-3: #e7e7e7;
+  --text: var(--paper-ink);
+  --text-2: var(--paper-ink-2);
+  --muted: var(--paper-muted);
+  --border: var(--paper-rule);
+  --border-strong: #8a8a8a;
+  --rt-code-bg: rgba(0, 0, 0, 0.06);
+  --rt-code-border: rgba(0, 0, 0, 0.22);
+  --rt-table-border: #6f6f6f;
+  --rt-table-head: #efefef;
+  color-scheme: light;
+
+  width: 100%;
+  max-width: 210mm;
+  min-width: 0;
+  margin: 0 auto;
+  padding: 14mm;
+  background: var(--paper-bg);
+  color: var(--paper-ink);
+  border-radius: 4px;
+  box-shadow: var(--shadow-lg);
+  font-family: var(--paper-serif);
+  font-size: var(--paper-size);
+  line-height: 1.45;
+  overflow-wrap: break-word;
+}
+
+.code {
+  font-family: var(--mono);
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.codeBox {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2mm;
+  padding: 1.2mm 2.6mm;
+  border: 1.2pt solid var(--paper-rule-strong);
+  border-radius: 2px;
+  font-family: var(--paper-sans);
+  font-size: 10.5pt;
+  white-space: nowrap;
+}
+
+.codeLabel {
+  font-size: 7pt;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--paper-muted);
+}
+
+/* Fill-in fields: a label and a rule to write on. */
+.blank {
+  display: flex;
+  align-items: flex-end;
+  gap: 2mm;
+  min-width: 0;
+}
+
+.blankWide {
+  grid-column: 1 / -1;
+}
+
+.blankLabel {
+  font-family: var(--paper-sans);
+  font-size: 8.5pt;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.blankLine {
+  flex: 1 1 auto;
+  min-width: 14mm;
+  height: 5.5mm;
+  border-bottom: 0.75pt solid var(--paper-rule-strong);
+}
+
+.tableWrap {
+  overflow-x: auto;
+}
+
+/* ---------------------------------------------------------------- cover */
+
+.cover {
+  /* Fixed size: the cover must fit one page at every text size. */
+  font-size: 10.5pt;
+  display: flex;
+  flex-direction: column;
+  gap: 5mm;
+}
+
+.coverTop {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2mm 4mm;
+  padding-bottom: 3mm;
+  border-bottom: 1.5pt solid var(--paper-rule-strong);
+  font-family: var(--paper-sans);
+}
+
+.coverBrand {
+  font-size: 8pt;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.titleBlock {
+  padding: 3mm 0 0;
+}
+
+.kicker {
+  margin: 0 0 1.5mm;
+  font-family: var(--paper-sans);
+  font-size: 9pt;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--paper-muted);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--paper-sans);
+  font-size: 21pt;
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--paper-ink);
+}
+
+.subtitle {
+  margin: 2mm 0 0;
+  font-size: 11.5pt;
+  color: var(--paper-ink-2);
+}
+
+.pattern {
+  margin: 1mm 0 0;
+  font-family: var(--paper-sans);
+  font-size: 8pt;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--paper-muted);
+}
+
+.facts {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 0;
+  border: 1pt solid var(--paper-rule-strong);
+  border-radius: 2px;
+}
+
+.facts > div {
+  min-width: 0;
+  padding: 2.2mm 3mm;
+  border-left: 0.75pt solid var(--paper-rule);
+}
+
+.facts > div:first-child {
+  border-left: 0;
+}
+
+.facts dt {
+  font-family: var(--paper-sans);
+  font-size: 7pt;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--paper-muted);
+}
+
+.facts dd {
+  margin: 0.6mm 0 0;
+  font-family: var(--paper-sans);
+  font-size: 13pt;
+  font-weight: 800;
+}
+
+.candidate {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 3.5mm 7mm;
+}
+
+.sectionsTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--paper-sans);
+  font-size: 9.5pt;
+}
+
+.sectionsTable caption {
+  caption-side: top;
+  padding: 0 0 1.5mm;
+  text-align: left;
+  font-size: 9.5pt;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.sectionsTable th,
+.sectionsTable td {
+  padding: 1.3mm 2.4mm;
+  border: 0.75pt solid var(--paper-rule-strong);
+  text-align: left;
+  vertical-align: middle;
+}
+
+.sectionsTable thead th {
+  font-size: 7.5pt;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: var(--paper-tint);
+}
+
+.sectionsTable tbody th {
+  font-weight: 600;
+}
+
+.sectionsTable tfoot th,
+.sectionsTable tfoot td {
+  font-weight: 800;
+}
+
+.numCell {
+  text-align: right !important;
+  font-variant-numeric: tabular-nums;
+}
+
+.instructionsBlock {
+  min-width: 0;
+}
+
+.coverHeading {
+  margin: 0 0 1.5mm;
+  font-family: var(--paper-sans);
+  font-size: 9.5pt;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.instructions {
+  display: grid;
+  gap: 1.1mm;
+  margin: 0;
+  padding-left: 5.5mm;
+  line-height: 1.38;
+}
+
+.instructions li {
+  padding-left: 0.8mm;
+}
+
+.selfCheck {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 3mm 7mm;
+  padding: 3mm 3.5mm;
+  border: 1pt dashed var(--paper-rule-strong);
+  border-radius: 2px;
+}
+
+.selfCheckNote {
+  grid-column: 1 / -1;
+  margin: 0;
+  font-family: var(--paper-sans);
+  font-size: 8pt;
+  color: var(--paper-muted);
+}
+
+.coverBottom {
+  margin-top: auto;
+  padding-top: 3mm;
+  border-top: 0.75pt solid var(--paper-rule-strong);
+  font-family: var(--paper-sans);
+  font-size: 7.5pt;
+  line-height: 1.4;
+  color: var(--paper-muted);
+}
+
+.coverMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1mm 8mm;
+  margin: 0 0 2mm;
+}
+
+.coverMeta > div {
+  display: flex;
+  align-items: baseline;
+  gap: 1.5mm;
+}
+
+.coverMeta dt {
+  font-size: 6.5pt;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.coverMeta dd {
+  margin: 0;
+  font-size: 8.5pt;
+  color: var(--paper-ink);
+}
+
+.disclaimer {
+  margin: 0;
+}
+
+/* ------------------------------------------------------------- sections */
+
+.sectionSheet {
+  min-height: 60mm;
+}
+
+.sectionHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5mm 4mm;
+  margin: 0 0 4mm;
+  padding-bottom: 2mm;
+  border-bottom: 1.5pt solid var(--paper-rule-strong);
+  font-family: var(--paper-sans);
+}
+
+.sectionKicker {
+  flex: 1 0 100%;
+  margin: 0;
+  font-size: 7.5pt;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--paper-muted);
+}
+
+.sectionTitle {
+  margin: 0;
+  font-size: 15pt;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.sectionMeta {
+  margin: 0;
+  font-size: 9pt;
+  color: var(--paper-muted);
+}
+
+/* Blocks that must not be split across pages. */
+.keep {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.q {
+  break-inside: avoid;
+  page-break-inside: avoid;
+  padding: 0 0 0.95em;
+}
+
+/*
+ * QuestionView internals, reached structurally (its classes are module-scoped):
+ * tighter spacing, a fixed-width number column, and borderless options like print.
+ */
+.q > div {
+  gap: 0.3em;
+}
+
+.q > div > div > span:first-child {
+  min-width: 1.9em;
+  text-align: right;
+}
+
+.q ol {
+  gap: 0.12em 1.2em;
+  padding-left: calc(1.9em + 8px);
+}
+
+.q li {
+  gap: 0.45em;
+  padding: 0.04em 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+}
+
+.opt1 ol {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.opt4 ol {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.passageGroup {
+  min-width: 0;
+}
+
+.passage {
+  margin: 0 0 0.9em;
+  padding: 0.7em 0.95em;
+  border: 0.75pt solid var(--paper-rule);
+  border-left: 2.5pt solid var(--paper-rule-strong);
+  font-size: 0.97em;
+}
+
+.passageLead {
+  margin: 0 0 0.45em;
+  font-family: var(--paper-sans);
+  font-size: 0.78em;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.passageTitle {
+  margin: 0 0 0.3em;
+  font-family: var(--paper-sans);
+  font-size: 1em;
+  font-weight: 700;
+}
+
+.passageText {
+  line-height: 1.5;
+}
+
+/* ----------------------------------------------------- OMR answer sheet */
+
+.omr {
+  font-family: var(--paper-sans);
+  font-size: 9pt;
+}
+
+.omrHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 2mm 4mm;
+  padding-bottom: 2.5mm;
+  border-bottom: 1.5pt solid var(--paper-rule-strong);
+}
+
+.omrTitle,
+.keyTitle {
+  margin: 0;
+  font-family: var(--paper-sans);
+  font-size: 15pt;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.omrSub {
+  margin: 0.5mm 0 0;
+  font-size: 9pt;
+  color: var(--paper-muted);
+}
+
+.omrFields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 3mm 7mm;
+  margin: 3.5mm 0 3mm;
+}
+
+.omrHelp {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2mm 6mm;
+  padding: 2mm 3mm;
+  border: 0.75pt solid var(--paper-rule);
+  border-radius: 2px;
+  font-size: 8pt;
+  line-height: 1.35;
+}
+
+.omrHelp p {
+  margin: 0;
+}
+
+.omrHelp p:first-child {
+  flex: 1 1 95mm;
+}
+
+.omrExamples {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2mm 5mm;
+}
+
+.omrExample {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.2mm;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.omrLegend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1mm 5mm;
+  margin: 3mm 0 2mm;
+  font-size: 8pt;
+  font-weight: 700;
+}
+
+.omrLegendItem {
+  white-space: nowrap;
+}
+
+.omrGrid {
+  display: grid;
+  grid-template-columns: repeat(5, max-content);
+  justify-content: space-between;
+  gap: 2mm 3mm;
+}
+
+.omrCol {
+  min-width: 0;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.omrSection {
+  max-width: 27mm;
+  margin: 0.4mm 0 0.8mm;
+  padding: 0 0 0.3mm 1mm;
+  border-bottom: 0.75pt solid var(--paper-rule-strong);
+  overflow: hidden;
+  font-size: 6.5pt;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.omrRow {
+  display: flex;
+  align-items: center;
+  gap: 1.1mm;
+  height: 4.3mm;
+}
+
+.omrRowGap {
+  margin-bottom: 1.2mm;
+}
+
+.omrNum {
+  width: 7mm;
+  padding-right: 0.8mm;
+  font-size: 7.5pt;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.bubble {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 3.8mm;
+  height: 3.8mm;
+  border: 0.7pt solid var(--paper-ink);
+  border-radius: 50%;
+  font-size: 5.4pt;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--paper-ink-2);
+}
+
+/* Filled with a thick border, which prints even without "background graphics". */
+.bubbleFilled {
+  border-width: 1.9mm;
+}
+
+.omrTally {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 2mm 5mm;
+  margin-top: 4mm;
+  padding-top: 2.5mm;
+  border-top: 0.75pt solid var(--paper-rule-strong);
+  font-size: 8.5pt;
+  font-weight: 700;
+}
+
+/* ------------------------------------------------------------ answer key */
+
+.keyHead {
+  margin: 0 0 4mm;
+  padding-bottom: 2.5mm;
+  border-bottom: 1.5pt solid var(--paper-rule-strong);
+  font-family: var(--paper-sans);
+}
+
+.keySub {
+  margin: 1mm 0 0;
+  font-size: 8.5pt;
+  color: var(--paper-muted);
+}
+
+.keyBlock {
+  margin: 0 0 4.5mm;
+  overflow-x: auto;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.keyTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--paper-sans);
+  font-size: 9.5pt;
+  font-variant-numeric: tabular-nums;
+}
+
+.keyTable caption {
+  caption-side: top;
+  padding: 0 0 1.5mm;
+  text-align: left;
+  font-weight: 800;
+}
+
+.keyRange {
+  font-weight: 400;
+  color: var(--paper-muted);
+}
+
+.keyTable th,
+.keyTable td {
+  padding: 1.1mm 1.2mm;
+  border: 0.75pt solid var(--paper-rule);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.keyTable th {
+  width: 11%;
+  font-size: 7.5pt;
+  font-weight: 700;
+  color: var(--paper-muted);
+  background: var(--paper-tint);
+}
+
+.keyNum {
+  display: inline-block;
+  min-width: 1.7em;
+  margin-right: 0.15em;
+  font-size: 0.78em;
+  text-align: right;
+  color: var(--paper-muted);
+}
+
+.keyLetter {
+  font-weight: 800;
+}
+
+.keyPad {
+  border-color: var(--paper-rule);
+}
+
+/* ------------------------------------------------------- worked solutions */
+
+.solSection {
+  min-width: 0;
+}
+
+.solSectionTitle {
+  margin: 3mm 0 2.5mm;
+  padding-bottom: 1mm;
+  border-bottom: 0.75pt solid var(--paper-rule-strong);
+  font-family: var(--paper-sans);
+  font-size: 11pt;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.sol {
+  margin: 0 0 0.7em;
+  padding: 0 0 0.7em;
+  border-bottom: 0.5pt dotted var(--paper-rule);
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.solHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.2em 0.5em;
+}
+
+.solNum {
+  min-width: 1.9em;
+  font-weight: 700;
+  text-align: right;
+}
+
+.solAnswer {
+  font-family: var(--paper-sans);
+  font-weight: 800;
+}
+
+.solOption {
+  min-width: 0;
+}
+
+.solMeta {
+  margin-left: auto;
+  font-family: var(--paper-sans);
+  font-size: 0.74em;
+  color: var(--paper-muted);
+}
+
+.solBody {
+  margin-top: 0.25em;
+  padding-left: calc(1.9em + 0.5em);
+  color: var(--paper-ink-2);
+}
+
+/* ------------------------------------------------------------ the footer */
+
+.docFooter {
+  padding: 0 16px;
+  text-align: center;
+  font-family: var(--font);
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+.docFooter p {
+  margin: 0;
+}
+
+.docFooterNote {
+  font-size: 11.5px;
+}
+
+.pending {
+  margin: 0;
+  text-align: center;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* ------------------------------------------------------------ small screens */
+
+@media screen and (max-width: 640px) {
+  .document {
+    gap: 16px;
+  }
+
+  .sheet {
+    padding: 20px 14px;
+    border-radius: 2px;
+  }
+
+  .title {
+    font-size: 17pt;
+  }
+
+  .facts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .facts > div:nth-child(odd) {
+    border-left: 0;
+  }
+
+  .facts > div:nth-child(n + 3) {
+    border-top: 0.75pt solid var(--paper-rule);
+  }
+
+  .candidate,
+  .selfCheck,
+  .omrFields {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .q ol {
+    padding-left: 0;
+  }
+
+  .opt4 ol {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .solBody {
+    padding-left: 0;
+  }
+
+  .solMeta {
+    flex-basis: 100%;
+    margin-left: 0;
+  }
+
+  .sectionsTable th,
+  .sectionsTable td {
+    padding: 1.2mm 1.4mm;
+  }
+
+  .sectionsTable thead th {
+    letter-spacing: 0.02em;
+  }
+
+  /* Ten answers per row still fit a phone: number above letter. */
+  .keyTable th,
+  .keyTable td {
+    padding: 1mm 0.4mm;
+  }
+
+  .keyTable th {
+    white-space: normal;
+  }
+
+  .keyNum {
+    display: block;
+    min-width: 0;
+    margin: 0;
+    text-align: center;
+  }
+}
+
+@media screen and (max-width: 760px) {
+  .omrGrid {
+    grid-template-columns: repeat(auto-fill, minmax(30mm, 1fr));
+    justify-content: stretch;
+    gap: 4mm;
+  }
+}
+
+/* ------------------------------------------------------------------ print */
+
+@media print {
+  .document {
+    display: block;
+  }
+
+  .sheet {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .newPage {
+    break-before: page;
+    page-break-before: always;
+  }
+
+  /* Pin the cover's footer block to the bottom of the first page. The spacing is a little tighter
+     than on screen so the cover still fits one page with wider fallback fonts (Android prints
+     with Noto Serif instead of Georgia). */
+  .cover {
+    min-height: 255mm;
+    gap: 4mm;
+    font-size: 10pt;
+  }
+
+  .sectionSheet {
+    min-height: 0;
+  }
+
+  /* Scroll containers cannot be split across pages; let them grow instead. */
+  .tableWrap,
+  .keyBlock {
+    overflow: visible;
+  }
+
+  .q > div {
+    display: block;
+  }
+
+  .q > div > * + * {
+    margin-top: 0.3em;
+  }
+
+  .passageText {
+    text-align: justify;
+    hyphens: auto;
+  }
+
+  .pending {
+    display: none;
+  }
+
+  .docFooter {
+    margin-top: 8mm;
+    padding: 2mm 0 0;
+    border-top: 0.75pt solid #999;
+    font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+    font-size: 8pt;
+    color: #333;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .docFooterNote {
+    font-size: 7.5pt;
+  }
+}

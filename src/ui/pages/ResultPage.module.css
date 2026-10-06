@@ -1,0 +1,28 @@
+/* Page-level layout of the score report; component styles live in ./result/result.module.css. */
+
+.page {
+  gap: 20px;
+  min-width: 0;
+}
+
+/* Two cards side by side when there is room for both, stacked otherwise. */
+.pair {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(420px, 100%), 1fr));
+  gap: 20px;
+  min-width: 0;
+}
+
+.pair > * {
+  min-width: 0;
+}
+
+@media print {
+  .page {
+    gap: 12px;
+  }
+
+  .pair {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

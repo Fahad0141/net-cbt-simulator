@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">NET CBT Simulator</string>
+    <string name="title_activity_main">NET CBT</string>
+    <string name="package_name">com.netcbt.simulator</string>
+    <string name="custom_url_scheme">com.netcbt.simulator</string>
+</resources>

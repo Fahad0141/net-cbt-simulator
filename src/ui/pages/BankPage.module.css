@@ -1,0 +1,93 @@
+/* Question bank page: page-level pieces (the views live in bank/bank.module.css). */
+
+.page {
+  min-width: 0;
+}
+
+.version {
+  white-space: nowrap;
+}
+
+.errorBox {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.errorBox p {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+/* URL values are echoed back; a long unbroken one must not widen the page. */
+.wrap {
+  overflow-wrap: anywhere;
+}
+
+/* loading state */
+.loading {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* --text-2, not --muted: muted text on the page background is below 4.5:1 in light mode. */
+.loadingText {
+  margin: 0;
+  color: var(--text-2);
+}
+
+.skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.skeleton span {
+  display: block;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(
+    90deg,
+    var(--surface-3) 0%,
+    var(--surface-2) 50%,
+    var(--surface-3) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+
+.skeletonTitle {
+  width: 40%;
+  height: 22px;
+}
+
+.skeletonRow {
+  width: 85%;
+  height: 14px;
+}
+
+.skeletonBlock {
+  width: 100%;
+  height: 120px;
+}
+
+@keyframes shimmer {
+  from {
+    background-position: 100% 0;
+  }
+
+  to {
+    background-position: -100% 0;
+  }
+}
+
+/* The global reduced-motion rule only shortens animations; a looping shimmer would flicker. */
+@media (prefers-reduced-motion: reduce) {
+  .skeleton span {
+    animation: none;
+  }
+}
