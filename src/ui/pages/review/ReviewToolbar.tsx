@@ -4,7 +4,7 @@ import { FILTER_LABELS, REVIEW_FILTERS, type ReviewFilter } from './model';
 import s from './review.module.css';
 
 const DOT_CLASS: Readonly<Record<ReviewFilter, string | undefined>> = {
-  all: s.dotAll,
+  all: undefined,
   correct: s.dotCorrect,
   wrong: s.dotWrong,
   blank: s.dotBlank,
@@ -22,7 +22,10 @@ interface ReviewToolbarProps {
   onShowExplanations: (show: boolean) => void;
 }
 
-/** Outcome filters (native radios styled as chips), subject filter and the explanations switch. */
+/**
+ * Outcome filters (native radios styled as chips), subject filter and the explanations
+ * switch. The chips' marks match the navigator's cells, so they double as its key.
+ */
 export function ReviewToolbar({
   filter,
   counts,
@@ -36,7 +39,7 @@ export function ReviewToolbar({
   const name = useId();
   const subjectId = useId();
   return (
-    <section className={`${ui.card} ${s.toolbar}`} aria-label="Review filters">
+    <section className={s.toolbar} aria-label="Review filters">
       <fieldset className={s.filters}>
         <legend className="visually-hidden">Show questions</legend>
         {REVIEW_FILTERS.map((value) => (
@@ -49,7 +52,9 @@ export function ReviewToolbar({
               onChange={() => onFilter(value)}
             />
             <span className={s.chipBody}>
-              <span className={`${s.dot} ${DOT_CLASS[value] ?? ''}`} aria-hidden="true" />
+              {DOT_CLASS[value] ? (
+                <span className={`${s.dot} ${DOT_CLASS[value]}`} aria-hidden="true" />
+              ) : null}
               {FILTER_LABELS[value]}{' '}
               <span className={s.count}>
                 {counts[value]}

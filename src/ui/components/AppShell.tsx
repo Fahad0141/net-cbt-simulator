@@ -5,6 +5,7 @@ import styles from './AppShell.module.css';
 
 type Theme = 'system' | 'light' | 'dark';
 const THEME_KEY = 'net-cbt:theme';
+const NEXT_THEME: Record<Theme, Theme> = { system: 'light', light: 'dark', dark: 'system' };
 
 function applyTheme(theme: Theme) {
   const root = document.documentElement;
@@ -30,19 +31,54 @@ function useTheme(): [Theme, () => void] {
       // storage unavailable: theme still applies for this visit
     }
   }, [theme]);
-  const cycle = () =>
-    setTheme((t) => (t === 'system' ? 'light' : t === 'light' ? 'dark' : 'system'));
+  const cycle = () => setTheme((t) => NEXT_THEME[t]);
   return [theme, cycle];
 }
 
 const NAV: Array<{ path: string; label: string; match: Route['name'][] }> = [
   { path: '/', label: 'Dashboard', match: ['home'] },
-  { path: '/new', label: 'New Paper', match: ['new'] },
+  { path: '/new', label: 'New paper', match: ['new'] },
   { path: '/history', label: 'History', match: ['history', 'result', 'review'] },
   { path: '/analytics', label: 'Analytics', match: ['analytics'] },
-  { path: '/bank', label: 'Question Bank', match: ['bank'] },
+  { path: '/bank', label: 'Question bank', match: ['bank'] },
   { path: '/about', label: 'About', match: ['about'] },
 ];
+
+/** Sun for light, moon for dark, a half-filled disc for "follow the system". */
+function ThemeIcon({ theme }: { theme: Theme }) {
+  const common = {
+    viewBox: '0 0 24 24',
+    width: 18,
+    height: 18,
+    'aria-hidden': true,
+    fill: 'none',
+    stroke: 'currentColor',
+    strokeWidth: 1.8,
+    strokeLinecap: 'round' as const,
+    strokeLinejoin: 'round' as const,
+  };
+  if (theme === 'light') {
+    return (
+      <svg {...common}>
+        <circle cx="12" cy="12" r="4" />
+        <path d="M12 2.5v2M12 19.5v2M4.6 4.6l1.4 1.4M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4 6 18M18 6l1.4-1.4" />
+      </svg>
+    );
+  }
+  if (theme === 'dark') {
+    return (
+      <svg {...common}>
+        <path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z" />
+      </svg>
+    );
+  }
+  return (
+    <svg {...common}>
+      <circle cx="12" cy="12" r="8.5" />
+      <path d="M12 3.5a8.5 8.5 0 0 1 0 17Z" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
 
 function Logo() {
   return (
@@ -90,7 +126,7 @@ export function AppShell({ route, children }: { route: Route; children: ReactNod
         <div className={styles.headerInner}>
           <a className={styles.brand} href={href('/')}>
             <Logo />
-            <span>
+            <span className={styles.wordmark}>
               <strong>NET CBT</strong> Simulator
             </span>
           </a>
@@ -127,9 +163,10 @@ export function AppShell({ route, children }: { route: Route; children: ReactNod
               type="button"
               className={styles.themeButton}
               onClick={cycleTheme}
-              title="Change colour theme"
+              title={`Colour theme: ${theme}. Switch to ${NEXT_THEME[theme]}`}
             >
-              Theme: {theme}
+              <ThemeIcon theme={theme} />
+              <span className={styles.themeLabel}>Theme: {theme}</span>
             </button>
           </nav>
         </div>
@@ -139,10 +176,9 @@ export function AppShell({ route, children }: { route: Route; children: ReactNod
       </main>
       <footer className={styles.footer}>
         <p>
-          NET CBT Simulator is an independent, open-source practice tool. It is{' '}
-          <strong>not affiliated with or endorsed by NUST</strong>. Questions are original or
-          modelled on publicly reported topics; always check official announcements on the NUST
-          admissions website.
+          An independent, open-source practice tool,{' '}
+          <strong>not affiliated with or endorsed by NUST</strong>. Check dates and rules on the
+          official NUST admissions website.
         </p>
       </footer>
     </div>

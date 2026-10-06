@@ -23,50 +23,48 @@ export function ResultHeader({ model }: { model: ResultModel }) {
   const again = practiseAgainPath(model);
   const print = printPath(model);
   const timedOut = model.finishReason === 'timeout';
-  const pattern = exam ? exam.name : model.kind === 'custom' ? 'Custom test' : 'Practice paper';
 
   return (
     <header className={s.header}>
       <a className={s.backLink} href={href('/history')}>
-        <span aria-hidden="true">&larr;</span> Back to history
+        Back to history
       </a>
-      <div className={s.headerText}>
-        <p className={s.eyebrow}>Score report &middot; {pattern}</p>
-        <h1 className={s.title}>{paper.title || 'Untitled paper'}</h1>
+      <h1 className={s.title}>{paper.title || 'Untitled paper'}</h1>
+      <div className={s.meta}>
+        <div className={s.badges}>
+          <Badge tone={model.mode === 'exam' ? 'info' : 'neutral'}>
+            {model.mode === 'exam' ? 'Exam mode' : 'Practice mode'}
+          </Badge>
+          <Badge
+            tone={timedOut ? 'warning' : 'neutral'}
+            title={
+              timedOut ? 'The paper was submitted automatically when the timer ran out' : undefined
+            }
+          >
+            {timedOut ? 'Time up' : 'Submitted'}
+          </Badge>
+          {model.mode === 'practice' && model.session.settings?.instantFeedback ? (
+            <Badge>Instant feedback on</Badge>
+          ) : null}
+          {exam?.era === 'legacy' ? <Badge>Pre-2025 pattern</Badge> : null}
+        </div>
+        <dl className={s.facts}>
+          <div className={s.fact}>
+            <dt>Paper code</dt>
+            <dd className={s.code}>{paper.code}</dd>
+          </div>
+          <div className={s.fact}>
+            <dt>Finished</dt>
+            <dd>
+              <time dateTime={isoDate(model.finishedAt)}>{formatDate(model.finishedAt)}</time>
+            </dd>
+          </div>
+          <div className={s.fact}>
+            <dt>Candidate</dt>
+            <dd>{model.candidateName}</dd>
+          </div>
+        </dl>
       </div>
-      <div className={s.badges}>
-        <Badge tone={model.mode === 'exam' ? 'info' : 'neutral'}>
-          {model.mode === 'exam' ? 'Exam mode' : 'Practice mode'}
-        </Badge>
-        <Badge
-          tone={timedOut ? 'warning' : 'neutral'}
-          title={
-            timedOut ? 'The paper was submitted automatically when the timer ran out' : undefined
-          }
-        >
-          {timedOut ? 'Time up' : 'Submitted'}
-        </Badge>
-        {model.mode === 'practice' && model.session.settings?.instantFeedback ? (
-          <Badge>Instant feedback on</Badge>
-        ) : null}
-        {exam?.era === 'legacy' ? <Badge>Pre-2025 pattern</Badge> : null}
-      </div>
-      <dl className={s.facts}>
-        <div className={s.fact}>
-          <dt>Paper code</dt>
-          <dd className={s.mono}>{paper.code}</dd>
-        </div>
-        <div className={s.fact}>
-          <dt>Finished</dt>
-          <dd>
-            <time dateTime={isoDate(model.finishedAt)}>{formatDate(model.finishedAt)}</time>
-          </dd>
-        </div>
-        <div className={s.fact}>
-          <dt>Candidate</dt>
-          <dd>{model.candidateName}</dd>
-        </div>
-      </dl>
       <div className={s.actions} role="group" aria-label="Result actions">
         <LinkButton variant="primary" href={href(reviewPath(model.id))}>
           Review answers
@@ -87,9 +85,8 @@ export function ResultHeader({ model }: { model: ResultModel }) {
       </div>
       {model.bankChanged && (retake || print) ? (
         <Callout tone="warning">
-          This paper was generated from question bank v{paper.bankVersion}; the bank is now v
-          {BANK_VERSION}, so regenerating its code may give different questions. Review answers
-          always shows the exact paper you sat.
+          Made with question bank v{paper.bankVersion} (now v{BANK_VERSION}), so its code may now
+          build different questions. Review answers still shows the paper you sat.
         </Callout>
       ) : null}
     </header>

@@ -1,35 +1,22 @@
 .page {
-  display: flex;
-  justify-content: center;
-  padding: clamp(8px, 4vw, 40px) 0;
+  padding: clamp(8px, 4vw, 32px) 0;
 }
 
+/* On the page itself, not in a card. */
 .panel {
   width: 100%;
-  max-width: 620px;
+  max-width: 600px;
   display: flex;
   flex-direction: column;
   gap: 14px;
-  padding: clamp(20px, 5vw, 40px);
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: calc(var(--radius) + 6px);
-  box-shadow: var(--shadow);
-}
-
-.code {
-  margin: 0;
-  font-size: clamp(56px, 14vw, 96px);
-  font-weight: 800;
-  line-height: 1;
-  letter-spacing: -0.04em;
-  color: var(--primary);
-  opacity: 0.35;
 }
 
 .title {
   margin: 0;
-  font-size: clamp(24px, 4vw, 32px);
+  font-size: clamp(36px, 6vw, 52px);
+  font-stretch: var(--font-condensed);
+  font-weight: 750;
+  line-height: 1;
 }
 
 .text {
@@ -63,16 +50,15 @@
 }
 
 .more {
+  margin-top: 10px;
   padding-top: 14px;
   border-top: 1px solid var(--border);
 }
 
 .moreTitle {
-  margin: 0 0 6px;
+  margin: 0 0 2px;
   font-size: 13px;
-  font-weight: 650;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+  font-weight: 600;
   color: var(--muted);
 }
 

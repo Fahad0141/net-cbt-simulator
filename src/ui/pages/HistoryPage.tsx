@@ -8,7 +8,7 @@ import {
   useState,
 } from 'react';
 import { type AttemptSummary, deleteAttempt, exportHistory, importHistory } from '@/exam/store';
-import { isDesktopApp, isInstalledApp } from '@/platform/desktop';
+import { isInstalledApp, storagePlace } from '@/platform/desktop';
 import { isNativeApp, shareTextFile } from '@/platform/native';
 import { isPersistentStorage } from '@/storage/kv';
 import {
@@ -101,7 +101,6 @@ export default function HistoryPage() {
   const filterId = useId();
   const app = isInstalledApp();
   const android = isNativeApp();
-  const keptIn = isDesktopApp() ? 'this computer' : app ? 'this device' : 'your browser';
 
   const say = (tone: 'info' | 'error', text: string) => {
     messageId.current += 1;
@@ -196,7 +195,6 @@ export default function HistoryPage() {
     <div className={ui.page}>
       <PageHeader
         title="History"
-        subtitle={`Every paper you have finished on this device, newest first. Your attempts never leave ${keptIn} unless you export them.`}
         actions={
           hasAttempts ? <LinkButton href={href('/analytics')}>View analytics</LinkButton> : null
         }
@@ -204,9 +202,8 @@ export default function HistoryPage() {
 
       {persistent ? null : (
         <Callout tone="warning">
-          This browser is not letting the site save data (common in private windows), so your
-          attempts are kept only for this tab and will be lost when you reload or close it. Use
-          Export history to keep a backup.
+          This browser is not saving data (common in private windows), so attempts are kept only for
+          this tab. Use Export history to keep a backup.
         </Callout>
       )}
 
@@ -303,9 +300,8 @@ export default function HistoryPage() {
               </div>
             }
           >
-            Finish a full-length paper or a practice test and it will be listed here with its score,
-            time and a question-by-question review. Have a backup from another device? Use Import
-            history above.
+            Finished papers show up here with their score and a full review. Have a backup? Use
+            Import history.
           </EmptyState>
         </Card>
       ) : (
@@ -316,11 +312,10 @@ export default function HistoryPage() {
             onDeleted={handleDeleted}
             onError={(text) => say('error', text)}
           />
-          <Callout>
-            {app
-              ? 'History is stored in this app only. Export it regularly if you clear its storage or switch devices.'
-              : 'History is stored in this browser only. Export it regularly if you clear site data or switch devices.'}
-          </Callout>
+          <p className={s.storageNote}>
+            Saved {storagePlace()} only. Export a backup before you{' '}
+            {app ? 'clear its storage' : 'clear site data'} or switch devices.
+          </p>
         </>
       )}
     </div>
@@ -334,7 +329,7 @@ function Overview({ attempts }: { attempts: readonly AttemptSummary[] }) {
   const time = attempts.reduce((sum, a) => sum + finite(a.elapsedMs), 0);
   const answered = attempts.reduce((sum, a) => sum + finite(a.attempted), 0);
   return (
-    <div className={`${ui.card} ${s.overview}`}>
+    <div className={s.overview}>
       <Stat label="Attempts" value={attempts.length.toLocaleString()} />
       <Stat label="Best score" value={formatPercent(best)} />
       <Stat label="Average" value={formatPercent(average)} />
@@ -452,9 +447,7 @@ function AttemptRow({
       </td>
       <td data-label="Mode">
         <span className={s.badges}>
-          <Badge tone={a.mode === 'practice' ? 'info' : 'neutral'}>
-            {a.mode === 'practice' ? 'Practice' : 'Exam'}
-          </Badge>
+          <span>{a.mode === 'practice' ? 'Practice' : 'Exam'}</span>
           {a.finishReason === 'timeout' ? <Badge tone="warning">Timed out</Badge> : null}
         </span>
       </td>

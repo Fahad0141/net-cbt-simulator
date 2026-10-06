@@ -1,7 +1,6 @@
 import { Card, LinkButton, ui } from '@/ui/components/ui';
 import { href } from '@/ui/router';
 import { formatPercent, plural } from './format';
-import { MasteryBadge } from './ChapterMastery';
 import {
   type ChapterInsight,
   DRILL_QUESTIONS,
@@ -29,15 +28,11 @@ export function FocusChapters({
       {focus.length === 0 ? (
         <p className={ui.muted}>
           {rated === 0
-            ? `Chapters get a rating once you have seen at least ${MIN_QUESTIONS_FOR_RATING} of their questions. Finish another paper to unlock recommendations.`
-            : 'Every rated chapter is strong. Try a harder full-length paper to keep stretching yourself.'}
+            ? `A chapter is rated once you have seen ${MIN_QUESTIONS_FOR_RATING} of its questions. Finish another paper to see recommendations.`
+            : 'Every rated chapter is strong. Try a harder paper next.'}
         </p>
       ) : (
         <>
-          <p className={`${ui.muted} ${ui.small} ${s.cardIntro}`}>
-            Ranked by the share of the questions you saw that you got right. Practising these first
-            is the quickest way to add marks.
-          </p>
           <ol className={s.focusList}>
             {focus.map((c, i) => {
               const drill = drillPath(c);
@@ -51,12 +46,16 @@ export function FocusChapters({
                     <div className={s.focusMeta}>
                       <span>{c.subjectName}</span>
                       <span>
-                        {c.correct.toLocaleString()} correct of {c.seen.toLocaleString()} seen
-                        {c.accuracy !== null ? ` · ${formatPercent(c.accuracy)} accuracy` : ''}
+                        {c.correct.toLocaleString()} of {c.seen.toLocaleString()} right
                       </span>
-                      <MasteryBadge level={c.level} />
                     </div>
                   </div>
+                  {c.accuracy !== null ? (
+                    <span className={s.focusScore}>
+                      {formatPercent(c.accuracy)}
+                      <span className="visually-hidden"> accuracy</span>
+                    </span>
+                  ) : null}
                   {drill ? (
                     <LinkButton
                       size="sm"
@@ -79,8 +78,7 @@ export function FocusChapters({
                 Start practice test on these chapters
               </LinkButton>
               <span className={`${ui.muted} ${ui.small}`}>
-                {plural(questions, 'question')} · {spec.durationMinutes} min · opens the custom test
-                setup to review first
+                {plural(questions, 'question')} in {spec.durationMinutes} min
               </span>
             </div>
           ) : null}

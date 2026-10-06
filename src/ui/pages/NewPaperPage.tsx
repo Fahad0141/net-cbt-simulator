@@ -189,10 +189,7 @@ export default function NewPaperPage({ query }: { query: URLSearchParams }) {
 
   return (
     <div className={ui.page}>
-      <PageHeader
-        title="New test"
-        subtitle="Set up a full-length NET or a custom test, generate a unique paper and sit it in the CBT terminal."
-      />
+      <PageHeader title="New test" />
 
       {init.notices.length ? (
         <Callout tone="warning">
@@ -239,12 +236,7 @@ export default function NewPaperPage({ query }: { query: URLSearchParams }) {
             onInstantFeedback={(value) => dispatch({ kind: 'instantFeedback', value })}
           />
 
-          <Step
-            id="step-candidate"
-            number={3}
-            title="Candidate and paper"
-            description="Your name appears on the terminal and in your history. It stays on this device."
-          >
+          <Step id="step-candidate" number={3} title="Candidate and paper">
             <div className={ui.field}>
               <label className={ui.fieldLabel} htmlFor="candidate-name">
                 Candidate name <span className={styles.hint}>(optional)</span>
@@ -381,15 +373,11 @@ export default function NewPaperPage({ query }: { query: URLSearchParams }) {
                   )}
                 </Button>
                 <p className={styles.note}>
-                  Every paper gets a code. The same code always rebuilds the same questions, so you
-                  can share it or print it.
+                  Each paper gets a code that rebuilds the same questions, to share or print.
                 </p>
               </div>
             )}
           </div>
-          <p className={styles.note}>
-            Unofficial practice tool. Not affiliated with or endorsed by NUST.
-          </p>
         </aside>
       </div>
 

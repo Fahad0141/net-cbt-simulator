@@ -10,7 +10,7 @@ const ROUTES: ReadonlyArray<RouteSuggestion & { words: readonly string[] }> = [
   { path: '/', label: 'Dashboard', words: ['home', 'dashboard', 'index', 'start'] },
   {
     path: '/new',
-    label: 'New Paper',
+    label: 'New paper',
     words: ['new', 'generate', 'create', 'test', 'mock', 'flp', 'paper', 'papers'],
   },
   {
@@ -25,7 +25,7 @@ const ROUTES: ReadonlyArray<RouteSuggestion & { words: readonly string[] }> = [
   },
   {
     path: '/bank',
-    label: 'Question Bank',
+    label: 'Question bank',
     words: ['bank', 'questions', 'question', 'syllabus', 'topics'],
   },
   { path: '/about', label: 'About', words: ['about', 'help', 'faq', 'pattern', 'disclaimer'] },

@@ -30,7 +30,7 @@ import {
   type ReviewView,
   subjectName,
 } from './review/model';
-import { type NavigatorGroup, NavigatorLegend, ReviewNavigator } from './review/ReviewNavigator';
+import { type NavigatorGroup, ReviewNavigator } from './review/ReviewNavigator';
 import { ReviewQuestion } from './review/ReviewQuestion';
 import { ReviewToolbar } from './review/ReviewToolbar';
 import { useReviewShortcuts } from './review/useReviewShortcuts';
@@ -289,9 +289,9 @@ function ReviewScreen({
         title="Answer review"
         subtitle={
           <span className={styles.subtitle}>
-            {paper.title || 'Practice paper'} · <span className={styles.code}>{paper.code}</span>
-            {finishedAt ? <> · {formatDate(finishedAt)}</> : null}
-            {session.settings?.mode === 'practice' ? ' · Practice mode' : null} ·{' '}
+            <span>{paper.title || 'Practice paper'}</span>
+            <span className={styles.code}>{paper.code}</span>
+            {finishedAt ? <span>{formatDate(finishedAt)}</span> : null}
             <span className={styles.score}>
               Score {score}/{maxScore} ({percent}%)
             </span>
@@ -354,15 +354,12 @@ function ReviewScreen({
 
         <div className={styles.aside}>
           <nav className={`${ui.card} ${styles.navCard}`} aria-labelledby={navHeadingId}>
-            <div className={styles.navHead}>
-              <h2 id={navHeadingId} className={styles.navTitle}>
-                Question navigator{' '}
-                <span className={styles.navCount}>
-                  {list.length === total ? `${total} questions` : `${list.length} of ${total}`}
-                </span>
-              </h2>
-              <NavigatorLegend />
-            </div>
+            <h2 id={navHeadingId} className={styles.navTitle}>
+              Question navigator{' '}
+              <span className={styles.navCount}>
+                {list.length === total ? `${total} questions` : `${list.length} of ${total}`}
+              </span>
+            </h2>
             <ReviewNavigator
               groups={groups}
               current={item?.number ?? null}
@@ -370,7 +367,7 @@ function ReviewScreen({
               emptyText={empty.title}
             />
             <p className={styles.hint}>
-              <kbd>J</kbd> or <kbd>→</kbd> next · <kbd>K</kbd> or <kbd>←</kbd> previous
+              Move with <kbd>J</kbd> <kbd>K</kbd> or <kbd>←</kbd> <kbd>→</kbd>
             </p>
           </nav>
         </div>

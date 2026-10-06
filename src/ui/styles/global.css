@@ -1,36 +1,46 @@
 /* Design tokens for the dashboard / review / analytics pages.
  * (The CBT terminal has its own faithful, light-only styling in cbt.module.css.)
+ * The look borrows from the exam hall rather than from app templates: white answer
+ * sheets on grey paper, the e-Test blue for ink, a highlighter yellow for "look here"
+ * marks, and condensed Archivo numerals for scores, like the boxes of a result card.
+ * --primary, --primary-hover and --focus keep their original values: the CBT terminal's
+ * links and focus rings inherit them, and it must not change.
  * Text tokens keep WCAG AA (>= 4.5:1) in both themes: --muted on --bg, --surface,
  * --surface-2, --surface-3 and the soft tints; --primary/--success/--danger/--warning
  * on their own -soft tint (the Badge tones) and on --bg / --surface. */
 :root {
-  --bg: #f3f6fb;
+  --bg: #eef1f4;
   --surface: #ffffff;
-  --surface-2: #f6f8fc;
-  --surface-3: #eaf0f8;
-  --text: #13213a;
-  --text-2: #3a4a63;
-  --muted: #5d6c81;
-  --border: #d7dfeb;
-  --border-strong: #b8c5d8;
+  --surface-2: #f5f7f9;
+  --surface-3: #e6eaef;
+  --text: #17202c;
+  --text-2: #374252;
+  --muted: #586374;
+  --border: #d9dfe6;
+  --border-strong: #b5bfcb;
   --primary: #0a5d91;
   --primary-hover: #084d78;
-  --primary-soft: #e3f0fa;
+  --primary-soft: #e2edf6;
   --on-primary: #ffffff;
   --accent: #f4c430;
-  --success: #1b7b35;
-  --success-soft: #e3f5e8;
-  --danger: #c0392b;
-  --danger-soft: #fdeaea;
-  --warning: #9d5c00;
-  --warning-soft: #fff3df;
+  --highlight: #f6cd3c;
+  --highlight-soft: #fff2bf;
+  --on-highlight: #17202c;
+  --success: #17733a;
+  --success-soft: #e0f2e6;
+  --danger: #bd3124;
+  --danger-soft: #fbe8e5;
+  --warning: #8a5200;
+  --warning-soft: #fff0d6;
   --purple: #6d3fd6;
-  --radius: 10px;
+  --radius: 8px;
   --radius-sm: 6px;
-  --shadow: 0 1px 2px rgba(16, 24, 40, 0.06), 0 1px 3px rgba(16, 24, 40, 0.1);
-  --shadow-lg: 0 10px 30px rgba(16, 24, 40, 0.14);
+  --shadow: 0 1px 0 rgba(23, 32, 44, 0.04);
+  --shadow-lg: 0 18px 40px -12px rgba(23, 32, 44, 0.28);
   --focus: 0 0 0 3px rgba(10, 93, 145, 0.35);
-  --font: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font: 'Archivo Variable', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  --font-condensed: 72%;
+  --font-semicondensed: 86%;
   --mono: ui-monospace, 'Cascadia Code', Consolas, 'Courier New', monospace;
   --rt-code-bg: rgba(10, 93, 145, 0.08);
   color-scheme: light;
@@ -38,28 +48,30 @@
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
-    --bg: #0e1522;
-    --surface: #151f30;
-    --surface-2: #1a2639;
-    --surface-3: #22314a;
-    --text: #e6edf7;
-    --text-2: #c3cfe0;
-    --muted: #8a9ab3;
-    --border: #2a3a55;
-    --border-strong: #3a4e70;
+    --bg: #10151c;
+    --surface: #171d26;
+    --surface-2: #1c2330;
+    --surface-3: #252e3d;
+    --text: #e7ecf3;
+    --text-2: #c2ccd9;
+    --muted: #8d9aad;
+    --border: #2a3444;
+    --border-strong: #3b4759;
     --primary: #4aa3e0;
     --primary-hover: #6bb5e8;
-    --primary-soft: #16314b;
+    --primary-soft: #18324a;
     --on-primary: #06131f;
-    --success: #4cc46f;
-    --success-soft: #133524;
-    --danger: #f06b5d;
-    --danger-soft: #3b1a1a;
-    --warning: #f0a845;
-    --warning-soft: #3a2a12;
+    --highlight: #e2b62a;
+    --highlight-soft: #322b10;
+    --success: #55c27a;
+    --success-soft: #14321f;
+    --danger: #f0705f;
+    --danger-soft: #3a1b18;
+    --warning: #eda84a;
+    --warning-soft: #382913;
     --purple: #a283f5;
-    --shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
-    --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.5);
+    --shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
+    --shadow-lg: 0 18px 40px -12px rgba(0, 0, 0, 0.6);
     --focus: 0 0 0 3px rgba(74, 163, 224, 0.45);
     --rt-code-bg: rgba(255, 255, 255, 0.08);
     color-scheme: dark;
@@ -67,28 +79,30 @@
 }
 
 :root[data-theme='dark'] {
-  --bg: #0e1522;
-  --surface: #151f30;
-  --surface-2: #1a2639;
-  --surface-3: #22314a;
-  --text: #e6edf7;
-  --text-2: #c3cfe0;
-  --muted: #8a9ab3;
-  --border: #2a3a55;
-  --border-strong: #3a4e70;
+  --bg: #10151c;
+  --surface: #171d26;
+  --surface-2: #1c2330;
+  --surface-3: #252e3d;
+  --text: #e7ecf3;
+  --text-2: #c2ccd9;
+  --muted: #8d9aad;
+  --border: #2a3444;
+  --border-strong: #3b4759;
   --primary: #4aa3e0;
   --primary-hover: #6bb5e8;
-  --primary-soft: #16314b;
+  --primary-soft: #18324a;
   --on-primary: #06131f;
-  --success: #4cc46f;
-  --success-soft: #133524;
-  --danger: #f06b5d;
-  --danger-soft: #3b1a1a;
-  --warning: #f0a845;
-  --warning-soft: #3a2a12;
+  --highlight: #e2b62a;
+  --highlight-soft: #322b10;
+  --success: #55c27a;
+  --success-soft: #14321f;
+  --danger: #f0705f;
+  --danger-soft: #3a1b18;
+  --warning: #eda84a;
+  --warning-soft: #382913;
   --purple: #a283f5;
-  --shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
-  --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.5);
+  --shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
+  --shadow-lg: 0 18px 40px -12px rgba(0, 0, 0, 0.6);
   --focus: 0 0 0 3px rgba(74, 163, 224, 0.45);
   --rt-code-bg: rgba(255, 255, 255, 0.08);
   color-scheme: dark;

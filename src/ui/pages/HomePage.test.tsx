@@ -35,7 +35,7 @@ describe('HomePage', () => {
     render(<HomePage />);
     expect(document.title).toBe('Dashboard · NET CBT Simulator');
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('NET CBT Simulator');
-    expect(screen.getByText(/faithful replica of NUST/)).toBeInTheDocument();
+    expect(screen.getByText(/replica of the real test screen/)).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /Generate a full-length paper/ })).toHaveAttribute(
       'href',
       '#/new',
@@ -229,19 +229,12 @@ describe('HomePage', () => {
     await screen.findByRole('heading', { name: 'No attempts yet' });
   });
 
-  it('explains how it works and carries the unofficial disclaimer', async () => {
+  it('says it is unofficial and links to how it works', async () => {
     render(<HomePage />);
-    expect(screen.getByRole('heading', { name: 'How it works' })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'A faithful CBT terminal' })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'A hybrid question engine' })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'Reproducible paper codes' })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'Private by design' })).toBeInTheDocument();
-    const disclaimer = screen.getByRole('complementary', { name: 'An unofficial practice tool' });
-    expect(disclaimer).toHaveTextContent(/not affiliated with, endorsed by or connected to NUST/);
-
-    const user = userEvent.setup();
-    await user.click(screen.getByRole('button', { name: 'How it works' }));
-    expect(screen.getByRole('heading', { name: 'How it works' })).toHaveFocus();
+    expect(
+      screen.getByText(/Free and unofficial\. Your attempts stay in this browser\./),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'How it works' })).toHaveAttribute('href', '#/about');
     await screen.findByRole('heading', { name: 'No attempts yet' });
   });
 });

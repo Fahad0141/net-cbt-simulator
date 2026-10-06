@@ -124,7 +124,7 @@ export function Stat({
   );
 }
 
-/** Horizontal bar; `value` in 0-100. Colour follows the value unless `color` is given. */
+/** Horizontal bar; `value` in 0-100, in the ink colour unless `color` is given. */
 export function ProgressBar({
   value,
   label,
@@ -135,7 +135,7 @@ export function ProgressBar({
   color?: string;
 }) {
   const v = Math.max(0, Math.min(100, value));
-  const fill = color ?? (v >= 70 ? 'var(--success)' : v >= 45 ? 'var(--warning)' : 'var(--danger)');
+  const fill = color ?? 'var(--primary)';
   return (
     <div
       className={s.progress}

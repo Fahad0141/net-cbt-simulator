@@ -14,7 +14,6 @@ import {
 } from '@/ui/components/ui';
 import type { AsyncState } from '@/ui/hooks';
 import { href } from '@/ui/router';
-import { IconArrowRight, IconChart } from './icons';
 import {
   attemptName,
   formatChange,
@@ -42,7 +41,6 @@ function Change({ points }: { points: number | null }) {
 
 function AttemptRow({ attempt }: { attempt: AttemptSummary }) {
   const name = attemptName(attempt);
-  const subjects = Array.isArray(attempt.bySubject) ? attempt.bySubject : [];
   return (
     <li className={s.attempt}>
       <div className={s.attemptMain}>
@@ -55,20 +53,9 @@ function AttemptRow({ attempt }: { attempt: AttemptSummary }) {
         <div className={s.attemptMeta}>
           <code className={s.code}>{attempt.paperCode}</code>
           <time dateTime={isoDate(attempt.finishedAt)}>{formatDate(attempt.finishedAt)}</time>
-          <Badge tone={attempt.mode === 'practice' ? 'neutral' : 'info'}>
-            {attempt.mode === 'practice' ? 'Practice' : 'Exam'}
-          </Badge>
+          {attempt.mode === 'practice' ? <Badge>Practice</Badge> : null}
           {attempt.finishReason === 'timeout' ? <Badge tone="warning">Timed out</Badge> : null}
         </div>
-        {subjects.length ? (
-          <p className={s.subjects}>
-            {subjects.map((subject, i) => (
-              <span key={`${subject.subject}-${i}`} className={s.subject}>
-                {subject.title} <strong>{subject.correct}</strong>/{subject.total}
-              </span>
-            ))}
-          </p>
-        ) : null}
       </div>
       <div className={s.attemptScore}>
         <div className={s.scoreLine}>
@@ -140,18 +127,11 @@ function ProgressBody({ summary }: { summary: ProgressSummary }) {
 function EmptyProgress() {
   return (
     <div className={s.empty}>
-      <span className={s.emptyIcon} aria-hidden="true">
-        <IconChart size={26} />
-      </span>
       <h3 className={s.emptyTitle}>No attempts yet</h3>
       <p className={s.emptyText}>
-        Finish your first paper and your scores, subject breakdowns and trend will appear here.
-        Everything is saved privately {storagePlace()}.
+        Your scores and their trend show up here after your first paper.
       </p>
-      <LinkButton variant="primary" href={href('/new')}>
-        Generate your first paper
-        <IconArrowRight size={18} />
-      </LinkButton>
+      <LinkButton href={href('/new')}>Generate your first paper</LinkButton>
     </div>
   );
 }

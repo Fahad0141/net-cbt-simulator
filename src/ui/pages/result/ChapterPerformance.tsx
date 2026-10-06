@@ -1,6 +1,6 @@
 import { useId, useMemo, useState } from 'react';
 import type { SubjectId } from '@/engine/types';
-import { Badge, Button, Card, LinkButton, Segmented } from '@/ui/components/ui';
+import { Button, Card, LinkButton, Segmented } from '@/ui/components/ui';
 import { href } from '@/ui/router';
 import {
   bankPath,
@@ -41,10 +41,7 @@ function FocusNext({ model }: { model: ResultModel }) {
         <h3 id={headingId} className={s.focusTitle}>
           Focus next
         </h3>
-        <p className={s.focusIntro}>
-          No weak chapters: you did not drop a single mark in this paper.
-          {harder ? ' Try a harder paper to keep stretching yourself.' : ''}
-        </p>
+        <p className={s.focusIntro}>No weak chapters: you did not drop a single mark.</p>
         {harder ? (
           <LinkButton variant="primary" href={href(harder)}>
             Try a harder paper
@@ -58,27 +55,16 @@ function FocusNext({ model }: { model: ResultModel }) {
   const chapters = spec?.sections.reduce((sum, sec) => sum + (sec.chapters?.length ?? 0), 0) ?? 0;
   return (
     <section className={s.focus} aria-labelledby={headingId}>
-      <div className={s.focusHead}>
-        <h3 id={headingId} className={s.focusTitle}>
-          Focus next
-        </h3>
-        <p className={s.focusIntro}>
-          {focus.length === 1
-            ? 'The chapter where you lost the most ground in this paper.'
-            : `Your ${focus.length} weakest chapters in this paper, weakest first.`}
-        </p>
-      </div>
+      <h3 id={headingId} className={s.focusTitle}>
+        Focus next
+      </h3>
       <ol className={s.focusList}>
-        {focus.map((c, i) => (
+        {focus.map((c) => (
           <li key={c.key} className={s.focusItem}>
-            <span className={s.focusRank} aria-hidden="true">
-              {i + 1}
-            </span>
             <div className={s.focusBody}>
               <span className={s.focusName}>{c.name}</span>
               <span className={s.focusMeta}>
-                {c.subjectTitle} &middot; {c.correct}/{c.total} correct &middot;{' '}
-                {plural(c.wrong, 'wrong answer')} &middot; {c.unattempted} unattempted
+                {c.subjectTitle}, {c.correct} of {c.total} correct
               </span>
               <OutcomeBar
                 correct={c.correct}
@@ -102,17 +88,16 @@ function FocusNext({ model }: { model: ResultModel }) {
           <LinkButton variant="primary" href={href(customPracticePath(spec))}>
             {chapters === 1 ? 'Practise this chapter' : `Practise these ${chapters} chapters`}
           </LinkButton>
-          <span className={s.muted}>
-            Custom test &middot; {plural(questions, 'question')} &middot; {spec.durationMinutes}{' '}
-            minutes
+          <span className={s.focusCtaNote}>
+            {plural(questions, 'question')} in {spec.durationMinutes} minutes
             {chapters < focus.length
-              ? ` · ${focus.length - chapters} not in the current syllabus`
+              ? `, skipping ${focus.length - chapters} no longer in the syllabus`
               : ''}
           </span>
         </div>
       ) : (
-        <p className={s.muted}>
-          These chapters are no longer in the syllabus, so a practice test cannot be built for them.
+        <p className={s.focusCtaNote}>
+          These chapters are no longer in the syllabus, so there is no practice test for them.
         </p>
       )}
     </section>
@@ -128,9 +113,12 @@ function ChapterTableRow({ c, focusRank }: { c: ChapterRow; focusRank: number })
           {focusRank > 0 ? (
             <>
               {' '}
-              <Badge tone="warning" title={`Focus chapter ${focusRank} of ${FOCUS_CHAPTERS}`}>
+              <span
+                className={s.focusTag}
+                title={`Focus chapter ${focusRank} of ${FOCUS_CHAPTERS}`}
+              >
                 Focus
-              </Badge>
+              </span>
             </>
           ) : null}
         </span>
@@ -150,11 +138,11 @@ function ChapterTableRow({ c, focusRank }: { c: ChapterRow; focusRank: number })
         <CellLabel>Accuracy</CellLabel>
         {c.attempted ? formatPercent(c.accuracy) : '—'}
       </td>
-      <td role="cell" className={s.n}>
+      <td role="cell" className={`${s.n} ${s.optional}`}>
         <CellLabel>Wrong</CellLabel>
         {c.wrong}
       </td>
-      <td role="cell" className={s.n}>
+      <td role="cell" className={`${s.n} ${s.optional}`}>
         <CellLabel>Unattempted</CellLabel>
         {c.unattempted}
       </td>
@@ -200,18 +188,12 @@ export function ChapterPerformance({ model }: { model: ResultModel }) {
       : ` in ${subjectOptions.find((o) => o.value === activeSubject)?.label ?? ''}`;
 
   return (
-    <Card
-      className={s.cq}
-      title="Chapter-wise performance"
-      action={<span className={s.cardHint}>{plural(model.chapters.length, 'chapter')}</span>}
-    >
+    <Card className={s.cq} title="Chapter-wise performance">
       {model.chapters.length ? (
         <>
           <FocusNext model={model} />
           <div className={s.toolbar}>
-            <p className={s.toolbarText}>
-              Weakest first: lowest score, then lowest accuracy, then most marks lost.
-            </p>
+            <h3 className={s.subTitle}>All chapters, weakest first</h3>
             {subjectOptions.length > 1 ? (
               <div className={s.filter}>
                 <Segmented
@@ -261,6 +243,7 @@ export function ChapterPerformance({ model }: { model: ResultModel }) {
           </table>
 
           <div className={s.tableFoot}>
+            <OutcomeLegend />
             <p className={s.muted} aria-live="polite">
               Showing {visible.length} of {plural(rows.length, 'chapter')}
               {filterLabel}
@@ -275,7 +258,6 @@ export function ChapterPerformance({ model }: { model: ResultModel }) {
               </Button>
             ) : null}
           </div>
-          <OutcomeLegend />
         </>
       ) : (
         <p className={s.muted}>This paper has no questions to analyse by chapter.</p>

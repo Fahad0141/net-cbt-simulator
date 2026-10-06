@@ -196,8 +196,8 @@ export function CustomBuilder({
       <div className={styles.builderHead}>
         <h3>Build your test</h3>
         <p>
-          Pick subjects and, optionally, the chapters to draw from. {LIMITS.sectionMin}–
-          {LIMITS.sectionMax} questions per section, up to {LIMITS.totalMax} in total.
+          {LIMITS.sectionMin}–{LIMITS.sectionMax} questions per section, up to {LIMITS.totalMax} in
+          total.
         </p>
       </div>
 

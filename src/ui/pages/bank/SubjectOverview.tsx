@@ -106,7 +106,7 @@ export function SubjectOverview({
       <LoadIssues bank={bank} />
 
       {mix.total > 0 ? (
-        <section className={ui.card} aria-label={`${name} bank summary`}>
+        <section className={s.summary} aria-label={`${name} bank summary`}>
           <div className={s.stats}>
             <Stat
               label="Templates"
@@ -116,7 +116,7 @@ export function SubjectOverview({
             <Stat
               label="Parametric"
               value={mix.dynamic}
-              hint={`${percent(mix.dynamic, mix.total)}% · fresh values each time`}
+              hint={`${percent(mix.dynamic, mix.total)}% of templates`}
             />
             <Stat
               label="Fixed"

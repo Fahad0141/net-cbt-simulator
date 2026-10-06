@@ -29,10 +29,6 @@ export function PaperCodeCard() {
 
   return (
     <Card title="Open a paper code">
-      <p className={s.intro}>
-        Got a code or a share link from a friend or an earlier attempt? It rebuilds exactly the same
-        paper, so you can compare scores on identical questions.
-      </p>
       <form className={s.form} onSubmit={onSubmit} noValidate>
         <label className={ui.fieldLabel} htmlFor={inputId}>
           Paper code
@@ -76,8 +72,8 @@ export function PaperCodeCard() {
             </span>
           ) : (
             <>
-              Codes look like <code className={s.code}>{EXAMPLE_PAPER_CODE}</code>. Letters are not
-              case-sensitive.
+              Rebuilds the exact paper from a code or share link, like{' '}
+              <code className={s.code}>{EXAMPLE_PAPER_CODE}</code>.
             </>
           )}
         </p>

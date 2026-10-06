@@ -76,10 +76,7 @@ function Unresolved({ resolution }: { resolution: Extract<PaperResolution, { ok:
   const missingSpec = resolution.problem === 'missing-spec';
   return (
     <div className={css.root}>
-      <PageHeader
-        title="Printable paper"
-        subtitle="Full length papers you can print or save as a PDF."
-      />
+      <PageHeader title="Printable paper" />
       <Card>
         <EmptyState
           title={
@@ -88,14 +85,13 @@ function Unresolved({ resolution }: { resolution: Extract<PaperResolution, { ok:
         >
           {missingSpec ? (
             <>
-              Custom papers need their full link, including the test specification. Open the paper
-              again from your history, or set up a new custom test.
+              A custom paper needs its full link. Open it again from your history, or set up a new
+              custom test.
             </>
           ) : (
             <>
               <strong className={css.badCode}>{shorten(resolution.code) || '(empty)'}</strong> is
-              not a recognised paper code. Codes look like <strong>ENG-K7Q2-9XM4</strong>: an exam
-              prefix (ENG, APS, BUS, ARC, NAT…) followed by eight letters and digits.
+              not a paper code. Codes look like <strong>ENG-K7Q2-9XM4</strong>.
             </>
           )}
         </EmptyState>
@@ -122,10 +118,7 @@ function Loading({ code }: { code: string }) {
           <span className={css.spinner} aria-hidden="true" />
           <div>
             <strong>Generating paper {code}…</strong>
-            <p>
-              Picking questions from the bank and randomising values. A full 200-question paper
-              takes a moment.
-            </p>
+            <p>A full paper takes a moment.</p>
           </div>
         </div>
       </Card>

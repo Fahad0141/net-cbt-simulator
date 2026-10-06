@@ -89,23 +89,17 @@ export function AggregateEstimator({
 
   return (
     <Card className={s.cq} title="NUST aggregate estimator">
-      <p className={s.cardIntro}>
-        NUST ranks applicants on an aggregate that weights the NET at <strong>75%</strong>, HSSC
-        (FSc or equivalent) at <strong>15%</strong> and SSC (Matric or equivalent) at{' '}
-        <strong>10%</strong>. Enter your results to estimate yours from this attempt.
-      </p>
-
       <div className={s.aggInputs}>
         <PercentField
           label="HSSC / FSc percentage"
-          hint="Result awaited? Use your Part-I marks. A-level: use your IBCC equivalence."
+          hint="Awaited? Use Part-I marks. A-level: IBCC equivalence."
           value={inputs.hssc}
           onChange={(text) => update({ hssc: text })}
           error={hssc.error}
         />
         <PercentField
           label="SSC / Matric percentage"
-          hint="O-level: use your IBCC equivalence percentage."
+          hint="O-level: IBCC equivalence."
           value={inputs.ssc}
           onChange={(text) => update({ ssc: text })}
           error={ssc.error}
@@ -119,9 +113,7 @@ export function AggregateEstimator({
             <span className={s.aggValue}>{fixed2(aggregate)}%</span>
           </>
         ) : (
-          <span className={s.aggPending}>
-            Enter your HSSC and SSC results to see your estimated aggregate.
-          </span>
+          <span className={s.aggPending}>Enter your HSSC and SSC results to see it.</span>
         )}
       </div>
 
@@ -164,11 +156,8 @@ export function AggregateEstimator({
       </table>
 
       <p className={s.aggNote}>
-        {indicative
-          ? 'This attempt is not a full-length NET paper, so treat the NET part as indicative only. '
-          : ''}
-        An unofficial estimate for practice. NUST publishes closing merit separately for each
-        programme and admission round, so compare only with its official merit lists.
+        {indicative ? 'Not a full-length NET paper, so the NET part is only indicative. ' : ''}
+        Unofficial. Compare only with NUST&apos;s official merit lists.
       </p>
     </Card>
   );

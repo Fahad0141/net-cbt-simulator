@@ -368,7 +368,7 @@ export interface BarDatum {
   display: string;
   /** Secondary line, e.g. `36 of 50 correct`. */
   hint?: ReactNode;
-  /** Colour override; defaults to a success/warning/danger scale for percentages. */
+  /** Colour override; defaults to the ink colour (or the quality scale, see `scale`). */
   color?: string;
 }
 
@@ -378,7 +378,7 @@ export interface BarChartProps {
   max?: number;
   /** Optional marker line (e.g. the NET pace), drawn on every track. */
   marker?: { value: number; label: string };
-  /** Colour fill by value (true for percentages where higher is better). */
+  /** `quality` colours percentages where higher is better green / amber / red. */
   scale?: 'quality' | 'neutral';
   emptyText?: string;
 }
@@ -397,7 +397,7 @@ export function BarChart({
   data,
   max = 100,
   marker,
-  scale = 'quality',
+  scale = 'neutral',
   emptyText = 'No data yet.',
 }: BarChartProps) {
   if (!data.length) return <p className={s.noData}>{emptyText}</p>;

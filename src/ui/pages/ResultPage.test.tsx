@@ -157,14 +157,16 @@ describe('ResultPage', () => {
     expect(h.getByText('33.3%')).toBeInTheDocument();
     const kpi = (label: string) => h.getByText(label, { selector: 'dt' }).parentElement!;
     expect(kpi('Attempted')).toHaveTextContent('4of 6 questions');
-    expect(kpi('Correct')).toHaveTextContent('2');
-    expect(kpi('Wrong')).toHaveTextContent('2');
-    expect(kpi('Unattempted')).toHaveTextContent('2');
     expect(kpi('Accuracy')).toHaveTextContent('50%');
     expect(kpi('Time used')).toHaveTextContent('4m 00s');
     expect(kpi('Time used')).toHaveTextContent('of 6m 00s');
+    // Correct / wrong / unattempted counts live in the outcome bar's legend.
+    const count = (label: string) => h.getByText(label, { selector: 'li > span' }).parentElement!;
+    expect(count('Correct')).toHaveTextContent('Correct2');
+    expect(count('Wrong')).toHaveTextContent('Wrong2');
+    expect(count('Unattempted')).toHaveTextContent('Unattempted2');
     expect(
-      h.getByText(/no negative marking: each of your 2 unattempted questions was a lost mark/i),
+      h.getByText(/guessing your 2 unattempted questions was worth about 1 mark/i),
     ).toBeInTheDocument();
   });
 

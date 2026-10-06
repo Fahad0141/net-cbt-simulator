@@ -471,13 +471,13 @@ export function bankPath(subject: SubjectId, chapter: string): string {
 /** What the "no negative marking" rule meant for this attempt. */
 export function blankInsight(unattempted: number): string {
   if (unattempted <= 0) {
-    return 'You attempted every question: the right call when there is no negative marking.';
+    return 'You attempted every question, the right call with no negative marking.';
   }
   if (unattempted === 1) {
-    return 'No negative marking: your 1 unattempted question was a lost mark. Even a blind guess is right 1 time in 4.';
+    return 'With no negative marking, a guess on your 1 unattempted question was free.';
   }
   const expected = Math.round(unattempted / 4);
-  return `No negative marking: each of your ${unattempted} unattempted questions was a lost mark. Blind guesses are right 1 time in 4, so guessing them all was worth about ${plural(expected, 'mark')} on average.`;
+  return `With no negative marking, guessing your ${unattempted} unattempted questions was worth about ${plural(expected, 'mark')}.`;
 }
 
 /** Compares accuracy across difficulty levels. */
@@ -507,7 +507,7 @@ export function paceInsight(timing: TimingSummary, unattempted: number): string 
       : 'Time ran out, but every question had an answer.';
   }
   if (unattempted > 0 && timing.remainingMs >= 60_000) {
-    return `You finished with ${formatQuestionTime(timing.remainingMs)} left and ${plural(unattempted, 'question')} blank. With no negative marking, spare time is best spent answering them.`;
+    return `You finished with ${formatQuestionTime(timing.remainingMs)} left and ${plural(unattempted, 'question')} blank. Spend spare time answering them.`;
   }
   if (timing.paceMs > 0 && timing.avgMs > timing.paceMs * 1.05) {
     return `You averaged ${formatQuestionTime(timing.avgMs)} per question, slower than the ${formatQuestionTime(timing.paceMs)} pace this paper allows.`;

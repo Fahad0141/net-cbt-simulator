@@ -154,9 +154,7 @@ export default function BankPage({ query }: { query: URLSearchParams }) {
         title="Question bank"
         subtitle={
           <>
-            Every question in a generated paper comes from one of these templates. Browse by subject
-            and chapter, preview any question with its worked solution, and spin up fresh variants
-            of parametric templates.{' '}
+            The templates behind every generated paper, each with a worked solution.{' '}
             <span className={styles.version}>Bank version {BANK_VERSION}.</span>
           </>
         }

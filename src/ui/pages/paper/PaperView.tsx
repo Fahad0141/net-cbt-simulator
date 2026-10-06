@@ -139,9 +139,8 @@ export function PaperView({ resolved, paper, generatedAt, initialSettings }: Pap
           title={heading.title}
           subtitle={
             <>
-              Paper code <strong>{paper.code}</strong> · {plural(total, 'MCQ')} ·{' '}
-              {paper.durationMinutes} minutes. Print it or save it as a PDF, then mark it with the
-              answer key.
+              Paper code <strong>{paper.code}</strong>, {plural(total, 'MCQ')} in{' '}
+              {paper.durationMinutes} minutes
             </>
           }
         />

@@ -14,9 +14,11 @@
   }
 }
 
+/* Set in the terminal's own typeface, like the real e-Test screen. */
 .window {
+  font-family: Arial, Helvetica, sans-serif;
   border: 1px solid var(--border-strong);
-  border-radius: 12px;
+  border-radius: 10px;
   background: var(--surface);
   box-shadow: var(--shadow-lg);
   overflow: hidden;

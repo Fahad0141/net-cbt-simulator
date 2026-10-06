@@ -87,10 +87,11 @@ describe('NewPaperPage', () => {
   it('sets the title and preselects the default test with its section breakdown', () => {
     renderPage();
     expect(document.title).toBe('New test · NET CBT Simulator');
-    expect(screen.getByRole('radio', { name: 'NET Engineering' })).toBeChecked();
-    const table = screen.getByRole('table', { name: /Sections of the NET Engineering paper/ });
-    expect(within(table).getByText('Mathematics')).toBeInTheDocument();
-    expect(within(table).getAllByText('200').length).toBeGreaterThan(0);
+    const radio = screen.getByRole('radio', { name: 'NET Engineering' });
+    expect(radio).toBeChecked();
+    expect(radio).toHaveAccessibleDescription('Mathematics 100, Physics 60, English 40');
+    const details = screen.getByRole('region', { name: 'About NET Engineering' });
+    expect(within(details).getByText('Who sits it')).toBeInTheDocument();
   });
 
   it('preselects the test type from the link', () => {

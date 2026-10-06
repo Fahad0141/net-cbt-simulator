@@ -152,10 +152,7 @@ export function ChapterView({ bank, chapterId, templateId, seed }: ChapterViewPr
           <h3 id={`${ids}-none`} className={s.emptyTitle}>
             No templates in this chapter yet
           </h3>
-          <p>
-            Generated papers skip chapters without templates and share their questions out among the
-            other {subjectName} chapters.
-          </p>
+          <p>Papers skip this chapter and give its questions to other {subjectName} chapters.</p>
           <p>
             <ExternalLink href={AUTHORING_GUIDE_URL} className={s.standaloneLink}>
               Write the first template for this chapter
@@ -188,10 +185,7 @@ export function ChapterView({ bank, chapterId, templateId, seed }: ChapterViewPr
             ) : (
               <div className={s.placeholder}>
                 <p className={s.placeholderTitle}>Pick a template to preview it</p>
-                <p>
-                  You will see a generated question with its answer and worked solution. Parametric
-                  templates can produce a new variant at the press of a button.
-                </p>
+                <p>See a generated question with its answer and worked solution.</p>
               </div>
             )}
           </div>

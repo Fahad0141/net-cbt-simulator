@@ -20,15 +20,10 @@ const LEVEL_LABEL: Record<MasteryLevel, string> = {
   unrated: 'Not enough data',
 };
 
-const LEVEL_TONE: Record<MasteryLevel, 'success' | 'warning' | 'danger' | 'neutral'> = {
-  strong: 'success',
-  developing: 'warning',
-  weak: 'danger',
-  unrated: 'neutral',
-};
-
+/** Weak chapters get the highlighter: they are where the marks are. */
 export function MasteryBadge({ level }: { level: MasteryLevel }) {
-  return <Badge tone={LEVEL_TONE[level]}>{LEVEL_LABEL[level]}</Badge>;
+  if (level === 'weak') return <span className={s.weakMark}>{LEVEL_LABEL[level]}</span>;
+  return <Badge tone={level === 'strong' ? 'success' : 'neutral'}>{LEVEL_LABEL[level]}</Badge>;
 }
 
 const DEFAULT_DIRECTION: Record<SortKey, Direction> = {
@@ -133,12 +128,15 @@ export function ChapterMastery({ chapters }: { chapters: readonly ChapterInsight
   return (
     <Card title="Chapter mastery">
       <div className={s.masteryIntro}>
-        <p className={`${ui.muted} ${ui.small}`}>
-          Mastery is the share of the questions you saw that you got right: a skipped question is a
-          lost mark (there is no negative marking), but questions you never reached are ignored. A
-          rating needs at least {MIN_QUESTIONS_FOR_RATING} questions seen. Trend compares your
-          latest attempt with the average of earlier ones. Select a column heading to sort.
-        </p>
+        <details className={s.howRated}>
+          <summary>How chapters are rated</summary>
+          <p className={`${ui.muted} ${ui.small}`}>
+            Mastery is the share of the questions you saw that you got right. A skipped question
+            counts as a lost mark; questions you never reached are ignored. A rating needs{' '}
+            {MIN_QUESTIONS_FOR_RATING} questions seen. Trend compares your latest attempt with the
+            average of earlier ones.
+          </p>
+        </details>
         {subjects.length > 1 ? (
           <span className={s.inlineField}>
             <label htmlFor={subjectId} className={ui.small}>

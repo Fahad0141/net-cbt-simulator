@@ -48,8 +48,7 @@ export function DifficultyMix({
       </ul>
       {targetPct ? (
         <p className={s.note}>
-          Generated papers aim for {targetPct[0]}% easy, {targetPct[1]}% medium and {targetPct[2]}%
-          hard questions; parametric templates can be reused with fresh values to fill the mix.
+          Papers aim for {targetPct[0]}% easy, {targetPct[1]}% medium and {targetPct[2]}% hard.
         </p>
       ) : null}
     </div>

@@ -3,7 +3,7 @@
 .page {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 24px;
 }
 
 .pageHeader {
@@ -15,22 +15,25 @@
 }
 
 .pageHeader h1 {
-  font-size: clamp(22px, 3vw, 30px);
+  font-size: clamp(28px, 3.6vw, 38px);
+  font-stretch: var(--font-condensed);
+  font-weight: 750;
+  line-height: 1.05;
+  letter-spacing: -0.005em;
   margin: 0;
 }
 
 .pageHeader p {
-  margin: 4px 0 0;
+  margin: 8px 0 0;
   color: var(--muted);
-  max-width: 70ch;
+  max-width: 60ch;
 }
 
 .card {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  padding: 18px;
+  padding: 20px;
   min-width: 0;
 }
 
@@ -43,8 +46,9 @@
 }
 
 .cardTitle {
-  font-size: 16px;
-  font-weight: 650;
+  font-size: 18px;
+  font-stretch: var(--font-semicondensed);
+  font-weight: 700;
   margin: 0;
 }
 
@@ -99,18 +103,14 @@
   cursor: pointer;
   transition:
     background 0.15s,
-    border-color 0.15s,
-    transform 0.05s;
+    border-color 0.15s;
   white-space: nowrap;
 }
 
 .button:hover {
-  background: var(--surface-3);
+  background: var(--surface-2);
+  border-color: var(--text-2);
   color: var(--text);
-}
-
-.button:active {
-  transform: translateY(1px);
 }
 
 .button:disabled,
@@ -164,8 +164,8 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  padding: 2px 8px;
-  border-radius: 999px;
+  padding: 1px 7px;
+  border-radius: 4px;
   font-size: 12px;
   font-weight: 600;
   background: var(--surface-3);
@@ -201,17 +201,16 @@
 }
 
 .statLabel {
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+  font-size: 13px;
   color: var(--muted);
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .statValue {
-  font-size: 26px;
-  font-weight: 700;
-  line-height: 1.15;
+  font-size: 32px;
+  font-stretch: var(--font-condensed);
+  font-weight: 750;
+  line-height: 1.05;
   font-variant-numeric: tabular-nums;
 }
 
@@ -223,8 +222,8 @@
 /* progress bar */
 .progress {
   position: relative;
-  height: 10px;
-  border-radius: 999px;
+  height: 8px;
+  border-radius: 2px;
   background: var(--surface-3);
   overflow: hidden;
 }
@@ -232,7 +231,7 @@
 .progressFill {
   position: absolute;
   inset: 0 auto 0 0;
-  border-radius: 999px;
+  border-radius: 2px;
   background: var(--primary);
 }
 
@@ -301,8 +300,8 @@
 
 .segment[aria-checked='true'] {
   background: var(--surface);
-  color: var(--primary);
-  box-shadow: var(--shadow);
+  color: var(--text);
+  box-shadow: 0 0 0 1px var(--border-strong);
 }
 
 /* tables */
@@ -311,8 +310,6 @@
      escape the horizontal scroller and widen the whole page on phones. */
   position: relative;
   overflow-x: auto;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
 }
 
 .table {
@@ -330,15 +327,19 @@
 }
 
 .table th {
-  background: var(--surface-2);
-  font-size: 12.5px;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
+  font-size: 13px;
   color: var(--muted);
-  font-weight: 650;
+  font-weight: 550;
+  border-bottom-color: var(--border-strong);
 }
 
-.table tr:last-child td {
+/* Row headers sit in the body: they take the body's hairline, not the header rule. */
+.table tbody th {
+  border-bottom-color: var(--border);
+}
+
+.table tr:last-child td,
+.table tbody tr:last-child th {
   border-bottom: 0;
 }
 
@@ -349,19 +350,22 @@
 
 /* empty state */
 .empty {
-  text-align: center;
-  padding: 32px 16px;
+  padding: 8px 0;
   color: var(--muted);
 }
 
 .empty h2 {
   color: var(--text);
-  font-size: 18px;
+  font-size: 20px;
+  font-stretch: var(--font-semicondensed);
+}
+
+.empty p {
+  max-width: 52ch;
 }
 
 /* callout */
 .callout {
-  border-left: 4px solid var(--primary);
   background: var(--primary-soft);
   padding: 12px 14px;
   border-radius: var(--radius-sm);
@@ -369,7 +373,6 @@
 }
 
 .calloutWarning {
-  border-left-color: var(--warning);
   background: var(--warning-soft);
 }
 
@@ -391,10 +394,10 @@
 
 @media (max-width: 640px) {
   .card {
-    padding: 14px;
+    padding: 16px;
   }
 
   .statValue {
-    font-size: 22px;
+    font-size: 26px;
   }
 }

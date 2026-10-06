@@ -5,57 +5,34 @@ import { paperShareText, publicAppUrl } from '@/platform/links';
 import { isNativeApp, shareContent } from '@/platform/native';
 import { href } from '@/ui/router';
 import { Button, LinkButton } from '@/ui/components/ui';
+import { sectionTint } from '../home/tints';
 import { copyText } from './browser';
 import {
   DIFFICULTY_META,
   formatMinutes,
-  isSubjectId,
   newPaperPath,
   paperStats,
   percentOf,
   printablePath,
   shortSectionTitle,
-  SUBJECT_COLORS,
 } from './model';
 import styles from '../NewPaperPage.module.css';
 
 function MiniStat({ label, value, hint }: { label: string; value: string; hint?: string }) {
   return (
     <div className={styles.miniStat}>
-      <span className={styles.miniLabel}>{label}</span>
-      <span className={styles.miniValue}>{value}</span>
-      {hint ? <span className={styles.miniHint}>{hint}</span> : null}
+      <dt className={styles.miniLabel}>{label}</dt>
+      <dd className={styles.miniValue}>
+        {value}
+        {hint ? <span className={styles.miniHint}> {hint}</span> : null}
+      </dd>
     </div>
   );
 }
 
-function ShareRow({
-  label,
-  value,
-  total,
-  color,
-  hint,
-}: {
-  label: string;
-  value: number;
-  total: number;
-  color: string;
-  hint: string;
-}) {
-  const pct = percentOf(value, total);
-  return (
-    <li className={styles.shareRow}>
-      <span>{label}</span>
-      <span className={styles.shareValue}>
-        {value} · {pct}%
-      </span>
-      <span className={styles.shareTrack} aria-hidden="true">
-        <span className={styles.shareFill} style={{ width: `${pct}%`, background: color }} />
-      </span>
-      <span className={styles.shareHint}>{hint}</span>
-    </li>
-  );
-}
+/** Section `index` of `count` in the dashboard's ordinal ramp of the ink colour. */
+const sectionColor = (index: number, count: number) =>
+  `color-mix(in oklab, var(--primary) ${sectionTint(index, count)}, var(--surface))`;
 
 /** Id of the "Start test" button (focus returns here after the confirm dialog). */
 export const START_BUTTON_ID = 'start-test';
@@ -162,37 +139,32 @@ export function PaperSummary({
         </Button>
       </div>
 
-      <div className={styles.miniStats}>
-        <MiniStat label="Questions" value={String(stats.total)} hint={`${stats.total} marks`} />
+      <dl className={styles.miniStats}>
+        <MiniStat label="Questions" value={String(stats.total)} />
         <MiniStat label="Time" value={formatMinutes(paper.durationMinutes)} />
         <MiniStat
           label="Chapters"
           value={String(stats.chaptersCovered)}
           hint={stats.chaptersInScope ? `of ${stats.chaptersInScope}` : undefined}
         />
-      </div>
+      </dl>
 
       <div>
         <h3 className={styles.subheading}>Sections</h3>
         <div className={styles.bar} aria-hidden="true">
-          {stats.sections.map((s) => (
+          {stats.sections.map((s, i) => (
             <span
               key={`${s.subject}-${s.first}`}
-              style={{
-                flexGrow: s.count,
-                background: isSubjectId(s.subject) ? SUBJECT_COLORS[s.subject] : 'var(--muted)',
-              }}
+              style={{ flexGrow: s.count, background: sectionColor(i, stats.sections.length) }}
             />
           ))}
         </div>
         <ul className={styles.legend}>
-          {stats.sections.map((s) => (
+          {stats.sections.map((s, i) => (
             <li key={`${s.subject}-${s.first}`}>
               <span
                 className={styles.dot}
-                style={{
-                  background: isSubjectId(s.subject) ? SUBJECT_COLORS[s.subject] : 'var(--muted)',
-                }}
+                style={{ background: sectionColor(i, stats.sections.length) }}
                 aria-hidden="true"
               />
               {shortSectionTitle(s.title)} {s.count}
@@ -231,29 +203,18 @@ export function PaperSummary({
 
       <div>
         <h3 className={styles.subheading}>Question sources</h3>
-        <ul className={styles.shares}>
-          <ShareRow
-            label="Randomised values"
-            value={stats.randomised}
-            total={stats.total}
-            color="var(--primary)"
-            hint="Built afresh for every paper (new numbers or passages), so they cannot be memorised."
-          />
-          <ShareRow
-            label="Fixed questions"
-            value={stats.fixed}
-            total={stats.total}
-            color="var(--purple)"
-            hint="Concept and vocabulary items worded as on the NET."
-          />
-          <ShareRow
-            label="Past-paper style"
-            value={stats.pastPaper}
-            total={stats.total}
-            color="var(--accent)"
-            hint="Modelled on questions reported from real NET sittings (overlaps the two above)."
-          />
-        </ul>
+        <dl className={styles.sources}>
+          <dt title="New numbers or passages in every paper, so they cannot be memorised">
+            Randomised values
+          </dt>
+          <dd>{stats.randomised}</dd>
+          <dt>Fixed questions</dt>
+          <dd>{stats.fixed}</dd>
+          <dt title="Modelled on questions reported from real NET sittings">
+            Past-paper style, of either kind
+          </dt>
+          <dd>{stats.pastPaper}</dd>
+        </dl>
       </div>
 
       {stats.outOfScope > 0 ? (
@@ -264,8 +225,7 @@ export function PaperSummary({
       ) : null}
 
       <p className={styles.startNote}>
-        {modeText} · {formatMinutes(paper.durationMinutes)}. The timer starts after the instructions
-        screen.
+        {modeText}. The clock starts after the instructions screen.
       </p>
       <Button
         id={START_BUTTON_ID}

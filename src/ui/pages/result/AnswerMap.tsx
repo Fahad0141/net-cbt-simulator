@@ -1,8 +1,7 @@
-import { type KeyboardEvent, useRef, useState } from 'react';
+import { type KeyboardEvent, useId, useRef, useState } from 'react';
 import { Card } from '@/ui/components/ui';
 import { href } from '@/ui/router';
 import { type Outcome, type ResultModel, reviewPath } from './analysis';
-import { plural } from './format';
 import s from './result.module.css';
 
 const OUTCOME_TEXT: Record<Outcome, string> = {
@@ -67,14 +66,15 @@ function groupsOf(sections: ResultModel['paper']['sections'], count: number): Ma
 }
 
 /**
- * Every question as a coloured square, grouped by section; each square opens that
- * question in the review. One tab stop: arrow keys, Home and End move between squares.
+ * Every question as an answer-sheet bubble, grouped by section; each bubble opens that
+ * question in the review. One tab stop: arrow keys, Home and End move between bubbles.
  */
 export function AnswerMap({ model }: { model: ResultModel }) {
   const { paper, report } = model;
   const count = paper.questions.length;
   const [active, setActive] = useState(0);
   const cells = useRef<(HTMLAnchorElement | null)[]>([]);
+  const hintId = useId();
 
   if (!count) return null;
   const focusIndex = Math.min(active, count - 1);
@@ -113,20 +113,36 @@ export function AnswerMap({ model }: { model: ResultModel }) {
   };
 
   return (
-    <Card
-      className={s.cq}
-      title="Answer map"
-      action={<span className={s.cardHint}>{plural(count, 'question')}</span>}
-    >
-      <p className={s.mapHint}>
-        Select a square to review that question. Use the arrow keys to move between squares.
+    <Card className={s.cq} title="Answer map">
+      <ul className={s.mapLegend}>
+        <li>
+          <span className={`${s.mapKey} ${s.cellCorrect}`} aria-hidden="true" />
+          Correct
+        </li>
+        <li>
+          <span className={`${s.mapKey} ${s.cellWrong}`} aria-hidden="true" />
+          Wrong
+        </li>
+        <li>
+          <span className={`${s.mapKey} ${s.cellBlank}`} aria-hidden="true" />
+          Unattempted
+        </li>
+      </ul>
+      <p id={hintId} className="visually-hidden">
+        Select a question to review it. The arrow keys move between questions.
       </p>
       <div className={s.mapSections}>
         {groups.map((group) => {
           const outcomes = report.outcomes.slice(group.start, group.end);
           const correct = outcomes.filter((o) => o === 'correct').length;
           return (
-            <div key={group.key} className={s.mapSection} role="group" aria-label={group.title}>
+            <div
+              key={group.key}
+              className={s.mapSection}
+              role="group"
+              aria-label={group.title}
+              aria-describedby={hintId}
+            >
               <div className={s.mapSectionHead}>
                 <span className={s.mapSectionTitle}>{group.title}</span>
                 <span className={s.muted}>
@@ -161,20 +177,6 @@ export function AnswerMap({ model }: { model: ResultModel }) {
           );
         })}
       </div>
-      <ul className={s.mapLegend}>
-        <li>
-          <span className={`${s.mapKey} ${s.cellCorrect}`} aria-hidden="true" />
-          Correct (filled)
-        </li>
-        <li>
-          <span className={`${s.mapKey} ${s.cellWrong}`} aria-hidden="true" />
-          Wrong (outlined)
-        </li>
-        <li>
-          <span className={`${s.mapKey} ${s.cellBlank}`} aria-hidden="true" />
-          Unattempted (dashed)
-        </li>
-      </ul>
     </Card>
   );
 }

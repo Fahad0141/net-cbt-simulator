@@ -43,9 +43,9 @@
   align-items: center;
   gap: 8px;
   min-height: 36px;
-  padding: 4px 5px 4px 12px;
+  padding: 4px 12px;
   border: 1px solid var(--border-strong);
-  border-radius: 999px;
+  border-radius: var(--radius-sm);
   background: var(--surface);
   color: var(--text-2);
   font-size: 14px;
@@ -53,18 +53,17 @@
   white-space: nowrap;
   transition:
     background 0.15s,
-    border-color 0.15s,
-    color 0.15s;
+    border-color 0.15s;
 }
 
 .chip:hover .chipBody {
-  background: var(--surface-3);
+  border-color: var(--text-2);
 }
 
 .chip input:checked + .chipBody {
   border-color: var(--primary);
-  background: var(--primary-soft);
-  color: var(--primary);
+  box-shadow: inset 0 0 0 1px var(--primary);
+  color: var(--text);
 }
 
 .chip input:focus-visible + .chipBody {
@@ -72,30 +71,22 @@
 }
 
 .count {
-  min-width: 28px;
-  padding: 1px 8px;
-  border-radius: 999px;
-  background: var(--surface-3);
-  color: var(--text);
-  font-size: 12.5px;
+  color: var(--muted);
+  font-weight: 500;
   font-variant-numeric: tabular-nums;
-  text-align: center;
 }
 
 .chip input:checked + .chipBody .count {
-  background: var(--primary);
-  color: var(--on-primary);
+  color: var(--primary);
+  font-weight: 650;
 }
 
+/* The same marks as the navigator cells: filled, ring, dashed ring, review dot. */
 .dot {
   flex: none;
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
-}
-
-.dotAll {
-  background: conic-gradient(var(--success) 0 55%, var(--danger) 55% 82%, var(--muted) 82% 100%);
 }
 
 .dotCorrect {
@@ -103,14 +94,17 @@
 }
 
 .dotWrong {
-  background: var(--danger);
+  border: 2px solid var(--danger);
+  background: var(--danger-soft);
 }
 
 .dotBlank {
-  border: 2px solid var(--muted);
+  border: 2px dashed var(--border-strong);
 }
 
 .dotReview {
+  width: 8px;
+  height: 8px;
   background: var(--purple);
 }
 
@@ -219,8 +213,9 @@
 
 .qTitle {
   margin: 0;
-  font-size: 19px;
-  font-weight: 700;
+  font-size: 22px;
+  font-stretch: var(--font-condensed);
+  font-weight: 750;
 }
 
 .qOf {
@@ -243,8 +238,6 @@
   align-items: center;
   gap: 4px 12px;
   padding: 10px 14px;
-  border: 1px solid var(--border-strong);
-  border-left-width: 4px;
   border-radius: var(--radius-sm);
   background: var(--surface-2);
   color: var(--text);
@@ -252,17 +245,11 @@
 }
 
 .bannerCorrect {
-  border-color: var(--success);
   background: var(--success-soft);
 }
 
 .bannerWrong {
-  border-color: var(--danger);
   background: var(--danger-soft);
-}
-
-.bannerBlank {
-  border-left-color: var(--muted);
 }
 
 .bannerTitle {
@@ -299,8 +286,8 @@
   align-items: center;
   gap: 5px;
   margin-left: auto;
-  padding: 2px 9px;
-  border-radius: 999px;
+  padding: 2px 8px;
+  border-radius: 4px;
   background: color-mix(in srgb, var(--purple) 13%, var(--surface));
   color: color-mix(in srgb, var(--purple) 82%, var(--text));
   font-size: 12.5px;
@@ -370,10 +357,7 @@
 }
 
 .referenceLabel {
-  font-size: 11.5px;
-  font-weight: 650;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  font-weight: 600;
 }
 
 .templateId {
@@ -449,8 +433,9 @@
 
 .navGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(38px, 1fr));
-  gap: 5px;
+  grid-template-columns: repeat(auto-fill, 34px);
+  justify-content: space-between;
+  gap: 6px 4px;
 }
 
 .cell {
@@ -458,67 +443,53 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 0;
-  height: 36px;
+  width: 34px;
+  height: 34px;
   padding: 0;
-  border: 1px solid var(--border-strong);
-  border-radius: 6px;
+  border: 2px solid var(--border-strong);
+  border-radius: 50%;
   background: var(--surface);
   color: var(--text);
   font: inherit;
-  font-size: 12.5px;
+  font-size: 11.5px;
+  font-stretch: var(--font-semicondensed);
   font-weight: 650;
   font-variant-numeric: tabular-nums;
   cursor: pointer;
 }
 
 .cell:hover {
-  border-color: var(--primary);
+  outline: 2px solid var(--border-strong);
+  outline-offset: 1px;
 }
 
 .cell:focus-visible {
-  border-radius: 6px;
+  border-radius: 50%;
   box-shadow: var(--focus);
 }
 
+/* Correct: filled. Wrong: red ring. Unattempted: dashed ring. The fill style, not
+ * only the hue, tells them apart (red/green colour blindness). */
 .cellCorrect {
-  border-color: var(--success);
-  background: var(--success-soft);
+  border-color: transparent;
+  background: var(--success);
+  background: color-mix(in srgb, var(--success) 82%, var(--text));
+  color: var(--on-primary);
 }
 
 .cellWrong {
   border-color: var(--danger);
   background: var(--danger-soft);
+  color: var(--danger);
 }
 
 .cellBlank {
   border-style: dashed;
-  background: var(--surface-2);
-  color: var(--text-2);
+  color: var(--muted);
 }
 
-/* Outcome glyphs, so the grid does not rely on colour alone. */
-.cellCorrect::after,
-.cellWrong::after {
-  position: absolute;
-  right: 2px;
-  bottom: 1px;
-  font-size: 9px;
-  font-weight: 800;
-  line-height: 1;
-}
-
-.cellCorrect::after {
-  content: '\2713';
-  color: var(--success);
-}
-
-.cellWrong::after {
-  content: '\2715';
-  color: var(--danger);
-}
-
-.cellCurrent {
+.cellCurrent,
+.cellCurrent:hover {
   z-index: 1;
   outline: 2px solid var(--primary);
   outline-offset: 2px;
@@ -526,59 +497,19 @@
 
 .reviewDot {
   position: absolute;
-  top: 3px;
-  right: 3px;
-  width: 7px;
-  height: 7px;
+  top: -1px;
+  right: -1px;
+  width: 9px;
+  height: 9px;
   border-radius: 50%;
   background: var(--purple);
-  box-shadow: 0 0 0 1.5px var(--surface);
+  box-shadow: 0 0 0 2px var(--surface);
 }
 
 .navEmpty {
   margin: 0;
   color: var(--muted);
   font-size: 14px;
-}
-
-.legend {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px 14px;
-  margin: 0;
-  padding: 0;
-  color: var(--text-2);
-  font-size: 12.5px;
-  list-style: none;
-}
-
-.legend li {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.swatch {
-  position: relative;
-  display: inline-block;
-  flex: none;
-  width: 20px;
-  height: 16px;
-  border: 1px solid var(--border-strong);
-  border-radius: 4px;
-  background: var(--surface);
-}
-
-.swatch.cellCorrect::after,
-.swatch.cellWrong::after {
-  right: 1px;
-  bottom: 0;
-  font-size: 8px;
-}
-
-.swatchReview .reviewDot {
-  top: 2px;
-  right: 2px;
 }
 
 @media (min-width: 961px) {

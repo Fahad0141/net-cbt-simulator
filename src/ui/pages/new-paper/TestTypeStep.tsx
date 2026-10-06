@@ -1,6 +1,7 @@
-import type { ReactNode } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import type { ExamSectionConfig, ExamTypeConfig } from '@/config/exams';
-import { Badge, ui } from '@/ui/components/ui';
+import { Badge } from '@/ui/components/ui';
+import { sectionTint } from '../home/tints';
 import {
   CURRENT_TYPES,
   CUSTOM,
@@ -8,9 +9,7 @@ import {
   isLegacyType,
   LEGACY_TYPES,
   LIMITS,
-  percentOf,
   shortSectionTitle,
-  SUBJECT_COLORS,
   sumCounts,
 } from './model';
 import { Step } from './Step';
@@ -18,14 +17,35 @@ import styles from '../NewPaperPage.module.css';
 
 const RADIO_NAME = 'new-paper-test-type';
 
-/** Decorative bar showing each section's share of the paper (the text says the same). */
+type Tinted = CSSProperties & { '--tint': string };
+
+/** The questions and minutes every current pattern shares, so the cards need not repeat them. */
+const SHARED_SHAPE = (() => {
+  const totals = new Set(CURRENT_TYPES.map((e) => sumCounts(e.sections)));
+  const minutes = new Set(CURRENT_TYPES.map((e) => e.durationMinutes));
+  return totals.size === 1 && minutes.size === 1
+    ? { total: [...totals][0], minutes: [...minutes][0] }
+    : null;
+})();
+
+const hasSharedShape = (exam: ExamTypeConfig) =>
+  SHARED_SHAPE !== null &&
+  sumCounts(exam.sections) === SHARED_SHAPE.total &&
+  exam.durationMinutes === SHARED_SHAPE.minutes;
+
+/**
+ * Decorative bar of each section's share of the paper (the text says the same), in the
+ * same ordinal ramp of the ink colour as the dashboard's pattern cards.
+ */
 function CompositionBar({ sections }: { sections: readonly ExamSectionConfig[] }) {
   return (
     <span className={styles.composition} aria-hidden="true">
-      {sections.map((s) => (
+      {sections.map((s, i) => (
         <span
           key={`${s.subject}-${s.title}`}
-          style={{ flexGrow: s.count, flexBasis: 0, background: SUBJECT_COLORS[s.subject] }}
+          style={
+            { flexGrow: s.count, flexBasis: 0, '--tint': sectionTint(i, sections.length) } as Tinted
+          }
         />
       ))}
     </span>
@@ -47,7 +67,7 @@ function OptionCard({
   title: ReactNode;
   text: ReactNode;
   visual?: ReactNode;
-  foot: ReactNode;
+  foot?: ReactNode;
 }) {
   const id = `${RADIO_NAME}-${value}`;
   return (
@@ -60,19 +80,21 @@ function OptionCard({
         onChange={() => onSelect(value)}
         className={styles.optionInput}
         aria-labelledby={`${id}-title`}
-        aria-describedby={`${id}-text ${id}-foot`}
+        aria-describedby={foot ? `${id}-text ${id}-foot` : `${id}-text`}
       />
       <span className={styles.optionBody}>
         <span id={`${id}-title`} className={styles.optionTitle}>
           {title}
         </span>
+        {visual}
         <span id={`${id}-text`} className={styles.optionText}>
           {text}
         </span>
-        {visual}
-        <span id={`${id}-foot`} className={styles.optionFoot}>
-          {foot}
-        </span>
+        {foot ? (
+          <span id={`${id}-foot`} className={styles.optionFoot}>
+            {foot}
+          </span>
+        ) : null}
       </span>
     </label>
   );
@@ -93,9 +115,13 @@ function TypeOption({
       checked={checked}
       onSelect={onSelect}
       title={exam.name}
-      text={exam.sections.map((s) => `${shortSectionTitle(s.title)} ${s.count}`).join(' · ')}
       visual={<CompositionBar sections={exam.sections} />}
-      foot={`${sumCounts(exam.sections)} MCQs · ${formatMinutes(exam.durationMinutes)}`}
+      text={exam.sections.map((s) => `${shortSectionTitle(s.title)} ${s.count}`).join(', ')}
+      foot={
+        hasSharedShape(exam)
+          ? undefined
+          : `${sumCounts(exam.sections)} MCQs in ${formatMinutes(exam.durationMinutes)}`
+      }
     />
   );
 }
@@ -116,12 +142,7 @@ export function TestTypeStep({
 }) {
   const legacySelected = isLegacyType(value);
   return (
-    <Step
-      id="step-test"
-      number={1}
-      title="Choose a test"
-      description="Every current NET is 200 MCQs in 3 hours. Pick the paper you are preparing for, or build your own test."
-    >
+    <Step id="step-test" number={1} title="Choose a test">
       <fieldset className={styles.fieldset}>
         <legend className="visually-hidden">Test type</legend>
         <div className={styles.optionGrid}>
@@ -133,8 +154,8 @@ export function TestTypeStep({
             checked={value === CUSTOM}
             onSelect={onChange}
             title="Custom test"
-            text="Your choice of subjects, chapters, length and time"
-            foot={`${LIMITS.sectionMin}–${LIMITS.totalMax} MCQs · your time limit`}
+            text="Your subjects, chapters, length and time"
+            foot={`${LIMITS.sectionMin}–${LIMITS.totalMax} MCQs`}
           />
         </div>
         <details
@@ -145,7 +166,7 @@ export function TestTypeStep({
           <summary className={styles.legacySummary}>
             Pre-2025 patterns{' '}
             <span className={styles.legacyHint}>
-              for extra Chemistry, Computer Science and Intelligence practice
+              extra Chemistry, Computer Science and Intelligence practice
             </span>
             {legacySelected && !legacyOpen ? (
               <>
@@ -155,11 +176,6 @@ export function TestTypeStep({
             ) : null}
           </summary>
           <div className={styles.legacyBody}>
-            <p className={styles.legacyNote}>
-              NET papers up to the 2024 cycle followed these patterns. Current papers have no
-              Intelligence or Computer Science sections, and Chemistry appears only in Applied
-              Sciences.
-            </p>
             <div className={styles.optionGrid}>
               {LEGACY_TYPES.map((exam) => (
                 <TypeOption
@@ -178,72 +194,28 @@ export function TestTypeStep({
   );
 }
 
-/** Who sits the selected pattern and how its 200 questions are split. */
+/** Who sits the selected pattern and where it leads (the card above shows its split). */
 export function ExamTypeDetails({ exam }: { exam: ExamTypeConfig }) {
-  const total = sumCounts(exam.sections);
   const current = exam.era === 'current';
   return (
-    <div className={styles.details}>
-      <div className={styles.detailsHead}>
-        <h3 className={styles.detailsTitle}>{exam.name}</h3>
-        <Badge tone={current ? 'success' : 'warning'}>
-          {current ? 'Current pattern' : 'Pre-2025 pattern'}
-        </Badge>
-      </div>
+    <section className={styles.details} aria-label={`About ${exam.name}`}>
+      {current ? null : <Badge tone="warning">Pre-2025 pattern</Badge>}
       <dl className={styles.facts}>
         <dt>Who sits it</dt>
         <dd>{exam.audience}</dd>
-        <dt>{current ? 'Leads to' : 'Good for'}</dt>
-        <dd>{exam.programmes.join(' · ')}</dd>
+        {exam.programmes.length ? (
+          <>
+            <dt>{current ? 'Leads to' : 'Good for'}</dt>
+            <dd>{exam.programmes.join('; ')}</dd>
+          </>
+        ) : null}
+        {exam.note ? (
+          <>
+            <dt>Weighting</dt>
+            <dd>{exam.note}</dd>
+          </>
+        ) : null}
       </dl>
-      <div className={ui.tableWrap}>
-        <table className={ui.table}>
-          <caption className="visually-hidden">Sections of the {exam.name} paper</caption>
-          <thead>
-            <tr>
-              <th scope="col">Section</th>
-              <th scope="col" className={ui.num}>
-                MCQs
-              </th>
-              <th scope="col" className={ui.num}>
-                Share
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {exam.sections.map((s) => (
-              <tr key={`${s.subject}-${s.title}`}>
-                <td>
-                  <span
-                    className={styles.dot}
-                    style={{ background: SUBJECT_COLORS[s.subject] }}
-                    aria-hidden="true"
-                  />
-                  {s.title}
-                </td>
-                <td className={ui.num}>{s.count}</td>
-                <td className={ui.num}>{percentOf(s.count, total)}%</td>
-              </tr>
-            ))}
-          </tbody>
-          <tfoot>
-            <tr className={styles.totalRow}>
-              <td>Total</td>
-              <td className={ui.num}>{total}</td>
-              <td className={ui.num}>100%</td>
-            </tr>
-          </tfoot>
-        </table>
-      </div>
-      <p className={styles.detailsNote}>
-        {total} marks in {formatMinutes(exam.durationMinutes)} · four options per MCQ · one mark
-        each · no negative marking
-      </p>
-      {exam.note ? (
-        <p className={styles.detailsNote}>
-          <strong>Weighting:</strong> {exam.note}
-        </p>
-      ) : null}
-    </div>
+    </section>
   );
 }

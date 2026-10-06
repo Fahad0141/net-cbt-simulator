@@ -18,7 +18,10 @@
 
 .viewTitle {
   margin: 0;
-  font-size: clamp(20px, 2.4vw, 24px);
+  font-size: clamp(24px, 3vw, 30px);
+  font-stretch: var(--font-condensed);
+  font-weight: 750;
+  line-height: 1.1;
   scroll-margin-top: 88px;
   overflow-wrap: anywhere;
 }
@@ -86,68 +89,47 @@
   position: relative;
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 0 6px;
   list-style: none;
   margin: 0;
   padding: 0;
+  border-bottom: 1px solid var(--border);
 }
 
 .tabItem {
   flex: 0 0 auto;
 }
 
+/* Quiet underline tabs: the current subject gets the ink bar, counts stay muted. */
 .tab {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  min-height: 40px;
-  padding: 6px 14px;
-  border-radius: 999px;
-  border: 1px solid var(--border);
-  background: var(--surface);
+  gap: 6px;
+  min-height: 42px;
+  padding: 6px 8px;
   color: var(--text-2);
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 14.5px;
+  font-weight: 550;
   text-decoration: none;
   white-space: nowrap;
-  transition:
-    background 0.15s,
-    border-color 0.15s,
-    color 0.15s;
+  box-shadow: inset 0 -3px 0 transparent;
 }
 
 .tab:hover {
-  border-color: var(--border-strong);
-  background: var(--surface-2);
   color: var(--text);
-}
-
-.tab:focus-visible {
-  border-radius: 999px;
+  box-shadow: inset 0 -3px 0 var(--border-strong);
 }
 
 .tab[aria-current='page'] {
-  background: var(--primary);
-  border-color: var(--primary);
-  color: var(--on-primary);
+  color: var(--text);
+  box-shadow: inset 0 -3px 0 var(--primary);
 }
 
 .tabCount {
-  min-width: 22px;
-  padding: 0 7px;
-  border-radius: 999px;
-  background: var(--surface-3);
-  color: var(--text-2);
-  font-size: 12px;
+  color: var(--muted);
+  font-size: 12.5px;
+  font-weight: 500;
   font-variant-numeric: tabular-nums;
-  text-align: center;
-}
-
-/* Inverted chip: primary on on-primary keeps >= 4.5:1 in both themes (a tinted
-   primary background behind on-primary text dropped to about 4.5:1 or below). */
-.tab[aria-current='page'] .tabCount {
-  background: var(--on-primary);
-  color: var(--primary);
 }
 
 @media (max-width: 760px) {
@@ -155,7 +137,7 @@
   .tabs {
     flex-wrap: nowrap;
     overflow-x: auto;
-    padding: 4px 4px 8px;
+    padding: 0 2px;
     scroll-snap-type: x proximity;
     scrollbar-width: thin;
   }
@@ -214,9 +196,9 @@
 }
 
 .tag {
-  padding: 0 8px;
+  padding: 0 7px;
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: 4px;
   background: var(--surface-2);
   color: var(--text-2);
   font-size: 12px;
@@ -225,15 +207,41 @@
 
 /* ------------------------------------------------------------ summary stats */
 
-.stats {
-  display: grid;
-  gap: 16px 20px;
-  grid-template-columns: repeat(auto-fit, minmax(min(150px, 100%), 1fr));
+/* A row of stats on the page, split by hairlines (two to a row on phones). */
+.summary {
+  min-width: 0;
 }
 
-@media (max-width: 480px) {
+.stats {
+  display: grid;
+  gap: 16px 0;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.stats > * {
+  padding: 0 16px;
+  border-left: 1px solid var(--border);
+  min-width: 0;
+}
+
+.stats > :nth-child(2n + 1) {
+  padding-left: 0;
+  border-left: 0;
+}
+
+@media (min-width: 720px) {
   .stats {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+
+  .stats > :nth-child(2n + 1) {
+    padding-left: 16px;
+    border-left: 1px solid var(--border);
+  }
+
+  .stats > :first-child {
+    padding-left: 0;
+    border-left: 0;
   }
 }
 
@@ -244,7 +252,8 @@
 
 .emptyTitle {
   margin: 0 0 6px;
-  font-size: 17px;
+  font-size: 18px;
+  font-stretch: var(--font-semicondensed);
 }
 
 /* ---------------------------------------------------------- difficulty mix */
@@ -258,8 +267,8 @@
 .mixBar {
   display: flex;
   gap: 2px;
-  height: 14px;
-  border-radius: 4px;
+  height: 10px;
+  border-radius: 2px;
   overflow: hidden;
 }
 
@@ -304,7 +313,7 @@
 .swatch {
   width: 12px;
   height: 12px;
-  border-radius: 3px;
+  border-radius: 2px;
 }
 
 .legendValue {
@@ -331,8 +340,8 @@
 .explainer {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  font-size: 14.5px;
+  gap: 12px;
+  font-size: 14px;
 }
 
 .explainer p {
@@ -341,12 +350,24 @@
 
 .kinds {
   display: grid;
-  gap: 8px;
+  gap: 10px;
   margin: 0;
 }
 
+.kinds > div {
+  display: grid;
+  grid-template-columns: 9.5em minmax(0, 1fr);
+  gap: 2px 12px;
+}
+
 .kinds dt {
-  font-weight: 650;
+  font-weight: 600;
+}
+
+@media (max-width: 480px) {
+  .kinds > div {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
 .kinds dd {
@@ -368,8 +389,7 @@
 
 .chapterTable tbody th,
 .chapterTable tfoot th {
-  text-transform: none;
-  letter-spacing: normal;
+  border-bottom-color: var(--border);
   font-size: 14px;
   font-weight: 500;
   color: var(--text);
@@ -531,10 +551,8 @@
 }
 
 .topicsLabel {
-  font-size: 12px;
-  font-weight: 650;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+  font-size: 13px;
+  font-weight: 600;
   color: var(--text-2);
 }
 
@@ -548,8 +566,8 @@
 }
 
 .topic {
-  padding: 1px 9px;
-  border-radius: 999px;
+  padding: 1px 8px;
+  border-radius: 4px;
   background: var(--surface-3);
   color: var(--text-2);
   font-size: 12.5px;
@@ -833,10 +851,8 @@
 
 .eyebrow {
   margin: 0;
-  font-size: 12px;
-  font-weight: 650;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
+  font-size: 13px;
+  font-weight: 550;
   color: var(--muted);
 }
 
@@ -912,8 +928,7 @@
 
 .passage {
   padding: 10px 14px;
-  border-left: 3px solid var(--primary);
-  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  border-radius: var(--radius-sm);
   background: var(--surface-2);
 }
 

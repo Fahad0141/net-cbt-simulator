@@ -5,7 +5,7 @@ import { Badge, LinkButton, ProgressBar, ui } from '@/ui/components/ui';
 import { href } from '@/ui/router';
 import { describeSession, type ResumeInfo } from './activeSession';
 import { useNow } from './hooks';
-import { IconArrowRight, IconClock } from './icons';
+import { IconClock } from './icons';
 import s from './ResumePanel.module.css';
 
 const STATUS: Record<
@@ -143,7 +143,6 @@ export function ResumePanel({
         <div className={s.actions}>
           <LinkButton variant="primary" href={href('/exam')} className={s.resumeButton}>
             {info.status === 'time-up' ? 'Submit and see result' : 'Resume test'}
-            <IconArrowRight size={18} />
           </LinkButton>
           <button
             type="button"

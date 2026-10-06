@@ -1,7 +1,7 @@
 import { Card } from '@/ui/components/ui';
 import { DIFFICULTY_LABELS, difficultyInsight, type ResultModel } from './analysis';
 import { formatPercent, plural } from './format';
-import { OutcomeBar, OutcomeLegend } from './OutcomeBar';
+import { OutcomeBar } from './OutcomeBar';
 import s from './result.module.css';
 
 const LEVELS = [1, 2, 3] as const;
@@ -27,19 +27,13 @@ export function DifficultyBreakdown({ model }: { model: ResultModel }) {
                   <OutcomeBar correct={t.correct} wrong={t.wrong} unattempted={t.unattempted} />
                   <div className={s.levelStats}>
                     <span>
-                      Accuracy <strong>{t.attempted ? formatPercent(t.accuracy) : '—'}</strong>
-                    </span>
-                    <span>
-                      Correct{' '}
                       <strong>
                         {t.correct}/{t.total}
-                      </strong>
+                      </strong>{' '}
+                      correct
                     </span>
                     <span>
-                      Wrong <strong>{t.wrong}</strong>
-                    </span>
-                    <span>
-                      Unattempted <strong>{t.unattempted}</strong>
+                      <strong>{t.attempted ? formatPercent(t.accuracy) : '—'}</strong> accuracy
                     </span>
                   </div>
                 </>
@@ -53,7 +47,6 @@ export function DifficultyBreakdown({ model }: { model: ResultModel }) {
         })}
       </ul>
       {insight ? <p className={s.insight}>{insight}</p> : null}
-      <OutcomeLegend />
     </Card>
   );
 }

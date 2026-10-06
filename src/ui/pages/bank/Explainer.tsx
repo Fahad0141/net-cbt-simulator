@@ -6,38 +6,30 @@ import s from './bank.module.css';
 export function Explainer() {
   return (
     <div className={s.explainer}>
-      <p>
-        Every question in a generated paper comes from a <strong>template</strong> in this bank.
-      </p>
       <dl className={s.kinds}>
         <div>
           <dt>Parametric</dt>
           <dd>
-            A small program instead of a fixed text. Each use draws new numbers or words from a
-            seeded random generator and recomputes the answer, with distractors built from typical
-            mistakes. One template yields many equivalent questions, and the same seed always
-            rebuilds the same variant, which is why a paper code regenerates the identical paper.
+            A small program instead of a fixed text: each use draws new numbers and recomputes the
+            answer. The same seed always rebuilds the same variant.
           </dd>
         </div>
         <div>
           <dt>Fixed</dt>
-          <dd>Written once; only the order of its options changes from paper to paper.</dd>
+          <dd>Written once; only the option order changes.</dd>
         </div>
         <div>
           <dt>Passage set</dt>
-          <dd>A reading passage whose questions always appear together.</dd>
+          <dd>A reading passage whose questions stay together.</dd>
         </div>
         <div>
           <dt>Past-paper style</dt>
-          <dd>
-            Modelled on topics and difficulty reported from real NET sittings and written in
-            original words; not copied from NUST papers.
-          </dd>
+          <dd>Modelled on topics reported from real NET sittings, in original words.</dd>
         </div>
       </dl>
       <p className={s.explainerCta}>
-        Want to add or improve questions? Read the{' '}
-        <ExternalLink href={AUTHORING_GUIDE_URL}>question authoring guide</ExternalLink> on GitHub.
+        Want to add questions? Read the{' '}
+        <ExternalLink href={AUTHORING_GUIDE_URL}>question authoring guide</ExternalLink>.
       </p>
     </div>
   );

@@ -75,9 +75,7 @@ export function AdvancedOptions({
             options={choices}
             onChange={(value) => dispatch({ kind: 'difficulty', value })}
           />
-          <span className={ui.fieldHint}>
-            {describeMix(mix)}. NET-like matches the reported mix of mostly easy-to-moderate items.
-          </span>
+          <span className={ui.fieldHint}>{describeMix(mix)}.</span>
         </div>
 
         <div className={ui.field}>
@@ -101,8 +99,8 @@ export function AdvancedOptions({
             <span>Questions with randomised values</span>
           </div>
           <span className={ui.fieldHint}>
-            {sliderText(state.dynamicPercent)}. The share is scaled per subject (Mathematics has the
-            most randomised questions, Chemistry the fewest).
+            {state.dynamicPercent === DEFAULT_DYNAMIC_PERCENT ? 'The NET-like default. ' : ''}
+            Scaled per subject.
           </span>
         </div>
 
@@ -126,8 +124,7 @@ export function AdvancedOptions({
             onBlur={() => setSeedTouched(true)}
           />
           <span id="paper-code-hint" className={ui.fieldHint}>
-            Enter a code a friend shared (e.g. ENG-K7Q2-9XM4) to sit exactly the same paper with the
-            same options.
+            A shared code, like ENG-K7Q2-9XM4, rebuilds exactly the same paper.
           </span>
         </div>
         {seedError ? (

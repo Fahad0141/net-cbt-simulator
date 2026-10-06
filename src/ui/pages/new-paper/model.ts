@@ -61,23 +61,14 @@ export const DIFFICULTY_CHOICES: ReadonlyArray<{ value: DifficultyPreset; label:
 export const CURRENT_TYPES = EXAM_TYPES.filter((e) => e.era === 'current');
 export const LEGACY_TYPES = EXAM_TYPES.filter((e) => e.era === 'legacy');
 
-/** One colour per subject, so a subject looks the same in every chart on the page. */
-export const SUBJECT_COLORS: Readonly<Record<SubjectId, string>> = {
-  mathematics: 'var(--primary)',
-  quantitative: 'var(--primary)',
-  physics: 'var(--purple)',
-  chemistry: 'var(--danger)',
-  biology: 'var(--success)',
-  english: 'var(--warning)',
-  computer: 'var(--text-2)',
-  design: 'var(--accent)',
-  intelligence: 'var(--muted)',
-};
-
+/**
+ * Difficulty as an ordinal ramp of the ink colour (easy lightest, hard darkest), so it does
+ * not borrow the green / red that mean right and wrong elsewhere.
+ */
 export const DIFFICULTY_META: ReadonlyArray<{ level: Difficulty; label: string; color: string }> = [
-  { level: 1, label: 'Easy', color: 'var(--success)' },
-  { level: 2, label: 'Medium', color: 'var(--warning)' },
-  { level: 3, label: 'Hard', color: 'var(--danger)' },
+  { level: 1, label: 'Easy', color: 'color-mix(in oklab, var(--primary) 43%, var(--surface))' },
+  { level: 2, label: 'Medium', color: 'color-mix(in oklab, var(--primary) 72%, var(--surface))' },
+  { level: 3, label: 'Hard', color: 'var(--primary)' },
 ];
 
 // ---------------------------------------------------------------------------

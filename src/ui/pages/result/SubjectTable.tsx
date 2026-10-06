@@ -1,7 +1,7 @@
 import { Card } from '@/ui/components/ui';
 import type { ResultModel } from './analysis';
 import { formatPercent, formatQuestionTime, plural } from './format';
-import { OutcomeBar, OutcomeLegend } from './OutcomeBar';
+import { OutcomeBar } from './OutcomeBar';
 import s from './result.module.css';
 
 /** Inline label shown above a value when the table collapses into cards on phones. */
@@ -23,11 +23,7 @@ export function SubjectTable({ model }: { model: ResultModel }) {
   const showTotal = subjects.length > 1;
 
   return (
-    <Card
-      className={s.cq}
-      title="Subject-wise performance"
-      action={<span className={s.cardHint}>{plural(subjects.length, 'section')}</span>}
-    >
+    <Card className={s.cq} title="Subject-wise performance">
       {subjects.length === 0 ? (
         <p className={s.muted}>This paper has no sections to report.</p>
       ) : (
@@ -75,15 +71,15 @@ export function SubjectTable({ model }: { model: ResultModel }) {
                     <CellLabel>Score</CellLabel>
                     {sub.score}/{sub.maxScore}
                   </td>
-                  <td role="cell" className={s.n}>
+                  <td role="cell" className={`${s.n} ${s.optional}`}>
                     <CellLabel>Correct</CellLabel>
                     {sub.correct}
                   </td>
-                  <td role="cell" className={s.n}>
+                  <td role="cell" className={`${s.n} ${s.optional}`}>
                     <CellLabel>Wrong</CellLabel>
                     {sub.wrong}
                   </td>
-                  <td role="cell" className={s.n}>
+                  <td role="cell" className={`${s.n} ${s.optional}`}>
                     <CellLabel>Unattempted</CellLabel>
                     {sub.unattempted}
                   </td>
@@ -119,15 +115,15 @@ export function SubjectTable({ model }: { model: ResultModel }) {
                     <CellLabel>Score</CellLabel>
                     {overall.score}/{overall.maxScore}
                   </td>
-                  <td role="cell" className={s.n}>
+                  <td role="cell" className={`${s.n} ${s.optional}`}>
                     <CellLabel>Correct</CellLabel>
                     {overall.correct}
                   </td>
-                  <td role="cell" className={s.n}>
+                  <td role="cell" className={`${s.n} ${s.optional}`}>
                     <CellLabel>Wrong</CellLabel>
                     {overall.wrong}
                   </td>
-                  <td role="cell" className={s.n}>
+                  <td role="cell" className={`${s.n} ${s.optional}`}>
                     <CellLabel>Unattempted</CellLabel>
                     {overall.unattempted}
                   </td>
@@ -153,12 +149,9 @@ export function SubjectTable({ model }: { model: ResultModel }) {
               </tfoot>
             ) : null}
           </table>
-          <div className={s.tableFoot}>
-            <OutcomeLegend />
-            <span className={s.muted}>
-              Target pace: {formatQuestionTime(model.timing.paceMs)} per question
-            </span>
-          </div>
+          <p className={s.tableNote}>
+            Target pace: {formatQuestionTime(model.timing.paceMs)} per question
+          </p>
         </>
       )}
     </Card>

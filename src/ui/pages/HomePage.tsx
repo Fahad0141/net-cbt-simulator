@@ -1,13 +1,10 @@
 import { useCallback, useState } from 'react';
 import { listAttempts } from '@/exam/store';
-import { Button, LinkButton } from '@/ui/components/ui';
+import { storagePlace } from '@/platform/desktop';
+import { LinkButton } from '@/ui/components/ui';
 import { useAsync } from '@/ui/hooks';
 import { href } from '@/ui/router';
-import { Disclaimer } from './home/Disclaimer';
-import { GlanceCard } from './home/GlanceCard';
 import { useActiveSession, useDocumentTitle } from './home/hooks';
-import { HowItWorks } from './home/HowItWorks';
-import { IconArrowRight, IconCheck } from './home/icons';
 import { PaperCodeCard } from './home/PaperCodeCard';
 import { PatternsSection } from './home/PatternsSection';
 import { ProgressSection } from './home/ProgressSection';
@@ -18,25 +15,8 @@ import s from './HomePage.module.css';
 const IDS = {
   title: 'home-title',
   cta: 'home-generate',
-  how: 'home-how',
   patterns: 'home-patterns',
-  disclaimer: 'home-disclaimer',
 } as const;
-
-const HIGHLIGHTS = [
-  '200 MCQs in 180 minutes',
-  'No negative marking',
-  'Review with worked solutions',
-  'No sign-up: stays on your device',
-];
-
-function scrollToSection(id: string) {
-  const target = document.getElementById(id);
-  if (!target) return;
-  const reduceMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
-  target.scrollIntoView?.({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
-  target.focus({ preventScroll: true });
-}
 
 /** Dashboard and landing page (`#/`). */
 export default function HomePage() {
@@ -57,16 +37,12 @@ export default function HomePage() {
     <div className={s.home}>
       <section className={s.hero} aria-labelledby={IDS.title}>
         <div className={s.heroText}>
-          <p className={s.eyebrow}>
-            <span className={s.eyebrowDot} aria-hidden="true" />
-            Unofficial · free and open source
-          </p>
           <h1 id={IDS.title} className={s.title}>
-            <span className={s.titleAccent}>NET CBT</span> Simulator
+            NET CBT Simulator
           </h1>
           <p className={s.lede}>
-            Practise on a faithful replica of NUST&apos;s computer-based NET terminal with unique,
-            reproducible full-length papers.
+            Sit full-length NET papers on a replica of the real test screen. Every paper is new, and
+            every answer has a worked solution.
           </p>
           <div className={s.ctaRow}>
             <LinkButton
@@ -77,25 +53,12 @@ export default function HomePage() {
               className={s.cta}
             >
               Generate a full-length paper
-              <IconArrowRight size={18} />
             </LinkButton>
-            <Button
-              variant="ghost"
-              size="lg"
-              className={s.cta}
-              onClick={() => scrollToSection(IDS.how)}
-            >
+            <LinkButton variant="ghost" size="lg" href={href('/about')} className={s.cta}>
               How it works
-            </Button>
+            </LinkButton>
           </div>
-          <ul className={s.highlights} aria-label="Highlights">
-            {HIGHLIGHTS.map((item) => (
-              <li key={item}>
-                <IconCheck size={16} className={s.highlightIcon} />
-                {item}
-              </li>
-            ))}
-          </ul>
+          <p className={s.fineprint}>Free and unofficial. Your attempts stay {storagePlace()}.</p>
           {session ? (
             <ResumePanel key={session.id} session={session} onDiscarded={onDiscarded} />
           ) : null}
@@ -109,15 +72,10 @@ export default function HomePage() {
 
       <div className={s.dashboard}>
         <ProgressSection attempts={attempts} />
-        <div className={s.side}>
-          <PaperCodeCard />
-          <GlanceCard />
-        </div>
+        <PaperCodeCard />
       </div>
 
       <PatternsSection headingId={IDS.patterns} />
-      <HowItWorks headingId={IDS.how} />
-      <Disclaimer headingId={IDS.disclaimer} />
     </div>
   );
 }

@@ -2,7 +2,6 @@ import { useMemo } from 'react';
 import { Callout, LinkButton } from '@/ui/components/ui';
 import { href, useRoute } from '@/ui/router';
 import { useDocumentTitle } from './home/hooks';
-import { IconArrowRight } from './home/icons';
 import { notFoundHints } from './home/notFound';
 import s from './home/NotFound.module.css';
 
@@ -23,15 +22,11 @@ export default function NotFoundPage() {
   return (
     <div className={s.page}>
       <section className={s.panel} aria-labelledby="not-found-title">
-        <p className={s.code} aria-hidden="true">
-          404
-        </p>
         <h1 id="not-found-title" className={s.title}>
           Page not found
         </h1>
         <p className={s.text}>
-          There is no page at <code className={s.path}>{hints.display}</code>. The link may be
-          mistyped, or it may come from an older version of the simulator.
+          There is no page at <code className={s.path}>{hints.display}</code>.
         </p>
 
         {hints.paper ? (
@@ -46,7 +41,6 @@ export default function NotFoundPage() {
               className={s.openPaper}
             >
               Open paper {hints.paper.code}
-              <IconArrowRight size={16} />
             </LinkButton>
           </Callout>
         ) : hints.route ? (

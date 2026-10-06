@@ -145,7 +145,6 @@ export default function AnalyticsPage() {
   const header = (
     <PageHeader
       title="Analytics"
-      subtitle="Your performance across every finished paper on this device: score trend, subject and chapter strengths, pacing and what to practise next."
       actions={
         digests.length ? <LinkButton href={href('/history')}>All attempts</LinkButton> : null
       }
@@ -198,8 +197,8 @@ export default function AnalyticsPage() {
               </div>
             }
           >
-            Finish a full-length paper or a practice test and this page will chart your scores, rate
-            every chapter and recommend what to practise next.
+            Finish a paper to see your score trend, a rating for every chapter and what to practise
+            next.
           </EmptyState>
         </Card>
         <UnreadableNotice count={data?.unreadable ?? 0} />
@@ -219,7 +218,7 @@ export default function AnalyticsPage() {
     <div className={ui.page}>
       {header}
 
-      <section className={`${ui.card} ${s.filters}`} aria-label="Filters">
+      <section className={s.filters} aria-label="Filters">
         <div className={s.filterField}>
           <label htmlFor={examId} className={s.filterLabel}>
             Exam type
@@ -282,7 +281,7 @@ export default function AnalyticsPage() {
         </Card>
       ) : (
         <>
-          <section className={`${ui.card} ${s.stats}`} aria-label="Summary">
+          <section className={s.stats} aria-label="Summary">
             <Stat
               label="Attempts"
               value={totals.attempts.toLocaleString()}
@@ -348,7 +347,7 @@ export default function AnalyticsPage() {
                   text: x.name,
                   value: x.accuracy,
                   display: x.accuracy === null ? '—' : formatPercent(x.accuracy),
-                  hint: `${x.correct.toLocaleString()} of ${x.attempted.toLocaleString()} answered correctly · ${x.unattempted.toLocaleString()} left blank`,
+                  hint: `${x.correct.toLocaleString()} of ${x.attempted.toLocaleString()} answered correctly`,
                 }))}
               />
             </Card>
@@ -385,7 +384,7 @@ export default function AnalyticsPage() {
                       text: d.label,
                       value: d.accuracy,
                       display: d.accuracy === null ? '—' : formatPercent(d.accuracy),
-                      hint: `${d.correct.toLocaleString()} of ${d.attempted.toLocaleString()} answered correctly · ${plural(d.total, 'question')}`,
+                      hint: `${d.correct.toLocaleString()} of ${d.attempted.toLocaleString()} answered correctly`,
                     }))}
                 />
               </div>
@@ -416,8 +415,8 @@ export default function AnalyticsPage() {
                       sec === null
                         ? 'No questions opened'
                         : sec > NET_SECONDS_PER_QUESTION
-                          ? `Slower than NET pace · ${plural(x.visited, 'question')} opened`
-                          : `Within NET pace · ${plural(x.visited, 'question')} opened`,
+                          ? 'Slower than NET pace'
+                          : undefined,
                   };
                 })}
               />

@@ -80,7 +80,7 @@ function MetaBadges({ item, subjectTitle }: { item: ReviewItem; subjectTitle: st
         {difficulty}
       </Badge>
       {q.origin === 'past-paper' ? (
-        <Badge tone="warning" title="Modelled on a question reported from a real NET sitting">
+        <Badge title="Modelled on a question reported from a real NET sitting">
           <ArchiveIcon width={13} height={13} /> Past-paper style
         </Badge>
       ) : null}

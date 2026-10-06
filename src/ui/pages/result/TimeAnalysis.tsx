@@ -1,8 +1,8 @@
 import { useId } from 'react';
-import { Badge, Card, formatDuration } from '@/ui/components/ui';
+import { Badge, Card } from '@/ui/components/ui';
 import { href } from '@/ui/router';
 import { type Outcome, paceInsight, type ResultModel, reviewPath } from './analysis';
-import { formatPaceDelta, formatPercent, formatQuestionTime, plural } from './format';
+import { formatPaceDelta, formatQuestionTime } from './format';
 import s from './result.module.css';
 
 const OUTCOME_BADGE: Record<Outcome, { tone: 'success' | 'danger' | 'neutral'; label: string }> = {
@@ -16,7 +16,6 @@ export function TimeAnalysis({ model }: { model: ResultModel }) {
   const paceHeadingId = useId();
   const slowHeadingId = useId();
   const { timing, subjects, slowest } = model;
-  const totalQuestions = model.report.overall.total;
   const scaleMax = Math.max(timing.paceMs, ...subjects.map((sub) => sub.avgMs), 1) * 1.15;
   const pacePosition = (timing.paceMs / scaleMax) * 100;
 
@@ -24,26 +23,19 @@ export function TimeAnalysis({ model }: { model: ResultModel }) {
     <Card className={s.cq} title="Time analysis">
       <dl className={s.miniStats}>
         <div className={s.miniStat}>
-          <dt>Time used</dt>
-          <dd className={s.miniValue}>{formatDuration(timing.usedMs)}</dd>
-          <dd className={s.miniHint}>of {formatDuration(timing.allowedMs)} allowed</dd>
-        </div>
-        <div className={s.miniStat}>
-          <dt>Average per question</dt>
+          <dt>Per question</dt>
           <dd className={s.miniValue}>{formatQuestionTime(timing.avgMs)}</dd>
-          <dd className={s.miniHint}>target pace {formatQuestionTime(timing.paceMs)}</dd>
+          <dd className={s.miniHint}>pace {formatQuestionTime(timing.paceMs)}</dd>
         </div>
         <div className={s.miniStat}>
-          <dt>Per attempted question</dt>
+          <dt>Per answer</dt>
           <dd className={s.miniValue}>
             {model.report.overall.attempted ? formatQuestionTime(timing.avgAttemptedMs) : '—'}
           </dd>
-          <dd className={s.miniHint}>{plural(model.report.overall.attempted, 'answer')}</dd>
         </div>
         <div className={s.miniStat}>
           <dt>Never opened</dt>
           <dd className={s.miniValue}>{timing.unvisited}</dd>
-          <dd className={s.miniHint}>of {plural(totalQuestions, 'question')}</dd>
         </div>
       </dl>
 
@@ -69,11 +61,9 @@ export function TimeAnalysis({ model }: { model: ResultModel }) {
                 </span>
                 <span className={s.paceValue}>
                   <strong>{formatQuestionTime(sub.avgMs)}</strong>
-                  <span className={s.paceDelta}>
-                    {timing.paceMs > 0 ? formatPaceDelta(sub.avgMs, timing.paceMs) : ''}
-                    {' · '}
-                    {formatPercent(sub.timeShare, 0)} of time
-                  </span>
+                  {timing.paceMs > 0 ? (
+                    <span className={s.paceDelta}>{formatPaceDelta(sub.avgMs, timing.paceMs)}</span>
+                  ) : null}
                 </span>
               </li>
             ))}
@@ -81,8 +71,7 @@ export function TimeAnalysis({ model }: { model: ResultModel }) {
           {timing.paceMs > 0 ? (
             <p className={s.paceKey}>
               <span className={s.paceKeyMark} aria-hidden="true" />
-              Target pace: {formatQuestionTime(timing.paceMs)} per question (
-              {formatDuration(timing.allowedMs)} for {plural(totalQuestions, 'question')})
+              Target pace, {formatQuestionTime(timing.paceMs)} per question
             </p>
           ) : null}
         </section>
@@ -101,9 +90,7 @@ export function TimeAnalysis({ model }: { model: ResultModel }) {
                   <a className={s.slowLink} href={href(reviewPath(model.id, q.number))}>
                     Question {q.number}
                   </a>
-                  <span className={s.slowMeta}>
-                    {q.subjectTitle} &middot; {q.chapterName}
-                  </span>
+                  <span className={s.slowMeta}>{q.chapterName}</span>
                   <span className={s.slowTime}>{formatQuestionTime(q.timeMs)}</span>
                   <Badge tone={badge.tone}>{badge.label}</Badge>
                 </li>

@@ -76,7 +76,7 @@ interface ReviewNavigatorProps {
 }
 
 /**
- * Compact grid of question buttons coloured by outcome. One Tab stop (roving
+ * Compact grid of question bubbles marked by outcome (filled, ring, dashed ring). One Tab stop (roving
  * tabindex): arrow keys move between cells, Home/End jump to the ends, Enter/Space opens.
  */
 export const ReviewNavigator = memo(function ReviewNavigator({
@@ -210,26 +210,3 @@ export const ReviewNavigator = memo(function ReviewNavigator({
     </div>
   );
 });
-
-/** Colour key for the navigator. */
-export function NavigatorLegend() {
-  return (
-    <ul className={s.legend} aria-label="Colour key">
-      <li>
-        <span className={`${s.swatch} ${s.cellCorrect}`} aria-hidden="true" /> Correct
-      </li>
-      <li>
-        <span className={`${s.swatch} ${s.cellWrong}`} aria-hidden="true" /> Wrong
-      </li>
-      <li>
-        <span className={`${s.swatch} ${s.cellBlank}`} aria-hidden="true" /> Unattempted
-      </li>
-      <li>
-        <span className={`${s.swatch} ${s.swatchReview}`} aria-hidden="true">
-          <span className={s.reviewDot} />
-        </span>{' '}
-        Marked for review
-      </li>
-    </ul>
-  );
-}

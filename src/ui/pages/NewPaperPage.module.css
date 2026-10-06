@@ -10,7 +10,6 @@
 .form {
   display: flex;
   flex-direction: column;
-  gap: 16px;
   min-width: 0;
   margin: 0;
 }
@@ -39,51 +38,46 @@
 }
 
 /* ---------- steps ---------- */
+/* Steps sit on the page, split by hairlines; only the choices inside are boxes. */
 
 .step {
   display: flex;
   flex-direction: column;
   gap: 16px;
+  padding: 24px 0;
+  border-top: 1px solid var(--border);
 }
 
-.stepHeader {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-}
-
-.stepNumber {
-  flex: none;
-  display: grid;
-  place-items: center;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background: var(--primary-soft);
-  color: var(--primary);
-  font-weight: 700;
-  font-size: 14px;
-  font-variant-numeric: tabular-nums;
-}
-
-.stepHeading {
-  min-width: 0;
+.step:first-child {
+  padding-top: 0;
+  border-top: 0;
 }
 
 .stepTitle {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  gap: 8px;
-  margin: 3px 0 0;
-  font-size: 17px;
-  font-weight: 650;
+  gap: 10px;
+  margin: 0;
+  font-size: 22px;
+  font-stretch: var(--font-condensed);
+  font-weight: 750;
+  line-height: 1.15;
 }
 
-.stepDescription {
-  margin: 2px 0 0;
-  color: var(--muted);
+/* The step number in an answer-sheet bubble. */
+.stepNumber {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border: 1.5px solid var(--border-strong);
+  border-radius: 50%;
+  color: var(--text-2);
   font-size: 14px;
+  font-stretch: 100%;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
 }
 
 .fieldset {
@@ -96,10 +90,8 @@
 .subheading {
   margin: 0 0 8px;
   padding: 0;
-  font-size: 12.5px;
-  font-weight: 650;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  font-size: 13px;
+  font-weight: 600;
   color: var(--muted);
 }
 
@@ -131,8 +123,8 @@
 
 .optionGrid {
   display: grid;
-  gap: 10px;
-  grid-template-columns: repeat(auto-fill, minmax(min(230px, 100%), 1fr));
+  gap: 8px;
+  grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr));
 }
 
 .option {
@@ -145,15 +137,11 @@
   border-radius: var(--radius);
   background: var(--surface);
   cursor: pointer;
-  transition:
-    border-color 0.15s,
-    background 0.15s,
-    box-shadow 0.15s;
+  transition: border-color 0.15s;
 }
 
 .option:hover {
-  border-color: var(--border-strong);
-  background: var(--surface-2);
+  border-color: var(--text-2);
 }
 
 .optionChecked,
@@ -175,7 +163,7 @@
 .optionBody {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 6px;
   min-width: 0;
   flex: 1 1 auto;
 }
@@ -187,12 +175,12 @@
 }
 
 .optionText {
-  font-size: 13.5px;
-  color: var(--text-2);
+  font-size: 13px;
+  color: var(--muted);
 }
 
 .optionFoot {
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--muted);
 }
 
@@ -200,21 +188,25 @@
   display: flex;
   gap: 2px;
   height: 6px;
-  border-radius: 999px;
-  overflow: hidden;
-  background: var(--surface-3);
 }
 
 .composition > span {
   display: block;
   min-width: 2px;
   height: 100%;
+  background: color-mix(in oklab, var(--primary) var(--tint, 100%), var(--surface));
+}
+
+.composition > span:first-child {
+  border-radius: 2px 0 0 2px;
+}
+
+.composition > span:last-child {
+  border-radius: 0 2px 2px 0;
 }
 
 .legacy {
-  margin-top: 12px;
-  padding-top: 10px;
-  border-top: 1px dashed var(--border);
+  margin-top: 8px;
 }
 
 .legacySummary {
@@ -243,59 +235,41 @@
   padding-top: 8px;
 }
 
-.legacyNote {
-  margin: 0;
-  font-size: 13.5px;
-  color: var(--muted);
-}
-
 /* ---------- selected test details ---------- */
 
-.details,
+.details {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  min-width: 0;
+}
+
 .builder {
   display: flex;
   flex-direction: column;
   gap: 14px;
-  padding: 14px;
+  padding: 16px;
   border: 1px solid var(--border);
   border-radius: var(--radius);
   background: var(--surface-2);
   min-width: 0;
 }
 
-.detailsHead {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-}
-
-.detailsTitle {
-  margin: 0;
-  font-size: 16px;
-}
-
 .facts {
   display: grid;
   grid-template-columns: max-content minmax(0, 1fr);
-  gap: 6px 14px;
+  gap: 6px 16px;
   margin: 0;
   font-size: 14px;
 }
 
 .facts dt {
   color: var(--muted);
-  font-weight: 600;
 }
 
 .facts dd {
   margin: 0;
-}
-
-.detailsNote {
-  margin: 0;
-  font-size: 13.5px;
   color: var(--text-2);
 }
 
@@ -309,11 +283,6 @@
   vertical-align: -1px;
 }
 
-.totalRow td {
-  font-weight: 700;
-  border-top: 1px solid var(--border-strong);
-}
-
 /* ---------- custom builder ---------- */
 
 .builderHead {
@@ -324,7 +293,9 @@
 
 .builderHead h3 {
   margin: 0;
-  font-size: 16px;
+  font-size: 18px;
+  font-stretch: var(--font-semicondensed);
+  font-weight: 700;
 }
 
 .builderHead p {
@@ -473,43 +444,15 @@
 
 .modeGrid {
   display: grid;
-  gap: 10px;
+  gap: 8px;
   grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
-}
-
-.points {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  margin: 4px 0 0;
-  font-size: 13.5px;
-  color: var(--text-2);
-}
-
-.point {
-  position: relative;
-  padding-left: 16px;
-}
-
-.point::before {
-  content: '';
-  position: absolute;
-  left: 4px;
-  top: 0.6em;
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: currentColor;
 }
 
 .toggle {
   display: flex;
   align-items: flex-start;
   gap: 10px;
-  padding: 10px 12px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  background: var(--surface-2);
+  padding: 2px 0;
   cursor: pointer;
 }
 
@@ -534,7 +477,7 @@
 .advanced {
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  background: var(--surface-2);
+  background: var(--surface);
 }
 
 .advancedSummary {
@@ -642,7 +585,10 @@
   align-items: center;
   gap: 8px;
   margin: 0;
-  font-size: 17px;
+  font-size: 22px;
+  font-stretch: var(--font-condensed);
+  font-weight: 750;
+  line-height: 1.15;
 }
 
 .panelTitle:focus {
@@ -694,7 +640,7 @@
 .working {
   position: relative;
   height: 4px;
-  border-radius: 999px;
+  border-radius: 2px;
   background: var(--surface-3);
   overflow: hidden;
 }
@@ -779,19 +725,15 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 4px 10px;
+  gap: 2px 10px;
   padding: 10px 12px;
-  border: 1px dashed var(--border-strong);
+  border: 1px solid var(--border-strong);
   border-radius: var(--radius-sm);
-  background: var(--surface-2);
 }
 
 .codeLabel {
   width: 100%;
-  font-size: 11.5px;
-  font-weight: 650;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  font-size: 13px;
   color: var(--muted);
 }
 
@@ -805,50 +747,55 @@
   overflow-wrap: anywhere;
 }
 
+/* A row of stats split by hairlines, like the dashboard's progress numbers. */
 .miniStats {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px;
+  margin: 0;
 }
 
 .miniStat {
   display: flex;
   flex-direction: column;
+  gap: 2px;
   min-width: 0;
-  padding: 8px 10px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  background: var(--surface-2);
+  padding: 0 12px;
+  border-left: 1px solid var(--border);
+}
+
+.miniStat:first-child {
+  padding-left: 0;
+  border-left: 0;
 }
 
 .miniLabel {
-  font-size: 11.5px;
-  font-weight: 650;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  font-size: 13px;
   color: var(--muted);
 }
 
 .miniValue {
-  font-size: 19px;
-  font-weight: 700;
-  line-height: 1.25;
+  margin: 0;
+  font-size: 26px;
+  font-stretch: var(--font-condensed);
+  font-weight: 750;
+  line-height: 1.1;
   font-variant-numeric: tabular-nums;
   overflow-wrap: anywhere;
 }
 
 .miniHint {
-  font-size: 12px;
+  font-size: 13px;
+  font-stretch: 100%;
+  font-weight: 500;
   color: var(--muted);
 }
 
 .bar {
   display: flex;
   gap: 2px;
-  height: 10px;
-  border-radius: 999px;
+  height: 8px;
+  border-radius: 2px;
   overflow: hidden;
-  background: var(--surface-3);
 }
 
 .bar > span {
@@ -879,45 +826,23 @@
   color: var(--muted);
 }
 
-.shares {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.shareRow {
+.sources {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  gap: 3px 8px;
+  gap: 4px 12px;
+  margin: 0;
   font-size: 13.5px;
 }
 
-.shareValue {
-  font-variant-numeric: tabular-nums;
+.sources dt {
   color: var(--text-2);
 }
 
-.shareTrack {
-  grid-column: 1 / -1;
-  height: 6px;
-  border-radius: 999px;
-  background: var(--surface-3);
-  overflow: hidden;
-}
-
-.shareFill {
-  display: block;
-  height: 100%;
-  border-radius: inherit;
-}
-
-.shareHint {
-  grid-column: 1 / -1;
-  font-size: 12.5px;
-  color: var(--muted);
+.sources dd {
+  margin: 0;
+  font-weight: 600;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
 }
 
 .startNote {
@@ -986,7 +911,9 @@
 
 .dialogTitle {
   margin: 0;
-  font-size: 18px;
+  font-size: 22px;
+  font-stretch: var(--font-condensed);
+  font-weight: 750;
 }
 
 .dialogBody {
@@ -1029,7 +956,7 @@
   }
 
   .miniValue {
-    font-size: 17px;
+    font-size: 22px;
   }
 
   .dialogActions {

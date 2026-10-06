@@ -79,15 +79,14 @@ export function PaperDetails({ model }: { model: ResultModel }) {
           <dt>Sections</dt>
           <dd>
             {paper.sections.length
-              ? paper.sections.map((sec) => `${sec.title} ${sec.count}`).join(' · ')
+              ? paper.sections.map((sec) => `${sec.title} ${sec.count}`).join(', ')
               : '—'}
           </dd>
         </div>
         <div className={s.detail}>
           <dt>Format</dt>
           <dd>
-            {plural(paper.questions.length, 'MCQ')} in {minutes} minutes &middot; 1 mark each
-            &middot; no negative marking
+            {plural(paper.questions.length, 'MCQ')} in {minutes} minutes
           </dd>
         </div>
         <div className={s.detail}>
@@ -127,10 +126,6 @@ export function PaperDetails({ model }: { model: ResultModel }) {
           <SourceRow label="Fixed questions" tally={sources.fixed} />
         </tbody>
       </table>
-      <p className={s.smallNote}>
-        Past-paper items are rewritten from topics reported by candidates; randomised questions get
-        new values in every paper.
-      </p>
     </Card>
   );
 }

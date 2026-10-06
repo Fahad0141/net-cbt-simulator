@@ -27,26 +27,22 @@
   gap: 12px;
 }
 
-.navHead {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
 .navTitle {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
   gap: 8px;
   margin: 0;
-  font-size: 16px;
-  font-weight: 650;
+  font-size: 17px;
+  font-stretch: var(--font-semicondensed);
+  font-weight: 700;
 }
 
 .navCount {
   color: var(--muted);
   font-size: 13px;
-  font-weight: 600;
+  font-stretch: 100%;
+  font-weight: 500;
   font-variant-numeric: tabular-nums;
 }
 
@@ -72,7 +68,10 @@
 }
 
 .subtitle {
-  display: inline;
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 16px;
 }
 
 .code {
@@ -153,18 +152,19 @@
 .skelChips {
   width: min(640px, 100%);
   height: 36px;
-  border-radius: 999px;
 }
 
 .skelGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(38px, 1fr));
-  gap: 5px;
+  grid-template-columns: repeat(auto-fill, 34px);
+  justify-content: space-between;
+  gap: 6px 4px;
   margin-top: 12px;
 }
 
 .skelCell {
-  height: 36px;
+  height: 34px;
+  border-radius: 50%;
 }
 
 @keyframes shimmer {
