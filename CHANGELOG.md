@@ -5,6 +5,17 @@ All notable changes to this project are documented here. The format follows
 [Semantic Versioning](https://semver.org/). Question-bank versions are tracked separately by
 `BANK_VERSION` in `src/exam/papers.ts`; paper codes reproduce exactly within one bank version.
 
+## [1.1.0] - 2026-10-06
+
+### Changed
+
+- A redesigned interface for every page except the exam terminal, which is unchanged:
+  - less text: shorter headings and hints, with long explanations moved into collapsible sections;
+  - a calmer, flatter layout with fewer cards, sentence-case labels and one bundled typeface (Archivo) for
+    headings and scores;
+  - an answer-sheet style answer map and question navigator, and highlighted focus chapters;
+  - the dashboard drops the feature cards and fact table, and keeps progress, paper codes and the patterns.
+
 ## [1.0.0] - 2026-10-05
 
 ### Added

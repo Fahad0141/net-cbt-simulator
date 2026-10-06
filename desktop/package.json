@@ -1,7 +1,7 @@
 {
   "name": "net-cbt-simulator-desktop",
   "productName": "NET CBT Simulator",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "description": "Unofficial NUST Entry Test (NET) computer-based test simulator for Windows.",
   "author": "NET CBT Simulator contributors",
