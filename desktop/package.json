@@ -19,7 +19,7 @@
     "icon": "node scripts/make-icon.mjs"
   },
   "devDependencies": {
-    "electron": "41.7.1",
+    "electron": "41.10.7",
     "electron-builder": "26.17.0"
   }
 }
