@@ -2,8 +2,10 @@
 
 # NET CBT Simulator
 
-**A high-fidelity, open-source simulator of the NUST Entry Test (NET) computer-based test, with a hybrid
-dynamic question engine that generates unique, reproducible full-length papers.**
+**Practise for the NUST Entry Test on a screen that looks and behaves like the real one, with a fresh
+full-length paper every time.**
+
+[**Try it in your browser →**](https://fahad0141.github.io/net-cbt-simulator/)
 
 [![CI](https://github.com/Fahad0141/net-cbt-simulator/actions/workflows/ci.yml/badge.svg)](https://github.com/Fahad0141/net-cbt-simulator/actions/workflows/ci.yml)
 [![Deploy](https://github.com/Fahad0141/net-cbt-simulator/actions/workflows/deploy.yml/badge.svg)](https://github.com/Fahad0141/net-cbt-simulator/actions/workflows/deploy.yml)
@@ -11,12 +13,44 @@ dynamic question engine that generates unique, reproducible full-length papers.*
 
 </div>
 
-> **Unofficial.** This project is an independent practice tool. It is not affiliated with, endorsed by, or
-> connected to the National University of Sciences & Technology (NUST). It uses no NUST logos or official
-> question material. Always check official announcements on the
+![The CBT terminal](docs/screenshots/cbt-terminal.png)
+
+> This is an unofficial, independent project. It isn't made, endorsed or checked by NUST, and it doesn't use any
+> NUST logos or official questions. For anything official, go to the
 > [NUST admissions website](https://ugadmissions.nust.edu.pk/).
 
-![The CBT terminal](docs/screenshots/cbt-terminal.png)
+## Why I made this
+
+Most of us prepare for NET with PDFs, books and quiz apps, and then sit down on test day in front of a computer
+terminal we've never used. It has its own quirks: your answer only counts if you press **Save**, the clock only shows
+minutes, and you move through sections in a particular way. That's a bad time to be learning a new interface.
+
+Mock tests don't help much either. They tend to recycle the same questions, so by your third or fourth attempt you're
+remembering answers instead of practising.
+
+So I built two things:
+
+- **A copy of the exam terminal** that behaves like the real one, pieced together from NUST's official CBT sample
+  and what candidates have reported about it.
+- **A question engine** that puts together a brand-new 200-question paper every time, following the current NET
+  pattern, so you never run out of fresh practice.
+
+It's free, it needs no account, and everything stays on your own device.
+
+## What you can do with it
+
+- **Sit a full mock exam**: 200 questions in 180 minutes, with the same layout, buttons and rules as the real
+  terminal. That includes Save before Next, Review, Next/Prev Section, the minutes clock and the FINISH
+  confirmation. Nothing is lost if you close the tab: it picks up where you left off.
+- **Practise more gently** in practice mode, with pause, a question navigator, keyboard shortcuts and instant feedback.
+- **See where you stand**: a score report broken down by subject, chapter and difficulty, how you spent your time,
+  your weakest chapters (with one click to practise them) and a rough NUST aggregate estimate.
+- **Learn from mistakes**: go through every question afterwards with worked solutions.
+- **Track progress** across attempts with charts for your scores, chapter mastery and pacing.
+- **Print a paper**: an A4 full-length paper with an OMR answer sheet and answer key, or save it as a PDF.
+- **Share a paper**: every paper has a short code like `ENG-K7Q2-9XM4`. Anyone who enters the same code gets exactly
+  the same paper, which makes it easy to compare scores with friends.
+- **Build your own test**: pick subjects, chapters, how many questions and how long.
 
 <details>
 <summary><strong>More screenshots</strong></summary>
@@ -31,217 +65,116 @@ dynamic question engine that generates unique, reproducible full-length papers.*
 
 </details>
 
-## Why
+## Which papers are covered
 
-NET candidates usually practise on PDFs or generic quiz apps, then meet an unfamiliar computer-based terminal on
-test day. The terminal has a **Save** button that must be pressed, a minutes-only clock, and section navigation.
-Commercial mock tests also repeat the same questions and often use outdated patterns. This project fixes both:
+Every current NET paper (since 2025) is 200 MCQs in 180 minutes, with no negative marking:
 
-- **The terminal behaves like the real one.** It is recreated from NUST's official CBT sample and candidate reports.
-- **Every paper is new.** Nearly 2,900 question templates (about 1,300 parametric generators and 1,600 fixed
-  past-paper-style questions) are assembled to match the current NET blueprint. Each paper has a short code, so you
-  can share it, print it, or retake it exactly.
+| Paper                                  | Sections                                          |
+| -------------------------------------- | ------------------------------------------------- |
+| NET Engineering                        | Mathematics 100 · Physics 60 · English 40         |
+| NET Applied Sciences                   | Biology 100 · Chemistry 60 · English 40           |
+| NET Business Studies & Social Sciences | Quantitative Mathematics 100 · English 100        |
+| NET Architecture                       | Design Aptitude 100 · Mathematics 60 · English 40 |
+| NET Natural Sciences                   | Mathematics 100 · English 100                     |
 
-## Features
+The older (pre-2025) patterns are there too, if you want extra Chemistry, Computer Science or Intelligence practice.
+The sources for all of this are in [docs/EXAM_PATTERN.md](docs/EXAM_PATTERN.md).
 
-### Faithful CBT terminal
+## Where the questions come from
 
-- Login box, then the instructions, then the exam screen laid out like the official _VUTES / "NUST e-Test"_
-  client: section and test header, **Question No : x of 200**, **Marks: 1**, photograph panel, a question tab,
-  and four unlabelled radio options.
-- **Answers count only when you press Save.** If you leave a question without saving, the selection is
-  discarded. **Review** (mark for review) becomes available after you save.
-- **Next / Prev** move continuously across sections. **Next Section / Prev Section** and **First / Last** are
-  also available, plus the attempted counter and the **All / Attempted / Unattempted / Reviewable** jump lists
-  that the live exam provides.
-- A minutes-remaining green clock with the start time, and a 15-minute warning. The paper submits itself when
-  time runs out.
-- A pacing cue: the screen dims after the average time per question (about 54 s), as candidates report from the
-  real exam.
-- **"Click here to FINISH Your Test"** uses the real confirmation wording. In exam mode no score is shown on the
-  terminal, just like the real NET; the score appears in a separate simulator panel.
-- Crash-proof: state is saved after every action, so a refresh or closed tab resumes where you were.
+The question bank has **2,856 question templates** across 110 chapters of the FSc syllabus (and the NET-specific
+subjects). There are two kinds:
 
-### Hybrid dynamic question engine
+- **Generated questions** (about 1,300). Each one is a small program that comes up with new numbers every time and
+  works out the answer. Its wrong options are the mistakes students actually make, like a forgotten factor of ½ or a
+  sign slip. You'll essentially never see the same one twice.
+- **Fixed questions** (about 1,600). These are concept and theory questions written in the style of past NET papers.
+  Every one of them is original; nothing is copied from books or academies.
 
-- **Parametric templates** regenerate every time with new values and mistake-based distractors (for example a
-  forgotten factor of ½, a sign slip, or the wrong formula).
-- **Fixed past-paper-style questions** cover recurring NET themes. All are written for this project.
-- **Blueprint-accurate assembly.** It uses the official subject split, weighted chapter coverage with variation
-  from paper to paper, a calibrated easy/medium/hard mix, and a tunable hybrid ratio.
-- **Reproducible paper codes** such as `ENG-K7Q2-9XM4`: the same code and bank version always give the same paper.
-- KaTeX math, mhchem chemistry, SVG figures for design aptitude, code blocks for computer science, and reading
-  passages.
+| Subject            | Templates | Generated | Chapters |
+| ------------------ | --------: | --------: | -------: |
+| Mathematics        |       486 |       310 |       21 |
+| Physics            |       492 |       202 |       21 |
+| Chemistry          |       430 |       129 |       23 |
+| Biology            |       382 |       109 |       13 |
+| English            |       361 |        89 |        6 |
+| Design Aptitude    |       245 |       142 |        5 |
+| Computer Science   |       193 |        87 |       11 |
+| Quantitative Maths |       190 |       146 |        6 |
+| Intelligence       |        77 |        62 |        4 |
 
-### Every NET paper
+Each paper spreads its questions across chapters roughly the way the real exam does, with a realistic mix of easy,
+medium and hard questions.
 
-| Paper (current, since 2025)            | Sections (200 MCQs · 180 min · no negative marking) |
-| -------------------------------------- | --------------------------------------------------- |
-| NET Engineering                        | Mathematics 100 · Physics 60 · English 40           |
-| NET Applied Sciences                   | Biology 100 · Chemistry 60 · English 40             |
-| NET Business Studies & Social Sciences | Quantitative Mathematics 100 · English 100          |
-| NET Architecture                       | Design Aptitude 100 · Mathematics 60 · English 40   |
-| NET Natural Sciences                   | Mathematics 100 · English 100                       |
+Getting answers right matters most in something like this. Every template is tested automatically by generating
+it many times, and every chapter was checked by solving its questions without looking at the answers first. A final
+random check of 162 templates across all subjects found no wrong answers. Still, if you spot a mistake, please
+[open an issue](https://github.com/Fahad0141/net-cbt-simulator/issues) with the paper code and question number.
+Since codes always rebuild the same paper, I can see exactly what you saw.
 
-Legacy (pre-2025) patterns with Chemistry, Computer Science and Intelligence are included for extra practice,
-together with a **custom test builder** where you pick subjects, chapters, question counts and duration.
-Sources are in [docs/EXAM_PATTERN.md](docs/EXAM_PATTERN.md).
+## Use it on your phone or PC
 
-### Study tools
+- **In the browser**: just open the [website](https://fahad0141.github.io/net-cbt-simulator/). In Chrome or Edge
+  you can also choose **Install app** to get it on your home screen or desktop. After the first visit it works
+  offline.
+- **Android app**: an APK that works offline from the first launch, with Android's print dialog and share sheet.
+  Android 6.0 or newer. See [docs/ANDROID.md](docs/ANDROID.md).
+- **Windows app**: a normal installer for Windows 10 or 11 that doesn't need admin rights. Windows may warn that
+  it "protected your PC" because the installer isn't code-signed; click **More info → Run anyway**. See
+  [docs/DESKTOP.md](docs/DESKTOP.md).
 
-- **Exam mode** gives real conditions. **Practice mode** adds auto-save, pause, a question navigator, keyboard
-  shortcuts and instant feedback.
-- **Score report**: subject, chapter and difficulty breakdowns, time analysis, the weakest chapters with
-  one-click practice, and a NUST aggregate estimator (75% NET, 15% HSSC, 10% SSC).
-- **Review**: question-by-question review with worked solutions, filters, and a "report a problem" link.
-- **Analytics**: score trend, chapter mastery and pacing across all your attempts.
-- **Printable papers**: an A4 full-length paper with an OMR answer sheet, answer key and optional solutions
-  (save it as PDF). There is also a command-line generator.
-- **Question-bank browser** with live previews of every template.
-- Runs entirely in the browser: no account and no server. History is stored locally and can be exported or
-  imported as JSON. It also has light and dark themes, works at phone widths, and is keyboard accessible.
-- **Android app**: the same simulator as an installable APK that works offline from the first launch, with
-  Android printing and sharing. See [Android app](#android-app).
-- **Windows desktop app**: a `.exe` installer for Windows 10/11 that works offline, keeps your history on
-  the computer and prints with the Windows print dialog. See [Windows desktop app](#windows-desktop-app).
+The Android and Windows downloads are attached to each [release](https://github.com/Fahad0141/net-cbt-simulator/releases).
 
-## Quick start
+## Running it yourself
 
-Requires **Node.js 20+**.
+You'll need [Node.js](https://nodejs.org/) 20 or newer.
 
 ```bash
+git clone https://github.com/Fahad0141/net-cbt-simulator.git
+cd net-cbt-simulator
 npm install
-npm run dev          # http://localhost:5173
+npm run dev
 ```
 
-| Script                                | What it does                                                                                        |
-| ------------------------------------- | --------------------------------------------------------------------------------------------------- |
-| `npm run dev`                         | Start the dev server                                                                                |
-| `npm run build`                       | Type-check and build the static site into `dist/`                                                   |
-| `npm run preview`                     | Serve the production build                                                                          |
-| `npm test`                            | Run all unit, component and question-bank tests                                                     |
-| `npm run check`                       | Type-check, lint and test                                                                           |
-| `npm run e2e`                         | Playwright smoke tests (run `npm run build` first)                                                  |
-| `npm run paper -- --type engineering` | Print a full-length paper as Markdown (`--code`, `--seed`, `--format json`, `--solutions`, `--out`) |
-| `npm run sample -- physics/waves 3`   | Print generated instances of templates                                                              |
-| `npm run bank:report`                 | Summarise the question bank into `docs/BANK.md`                                                     |
-| `npm run android:sync`                | Build the site and copy it into the Android project (see [Android app](#android-app))               |
-| `npm run desktop:dist`                | Build the Windows installer into `dist-desktop/` (see [Windows desktop app](#windows-desktop-app))  |
+Then open http://localhost:5173. Some other handy commands:
 
-### Deploying
+| Command                               | What it does                                                         |
+| ------------------------------------- | -------------------------------------------------------------------- |
+| `npm run build` / `npm run preview`   | Build the site into `dist/` and serve it                             |
+| `npm test`                            | Run all the tests, including the question-bank checks                |
+| `npm run e2e`                         | Browser tests with Playwright (build first)                          |
+| `npm run paper -- --type engineering` | Print a full-length paper in the terminal as Markdown                |
+| `npm run sample -- physics/waves 3`   | Print a few generated questions from a chapter                       |
+| `npm run bank:report`                 | Summarise the question bank into [docs/BANK.md](docs/BANK.md)        |
+| `npm run android:sync`                | Prepare the Android app (see [docs/ANDROID.md](docs/ANDROID.md))     |
+| `npm run desktop:dist`                | Build the Windows installer (see [docs/DESKTOP.md](docs/DESKTOP.md)) |
 
-The build is a static site with relative asset paths and hash routing, so it runs on any static host. The
-included workflow `.github/workflows/deploy.yml` publishes it to **GitHub Pages** on every push to `main`
-(enable Pages → "GitHub Actions" in the repository settings). Builds take the GitHub links from
-`VITE_REPO_URL`, which the workflows set to the repository they run in, so a fork links to itself. The live site is
-<https://fahad0141.github.io/net-cbt-simulator/>.
+The site is static, so it runs on any static host. Every push to `main` deploys it to GitHub Pages automatically.
+If you fork the repo, your copy will link to your own fork.
 
-## Android app
-
-The simulator is also an Android app (Android 6.0 or later), built with [Capacitor](https://capacitorjs.com/)
-from the same code. Everything is bundled in the APK, so it works offline from the first launch. Printing
-uses Android's print dialog (including Save as PDF), history export opens the share sheet, and the back
-button never leaves a running test, just like the real terminal.
-
-- **Install:** download the APK from a GitHub release (the `.github/workflows/android.yml` workflow attaches
-  it to version tags), copy it to the phone and open it.
-- **Build it yourself:** `npm run android:sync`, then `./gradlew assembleRelease` in `android/` (JDK 21 and the
-  Android SDK required).
-
-See [docs/ANDROID.md](docs/ANDROID.md) for installing, building, release signing and the CI setup. You can
-also install the deployed website from Chrome (**Install app**); it works offline after the first visit.
-
-## Windows desktop app
-
-The simulator also comes as a Windows desktop app (Windows 10 or 11, 64-bit), built with
-[Electron](https://www.electronjs.org/) from the same code. Everything is bundled in the installer, so it works
-offline, your history stays in your Windows profile, the printable paper uses the Windows print dialog
-(including **Microsoft Print to PDF**), and F11 gives the CBT terminal the whole screen.
-
-- **Install:** run `NET-CBT-Simulator-Setup-<version>.exe` from a GitHub release (the
-  `.github/workflows/desktop.yml` workflow attaches it to version tags). It installs for your user only, without
-  administrator rights. The installer is not code-signed, so Windows SmartScreen may say it "protected your
-  PC": choose **More info**, then **Run anyway**.
-- **Build it yourself:** `npm run desktop:install` once, then `npm run desktop:dist`. The installer is written
-  to `dist-desktop/`.
-
-The desktop app lives in its own package (`desktop/`, with its own dependencies), so the website build and
-the GitHub Pages deploy are unchanged by it. See [docs/DESKTOP.md](docs/DESKTOP.md) for details.
-
-## How a paper is generated
-
-```mermaid
-flowchart LR
-  A[Paper code<br/>ENG-K7Q2-9XM4] --> B[Seeded RNG<br/>cyrb128 + sfc32]
-  C[Exam blueprint<br/>sections & counts] --> D
-  E[Syllabus weights<br/>+ per-paper jitter] --> D
-  B --> D[Assembler]
-  F[(Question bank<br/>parametric + fixed)] --> D
-  D --> G[Balance difficulty mix,<br/>hybrid share, no repeats]
-  G --> H[Generate instances,<br/>validate, shuffle options]
-  H --> I[200-question paper]
-```
-
-1. The **paper code** encodes the exam type and a seed. The seeded RNG is bit-for-bit deterministic on every
-   JavaScript engine.
-2. Each section's questions are split across chapters by syllabus weight, with jitter so papers differ the way
-   real ones do.
-3. Templates are drawn with pressure towards the target difficulty mix and the target dynamic/fixed share.
-   Fixed questions never repeat within a paper.
-4. Every generated instance is validated: four distinct options, balanced markup, no `NaN`/`undefined` leaks.
-   Options are shuffled per paper.
-
-See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for details.
-
-## Question bank
-
-The bank lives in `src/bank/<subject>/<chapter>.ts`, and a summary is generated in [docs/BANK.md](docs/BANK.md).
-It holds 2,856 templates across 110 syllabus chapters of nine subjects.
-
-| Subject            | Templates | Parametric | Chapters |
-| ------------------ | --------: | ---------: | -------: |
-| Mathematics        |       486 |        310 |       21 |
-| Physics            |       492 |        202 |       21 |
-| Chemistry          |       430 |        129 |       23 |
-| Biology            |       382 |        109 |       13 |
-| English            |       361 |         89 |        6 |
-| Design Aptitude    |       245 |        142 |        5 |
-| Computer Science   |       193 |         87 |       11 |
-| Quantitative Maths |       190 |        146 |        6 |
-| Intelligence       |        77 |         62 |        4 |
-
-A test-suite quality gate generates many instances of every template. It checks structure, distinct options,
-determinism, variety, interpolation leaks, rounded values shown in stems and KaTeX rendering. Every chapter was
-also reviewed adversarially: a reviewer solved sampled instances before looking at the key and fixed what they
-found. Many chapters had a second independent review, and a final seeded random spot-check of 162 templates across
-all subjects found no wrong answer keys.
-
-Found a wrong answer? Open an issue with the paper code and question number. Codes are reproducible, so the
-exact question can be regenerated.
-
-## Contributing
-
-Contributions are welcome, especially new questions and corrections. Read
-[CONTRIBUTING.md](CONTRIBUTING.md) and the [question authoring guide](docs/QUESTION_AUTHORING.md).
-
-## Project structure
+If you want to know how it fits together, start with [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md). Briefly:
 
 ```
 src/
-  engine/        seeded RNG, template API, rich text, validation, paper assembly (pure TypeScript)
-  bank/          question templates by subject and chapter
-  config/        exam patterns and syllabus weights
-  exam/          session state machine, scoring, persistence, paper service
-  ui/cbt/        the faithful CBT terminal
-  ui/pages/      dashboard, paper generator, results, review, analytics, print, bank browser
-  platform/      Android and Windows app integration (printing, sharing, back button, wording)
-android/         the Capacitor Android project
-desktop/         the Electron Windows desktop app and its installer (separate npm package)
-assets/          sources of the Android icon and splash screen
-scripts/         CLI tools (paper generator, sampler, bank report, Android assets, Android and desktop smoke tests)
-docs/            exam pattern sources, architecture, authoring guide, Android and desktop guides, bank report
+  engine/     the random generator, question templates, validation and paper assembly
+  bank/       the questions, one file per chapter
+  config/     exam patterns and syllabus weights
+  exam/       the exam session, scoring and saving
+  ui/         the CBT terminal and all the pages
+  platform/   the bits that differ on Android and Windows
+android/      the Android app
+desktop/      the Windows app (its own npm package)
+docs/         guides and background
 ```
+
+## Helping out
+
+New questions and corrections are the most useful contributions. Have a look at [CONTRIBUTING.md](CONTRIBUTING.md)
+and the [question authoring guide](docs/QUESTION_AUTHORING.md). It explains how to write a question and how to check
+it before sending a pull request.
+
+If this helped you prepare, a star on the repo is appreciated, and good luck with your NET!
 
 ## License
 
-[MIT](LICENSE). Questions are original works by the contributors and are released under the same license.
+[MIT](LICENSE). The questions are original and released under the same license.
